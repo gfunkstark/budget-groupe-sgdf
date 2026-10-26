@@ -1,0 +1,73 @@
+Date;Compte bancaire 1;Rapprochée 1;Compte bancaire 2;Rapprochée 2;Saison écriture bancaire;Intitulé;Dépense;Devise dépense;Recette;Devise recette;N° de pièce;Mode de transaction;Catégorie tiers;Structure tiers;Type;Nature;Activité;Branche/Pôle;Dépense ventilation;Devise dépense ventilation;Recette ventilation;Devise recette ventilation
+18/10/2026;GROUPE EXEMPLE;Oui;;;;Les Baroudeurs - Extrajob - Baby-sitting;;;432,57;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+18/10/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Les Baroudeurs - Extrajob - Baby-sitting;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Extra-Jobs;Extrajobs divers;Compagnons - Les Baroudeurs;;;432,57;EUR
+15/10/2026;GROUPE EXEMPLE;Oui;;;;Regroupement de prélèvements nationaux du 15/10/2026;20028,48;EUR;;;;Virement;Echelon National;National;Ecriture;;;;;;;
+15/10/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Regroupement de prélèvements nationaux du 15/10/2026;;;;;;Virement;Echelon National;;Ventilation;Cotisations SGDF;Inscriptions;National;14676,48;EUR;;
+15/10/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Regroupement de prélèvements nationaux du 15/10/2026;;;;;;Virement;Echelon National;;Ventilation;Assurances;Fonctionnement;Groupe;168,00;EUR;;
+15/10/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Regroupement de prélèvements nationaux du 15/10/2026;;;;;;Virement;Echelon National;;Ventilation;Participation au Fct du Territoire;Participation au Mouvement;Groupe;720,00;EUR;;
+15/10/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Regroupement de prélèvements nationaux du 15/10/2026;;;;;;Virement;Echelon National;;Ventilation;Participation au FSI;Participation au Mouvement;Groupe;720,00;EUR;;
+15/10/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Regroupement de prélèvements nationaux du 15/10/2026;;;;;;Virement;Echelon National;;Ventilation;Péréquation;Participation au Mouvement;Groupe;288,00;EUR;;
+15/10/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Regroupement de prélèvements nationaux du 15/10/2026;;;;;;Virement;Echelon National;;Ventilation;Participation au Fct du Mouvement;Participation au Mouvement;Groupe;3456,00;EUR;;
+13/10/2026;GROUPE EXEMPLE;Oui;;;;Louveteaux-Jeannettes - Sortie - Transport;224,95;EUR;;;20261013_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+13/10/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Louveteaux-Jeannettes - Sortie - Transport;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Achat Petit Matériel;Week-end d'Unité;Louveteaux-Jeannettes;224,95;EUR;;
+12/10/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Dépôt espèces;300,00;EUR;300,00;EUR;;Espèces;Autre : pas structure SGDF;;Ecriture;;;;;;;
+12/10/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Dépôt espèces;;;;;;Espèces;Autre : pas structure SGDF;;Ventilation;Dépôts, retrait espèces;Fonctionnement;Groupe;300,00;EUR;300,00;EUR
+08/10/2026;GROUPE EXEMPLE;Non;;;;Farfadets - Activité - Matériel;48,05;EUR;;;20261008_1;Carte procurement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+08/10/2026;GROUPE EXEMPLE;Non;;;Sept 2026 - Août 2027;Farfadets - Activité - Matériel;;;;;;Carte procurement;Autre : pas structure SGDF;;Ventilation;Achat Petit Matériel;Sorties & Activités;Farfadets;48,05;EUR;;
+08/10/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Abonnement stockage en ligne;2,99;EUR;;;20261008_2;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+08/10/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Abonnement stockage en ligne;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Frais communication et Internet;Fonctionnement;Groupe;2,99;EUR;;
+06/10/2026;GROUPE EXEMPLE;Oui;;;;Les Baroudeurs - Extrajob - Emballage cadeaux;;;233,35;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+06/10/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Les Baroudeurs - Extrajob - Emballage cadeaux;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Extra-Jobs;Extrajobs divers;Compagnons - Les Baroudeurs;;;233,35;EUR
+05/10/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Frais bancaires mensuels;18,72;EUR;;;;Prélèvement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+05/10/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Frais bancaires mensuels;;;;;;Prélèvement;Autre : pas structure SGDF;;Ventilation;Frais Bancaires;Frais bancaires;Groupe;18,72;EUR;;
+04/10/2026;GROUPE EXEMPLE;Oui;;;;Pionniers-Caravelles - WE unité - Matériel;96,48;EUR;;;20261004_1;Carte procurement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+04/10/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Pionniers-Caravelles - WE unité - Matériel;;;;;;Carte procurement;Autre : pas structure SGDF;;Ventilation;Activités, sorties, visites;Week-end d'Unité;Pionniers-Caravelles;96,48;EUR;;
+02/10/2026;GROUPE EXEMPLE;Non;;;;Groupe - Conseil de groupe - Collation;64,50;EUR;;;20261002_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+02/10/2026;GROUPE EXEMPLE;Non;;;Sept 2026 - Août 2027;Groupe - Conseil de groupe - Collation;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Alimentation, Intendance;Réunions (conseils et préparations);Groupe;64,50;EUR;;
+23/09/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Matériel - Gamelles;220,94;EUR;;;20260923_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+23/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Matériel - Gamelles;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Achat Matériel Pédagogique;Fonctionnement;Groupe;220,94;EUR;;
+20/09/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Rentrée - Achat Petit Matériel;254,53;EUR;;;20260920_6;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Week-end de Rentrée - Achat Petit Matériel;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Achat Petit Matériel;Week-end de Rentrée;Groupe;254,53;EUR;;
+20/09/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Rentrée - Alimentation;935,72;EUR;;;20260920_5;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Week-end de Rentrée - Alimentation;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Alimentation, Intendance;Week-end de Rentrée;Groupe;935,72;EUR;;
+20/09/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Rentrée - Carburant;79,43;EUR;;;20260920_4;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Week-end de Rentrée - Carburant;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Carburant;Week-end de Rentrée;Groupe;79,43;EUR;;
+20/09/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Rentrée - Hébergement;562,41;EUR;;;20260920_1;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Week-end de Rentrée - Hébergement;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Hébergement, séminaire;Week-end de Rentrée;Groupe;562,41;EUR;;
+20/09/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Rentrée - Location Véhicule/Bateau;244,37;EUR;;;20260920_3;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Week-end de Rentrée - Location Véhicule/Bateau;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Location Véhicule/Bateau;Week-end de Rentrée;Groupe;244,37;EUR;;
+20/09/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Rentrée - Transport collectif;1803,77;EUR;;;20260920_2;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Week-end de Rentrée - Transport collectif;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Transport collectif : en Autocar;Week-end de Rentrée;Groupe;1803,77;EUR;;
+19/09/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 9;;;2735,36;EUR;;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+19/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Inscriptions - Chèques et virements lot 9;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;1838,42;EUR
+19/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Inscriptions - Chèques et virements lot 9;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;772,14;EUR
+19/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Inscriptions - Chèques et virements lot 9;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Dons avec Reçu Fiscal;Inscriptions;Groupe;;;124,80;EUR
+17/09/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 8;;;1569,04;EUR;;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+17/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Inscriptions - Chèques et virements lot 8;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;1104,96;EUR
+17/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Inscriptions - Chèques et virements lot 8;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;464,08;EUR
+15/09/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 7;;;2315,88;EUR;;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+15/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Inscriptions - Chèques et virements lot 7;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;1630,90;EUR
+15/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Inscriptions - Chèques et virements lot 7;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;684,98;EUR
+13/09/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 6;;;2610,81;EUR;;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+13/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Inscriptions - Chèques et virements lot 6;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;1801,98;EUR
+13/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Inscriptions - Chèques et virements lot 6;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;756,83;EUR
+13/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Inscriptions - Chèques et virements lot 6;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Dons avec Reçu Fiscal;Inscriptions;Groupe;;;52,00;EUR
+11/09/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 5;;;2792,43;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+11/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Inscriptions - Chèques et virements lot 5;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;1966,50;EUR
+11/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Inscriptions - Chèques et virements lot 5;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;825,93;EUR
+09/09/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 4;;;943,62;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+09/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Inscriptions - Chèques et virements lot 4;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;664,52;EUR
+09/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Inscriptions - Chèques et virements lot 4;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;279,10;EUR
+08/09/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Abonnement stockage en ligne;2,99;EUR;;;20260908_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+08/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Abonnement stockage en ligne;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Frais communication et Internet;Fonctionnement;Groupe;2,99;EUR;;
+07/09/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 3;;;1136,07;EUR;;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+07/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Inscriptions - Chèques et virements lot 3;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;800,05;EUR
+07/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Inscriptions - Chèques et virements lot 3;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;336,02;EUR
+05/09/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Frais bancaires mensuels;18,72;EUR;;;;Prélèvement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+05/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Frais bancaires mensuels;;;;;;Prélèvement;Autre : pas structure SGDF;;Ventilation;Frais Bancaires;Frais bancaires;Groupe;18,72;EUR;;
+05/09/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 2;;;2165,05;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+05/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Inscriptions - Chèques et virements lot 2;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;1524,68;EUR
+05/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Inscriptions - Chèques et virements lot 2;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;640,37;EUR
+03/09/2026;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 1;;;1383,34;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+03/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Inscriptions - Chèques et virements lot 1;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;974,18;EUR
+03/09/2026;GROUPE EXEMPLE;Oui;;;Sept 2026 - Août 2027;Groupe - Inscriptions - Chèques et virements lot 1;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;409,16;EUR

@@ -1,0 +1,2591 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<base target="_top">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Budget du groupe</title>
+<style>
+:root {
+  --fond: #f6f5f2; --carte: #ffffff; --texte: #1d2433; --doux: #6b7280; --ligne: #e6e3dc; --ligne-forte: #d6d2c8; --survol: #f1efe9;
+  --accent: #1f4e79; --accent-doux: #e5edf6; --accent-texte: #ffffff;
+  --bon: #1d7a4a; --bon-doux: #e3f3ea; --mauvais: #b42318; --mauvais-doux: #fdecea; --alerte: #9a6700; --alerte-doux: #fff4d6;
+  --saisie: #fdf0c2; --saisie-survol: #fae39a; --bande: #f4f7fb; --info-doux: #e5edf6; --rayon: 10px; --ombre: 0 1px 2px rgba(20, 24, 33, .06), 0 4px 16px rgba(20, 24, 33, .04);
+  --mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fond: #12151c; --carte: #1a1e27; --texte: #e7e9ee; --doux: #9aa3b2; --ligne: #2a303c; --ligne-forte: #3a4150; --survol: #222734;
+    --accent: #8db8e8; --accent-doux: #1e2b3d; --accent-texte: #12151c;
+    --bon: #5cc28b; --bon-doux: #17301f; --mauvais: #f08a80; --mauvais-doux: #3a1d1b; --alerte: #e2b347; --alerte-doux: #372c12;
+    --saisie: #3a3218; --saisie-survol: #4a4020; --bande: #1b2230; --info-doux: #1e2b3d; --ombre: none; color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html, body { margin: 0; background: var(--fond); color: var(--texte); }
+body { font: 14px/1.45 "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: var(--accent); }
+
+.app { display: grid; grid-template-columns: 210px 1fr; min-height: 100vh; }
+.nav { background: var(--carte); border-right: 1px solid var(--ligne); padding: 18px 12px; position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; }
+.nav-main { flex: 1; overflow-y: auto; }
+.nav-bas { border-top: 1px solid var(--ligne); padding-top: 8px; }
+.nav-sep { border: 0; border-top: 1px solid var(--ligne); margin: 8px 10px; }
+.brand { font-weight: 700; font-size: 16px; padding: 4px 10px 18px; letter-spacing: -.01em; }
+.brand .logo-groupe { display: block; width: 64px; height: 64px; margin: 0 0 10px; }
+.brand small { display: block; font-weight: 400; color: var(--doux); font-size: 12px; }
+.nav button, .nav a.navlien { display: flex; gap: 10px; align-items: center; width: 100%; border: 0; background: none; padding: 9px 10px;
+  border-radius: 8px; cursor: pointer; text-align: left; color: var(--doux); font-weight: 500; text-decoration: none; }
+.nav button svg, .nav a.navlien svg { width: 18px; height: 18px; flex: none; }
+.nav button:hover, .nav a.navlien:hover { background: var(--survol); color: var(--texte); }
+.nav button.on { background: var(--accent-doux); color: var(--accent); }
+.nav .pill { margin-left: auto; }
+.pill { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 600; }
+.pill.ok { background: var(--bon-doux); color: var(--bon); }
+.pill.ko { background: var(--mauvais-doux); color: var(--mauvais); }
+.pill.wa { background: var(--alerte-doux); color: var(--alerte); }
+.pill.pl { background: var(--accent-doux); color: var(--accent); }
+
+main { min-width: 0; padding: 0 28px 48px; }
+.barre { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 18px 0 14px; position: sticky; top: 0; background: var(--fond); z-index: 5; border-bottom: 1px solid var(--ligne); margin-bottom: 18px; }
+.barre .who { color: var(--doux); font-size: 12px; }
+.barre h1 { font-size: 20px; margin: 0; letter-spacing: -.01em; }
+.barre-droite { display: flex; gap: 8px; align-items: center; }
+.saison-choix { color: var(--doux); font-size: 13px; display: flex; gap: 6px; align-items: center; }
+
+select, input[type=text], input[type=number], input[type=date], input[type=password], textarea {
+  border: 1px solid var(--ligne-forte); background: var(--carte); border-radius: 7px; padding: 6px 8px; min-height: 32px;
+}
+input:focus, select:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; border-color: transparent; }
+.btn { border: 1px solid var(--accent); background: var(--accent); color: var(--accent-texte); border-radius: 8px; padding: 6px 12px; cursor: pointer; font-weight: 600; min-height: 32px; white-space: nowrap; }
+.btn:hover { filter: brightness(1.05); }
+.btn.secondaire { background: var(--carte); color: var(--accent); }
+.btn.discret { background: transparent; border-color: var(--ligne-forte); color: var(--texte); font-weight: 500; }
+.btn.danger { background: transparent; border-color: transparent; color: var(--mauvais); padding: 4px 8px; }
+.btn:disabled { opacity: .5; cursor: default; }
+
+.carte { background: var(--carte); border: 1px solid var(--ligne); border-radius: var(--rayon); box-shadow: var(--ombre); padding: 16px 18px; margin-bottom: 16px; }
+.carte h2 { font-size: 15px; margin: 0 0 4px; }
+.carte h3 { font-size: 14px; margin: 0; }
+.carte .sous { color: var(--doux); font-size: 12.5px; margin: 0 0 12px; }
+.entete-carte { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 10px; }
+
+.tuiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 16px; }
+.tuile { background: var(--carte); border: 1px solid var(--ligne); border-radius: var(--rayon); padding: 12px 14px; box-shadow: var(--ombre); }
+.tuile .lib { color: var(--doux); font-size: 12px; }
+.tuile .val { font-size: 22px; font-weight: 650; letter-spacing: -.01em; font-variant-numeric: tabular-nums; margin-top: 2px; }
+.tuile .det { color: var(--doux); font-size: 12px; margin-top: 2px; }
+.tuile.cliquable { cursor: pointer; }
+.tuile.cliquable:hover { border-color: var(--accent); }
+
+.tableau-defile { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+th, td { padding: 6px 8px; border-bottom: 1px solid var(--ligne); text-align: left; vertical-align: middle; }
+th { font-size: 11.5px; font-weight: 600; color: var(--doux); text-transform: uppercase; letter-spacing: .03em; white-space: nowrap; }
+td.n, th.n { text-align: right; white-space: nowrap; }
+tr.section td { background: var(--fond); font-weight: 650; font-size: 12.5px; color: var(--doux); text-transform: uppercase; letter-spacing: .03em; padding-top: 12px; }
+tr.total td { font-weight: 650; border-top: 1px solid var(--ligne-forte); }
+tr.grand-total td { font-weight: 700; font-size: 15px; border-top: 2px solid var(--texte); background: var(--accent-doux); }
+tr.cliquable { cursor: pointer; }
+tr.cliquable:hover td { background: var(--fond); }
+td.col-n { border-left: 1px solid var(--ligne); }
+td.lien { cursor: pointer; }
+td.lien:hover { background: var(--accent-doux); color: var(--accent); text-decoration: underline; }
+.positif { color: var(--bon); }
+.negatif { color: var(--mauvais); }
+.zero { color: var(--doux); }
+.att { background: var(--alerte-doux); }
+
+.jauge { height: 6px; border-radius: 3px; background: var(--ligne); overflow: hidden; min-width: 60px; }
+.jauge > i { display: block; height: 100%; background: var(--accent); }
+.jauge > i.depasse { background: var(--mauvais); }
+
+.puce { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 11.5px; font-weight: 600; background: var(--fond); color: var(--doux); white-space: nowrap; }
+.puce.ok { background: var(--bon-doux); color: var(--bon); }
+.puce.ko { background: var(--mauvais-doux); color: var(--mauvais); }
+.puce.att { background: var(--alerte-doux); color: var(--alerte); }
+
+.onglets { display: flex; gap: 4px; border-bottom: 1px solid var(--ligne); margin-bottom: 16px; overflow-x: auto; }
+.onglets button { border: 0; background: none; padding: 9px 14px; cursor: pointer; color: var(--doux); font-weight: 600; border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; }
+.onglets button:hover { color: var(--texte); }
+.onglets button.actif { color: var(--accent); border-bottom-color: var(--accent); }
+.onglets .compte { font-size: 11px; background: var(--fond); color: var(--doux); border-radius: 999px; padding: 1px 7px; margin-left: 4px; font-weight: 600; }
+.onglets button.actif .compte { background: var(--accent-doux); color: var(--accent); }
+.filtres { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-bottom: 12px; }
+.filtres input[type=text] { min-width: 220px; }
+.case { display: inline-flex; gap: 6px; align-items: center; color: var(--doux); }
+
+.grille-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 16px; }
+.formulaire { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; align-items: end; }
+.formulaire label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; color: var(--doux); }
+
+.edit td { padding: 3px 4px; }
+.edit input, .edit select { width: 100%; min-height: 30px; padding: 4px 6px; }
+.edit input.n { text-align: right; }
+.edit td.calc { text-align: right; padding-right: 10px; font-weight: 600; white-space: nowrap; }
+
+.ligne-budget { border-top: 1px solid var(--ligne); padding: 12px 0; }
+.ligne-budget:first-of-type { border-top: 0; }
+.ligne-budget .tete { display: flex; align-items: center; gap: 12px; cursor: pointer; flex-wrap: wrap; }
+.ligne-budget .tete .nom { font-weight: 600; flex: 1; min-width: 200px; }
+.ligne-budget .tete .chiffres { display: flex; gap: 18px; color: var(--doux); font-size: 12.5px; font-variant-numeric: tabular-nums; }
+.ligne-budget .tete .chiffres b { color: var(--texte); }
+.ligne-budget .tete .chiffres { align-items: center; }
+input.saisie { background: var(--saisie); border-color: transparent; color: var(--accent); font-weight: 600; }
+input.saisie:hover { background: var(--saisie-survol); }
+.grille-blocs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 500px), 1fr)); gap: 16px; align-items: start; }
+.grille-blocs .carte { margin-bottom: 0; }
+th.groupe-col { text-align: center; border-bottom: 1px solid var(--ligne-forte); }
+table.sorties td, table.sorties th { white-space: nowrap; }
+.montant-direct { width: 110px; margin-left: 6px; text-align: right; }
+table.effectifs input { min-width: 64px; }
+table.effectifs td:first-child { white-space: nowrap; }
+.ligne-budget .corps { margin-top: 10px; }
+.fleche { color: var(--doux); transition: transform .15s; display: inline-block; width: 14px; }
+.ouvert .fleche { transform: rotate(90deg); }
+
+.alerte { border-radius: 8px; padding: 10px 14px; margin-bottom: 12px; background: var(--alerte-doux); color: var(--alerte); }
+.alerte.ko { background: var(--mauvais-doux); color: var(--mauvais); }
+.alerte.info { background: var(--info-doux); color: var(--texte); }
+.vide { color: var(--doux); padding: 18px 0; text-align: center; }
+.chargement { color: var(--doux); padding: 60px 0; text-align: center; }
+.aide { color: var(--doux); font-size: 12.5px; }
+code { font-family: var(--mono); font-size: 12px; background: var(--fond); padding: 1px 5px; border-radius: 4px; }
+
+.toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%) translateY(20px); background: var(--texte); color: var(--fond); padding: 10px 16px; border-radius: 8px; opacity: 0; pointer-events: none; transition: .2s; z-index: 50; max-width: 90vw; }
+.toast.visible { opacity: 1; transform: translateX(-50%); }
+.toast.ko { background: var(--mauvais); color: #fff; }
+.modale { position: fixed; inset: 0; background: rgba(0, 0, 0, .35); display: grid; place-items: center; z-index: 40; padding: 16px; }
+.modale-boite { background: var(--carte); border-radius: 12px; padding: 20px; width: min(520px, 100%); box-shadow: 0 10px 40px rgba(0, 0, 0, .25); }
+.modale-boite h2 { margin: 0 0 8px; font-size: 17px; }
+.actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; flex-wrap: wrap; }
+
+@media (max-width: 860px) {
+  .app { grid-template-columns: 1fr; }
+  .nav { position: fixed; bottom: 0; top: auto; left: 0; right: 0; height: auto; flex-direction: row; padding: 4px; z-index: 20; border-right: 0; border-top: 1px solid var(--ligne); overflow-x: auto; }
+  .brand, .nav-sep { display: none; }
+  .nav-main, .nav-bas { display: contents; }
+  .nav button, .nav a.navlien { flex-direction: column; gap: 2px; font-size: 11px; padding: 6px 8px; text-align: center; white-space: nowrap; width: auto; position: relative; }
+  .nav a.navlien svg + svg { display: none; }
+  .nav .pill { position: absolute; top: 0; right: 2px; font-size: 10px; padding: 0 5px; }
+  .barre .who { display: none; }
+  main { padding: 0 16px 90px; }
+  .barre h1 { font-size: 18px; }
+  .masque-mobile { display: none; }
+}
+
+/* Tableaux de budget : libellé large, colonnes de chiffres serrées, colonne du budget N teintée */
+table.budget { width: 100%; }
+table.budget col.c-n, table.budget col.c-bn { width: 112px; }
+table.budget col.c-bn { background: var(--bande); }
+table.budget th { padding-top: 8px; padding-bottom: 8px; }
+table.budget td { padding-top: 7px; padding-bottom: 7px; }
+table.budget.edit td { padding: 4px 8px; }
+table.budget td.n, table.budget th.n { padding-right: 12px; }
+table.budget td.col-n, table.budget th.col-n { border-left: 0; }
+table.budget tbody tr:hover td { background: rgba(31, 78, 121, .035); }
+table.budget tr.total td { border-top: 2px solid var(--ligne-forte); background: var(--survol); }
+table.budget tr.grand-total td { border-top: 2px solid var(--texte); background: var(--accent-doux); }
+table.budget th.groupe-col { font-size: 11px; letter-spacing: .05em; color: var(--doux); border-bottom: 0; padding-bottom: 0; }
+table.budget input.saisie { width: 100%; max-width: 96px; margin-left: auto; display: block; }
+table.budget input.eff { width: 100%; max-width: 72px; margin-left: auto; display: block; }
+table.budget .calc { font-weight: 600; }
+table.budget tr.parent td { border-bottom-color: transparent; }
+table.budget tr.detail td { border-bottom: 1px dashed var(--ligne); background: transparent; }
+table.budget tr.detail td:first-child { padding-left: 26px; }
+.detail-lib { display: flex; gap: 8px; align-items: center; }
+.detail-lib input[type=text] { flex: 1; max-width: 340px; min-height: 28px; }
+.detail-lib .indice { min-width: 84px; }
+a.lien-discret { font-size: 12px; color: var(--doux); margin-left: 6px; }
+a.lien-discret:hover { color: var(--accent); }
+.btn.petit { padding: 3px 10px; min-height: 26px; font-size: 12.5px; }
+.grille-blocs table.budget col.c-n, .grille-blocs table.budget col.c-bn { width: 100px; }
+.grille-blocs table.budget td:first-child, .grille-blocs table.budget th { white-space: nowrap; }
+
+table.budget col.c-act { width: 130px; }
+.fleche.tourne { transform: rotate(90deg); }
+table.detail-fonds { font-size: 12.5px; margin: 4px 0 8px; }
+table.detail-fonds th, table.detail-fonds td { padding: 4px 8px; }
+table.detail-fonds td:nth-child(2), table.detail-fonds td:nth-child(3) { white-space: nowrap; }
+table.detail-fonds tr.exclu td { color: var(--doux); text-decoration: line-through; }
+table.detail-fonds tr.exclu td:first-child { text-decoration: none; }
+
+a.piece { display: inline-flex; align-items: center; gap: 4px; text-decoration: none; white-space: nowrap; }
+a.piece:hover { text-decoration: underline; }
+#robotEntete .btn { font-size: 13px; }
+.etat-robot:empty { display: none; }
+
+.bandeau-version { margin: -6px 0 12px; }
+table.budget tr.modifie td { background: var(--saisie); }
+
+.routine .etape { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--ligne); }
+.routine .etape:last-child { border-bottom: 0; }
+.routine .etape label { display: flex; gap: 12px; align-items: flex-start; flex: 1; cursor: pointer; }
+.routine .etape input[type=checkbox] { width: 17px; height: 17px; margin-top: 2px; flex: none; }
+.routine .etape.faite b { color: var(--doux); font-weight: 600; }
+.aide-page p, .aide-page li { line-height: 1.6; }
+.aide-page ol, .aide-page ul { padding-left: 20px; margin: 6px 0; }
+a.depot { color: var(--accent); vertical-align: -2px; margin-left: 2px; }
+
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="nav" id="nav"><div class="brand">Budget</div></aside>
+  <main>
+    <header class="barre">
+      <h1 id="titre">Synthèse</h1>
+      <div class="barre-droite">
+        <span class="who" id="infoDonnees"></span>
+        <span id="robotEntete"></span>
+        <label class="saison-choix">Saison <select id="saison"></select></label>
+        <button class="btn discret" id="btnRecharger" title="Relire le classeur">↻</button>
+      </div>
+    </header>
+    <div id="alertes"></div>
+    <div class="etat-robot" id="etatRobotGlobal"></div>
+    <section id="vue"><div class="chargement">Chargement des données…</div></section>
+  </main>
+</div>
+<div id="toast" class="toast"></div>
+<div id="modale" class="modale" hidden><div class="modale-boite" id="modaleBoite"></div></div>
+<script>
+/* =====================================================================
+ * Moteur de calcul — Budget du groupe (Scouts et Guides de France)
+ * Partagé tel quel par le serveur (Code.gs), l'interface (Index) et les tests.
+ * Aucune dépendance à Apps Script ni au navigateur.
+ * ===================================================================== */
+var Engine = (function () {
+
+  /* ------------------------------------------------------------ utilitaires */
+  function txt(v) { return v === null || v === undefined ? '' : String(v).replace(/\s+$/, '').replace(/^\s+/, ''); }
+  function cle(v) { return txt(v).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/\s+/g, ' '); }
+
+  /** Nombre depuis une cellule (nombre, "1 234,56", "(12)", "-", ""). */
+  function num(v) {
+    if (typeof v === 'number') return isFinite(v) ? v : 0;
+    var s = txt(v).replace(/[   €]/g, '');
+    if (!s || s === '-') return 0;
+    var neg = /^\(.*\)$/.test(s);
+    s = s.replace(/[()]/g, '');
+    if (s.indexOf(',') >= 0 && s.indexOf('.') >= 0) s = s.replace(/\./g, '');
+    s = s.replace(',', '.');
+    var n = parseFloat(s);
+    if (!isFinite(n)) return 0;
+    return neg ? -n : n;
+  }
+  function arrondi(n) { return Math.round(n * 100) / 100; }
+
+  /** Date ISO yyyy-mm-dd depuis "dd/mm/yyyy", Date, ou ISO. */
+  function dateIso(v) {
+    if (v instanceof Date) {
+      return v.getFullYear() + '-' + ('0' + (v.getMonth() + 1)).slice(-2) + '-' + ('0' + v.getDate()).slice(-2);
+    }
+    var s = txt(v), m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+    if (m) return m[3] + '-' + ('0' + m[2]).slice(-2) + '-' + ('0' + m[1]).slice(-2);
+    m = s.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    return m ? m[0] : '';
+  }
+
+  /* ------------------------------------------------- import des écritures */
+  // En-têtes de l'export Comptaweb « recettes / dépenses ».
+  var COLS = {
+    date: 'Date', compte: 'Compte bancaire 1', rappro: 'Rapprochée 1', compte2: 'Compte bancaire 2',
+    rappro2: 'Rapprochée 2', intitule: 'Intitulé', depense: 'Dépense', recette: 'Recette',
+    piece: 'N° de pièce', mode: 'Mode de transaction', tiersCat: 'Catégorie tiers',
+    tiers: 'Structure tiers', type: 'Type', nature: 'Nature', activite: 'Activité',
+    branche: 'Branche/Pôle', depV: 'Dépense ventilation', recV: 'Recette ventilation'
+  };
+
+  /** Index des colonnes à partir d'une ligne d'en-têtes (tolérant accents/espaces). */
+  function indexEntetes(entetes) {
+    var idx = {}, cles = entetes.map(cle);
+    Object.keys(COLS).forEach(function (k) {
+      var i = cles.indexOf(cle(COLS[k]));
+      if (i < 0 && k === 'branche') i = cles.indexOf('branche');
+      idx[k] = i;
+    });
+    var manquantes = ['date', 'intitule', 'type', 'nature', 'activite', 'branche', 'depV', 'recV']
+      .filter(function (k) { return idx[k] < 0; });
+    if (manquantes.length) throw new Error('Colonnes Comptaweb introuvables : ' + manquantes.map(function (k) { return COLS[k]; }).join(', '));
+    return idx;
+  }
+
+  /**
+   * Transforme les lignes brutes de l'export (tableau de tableaux, en-têtes en
+   * première ligne) en écritures et ventilations. Chaque ventilation est
+   * rattachée à l'écriture qui la précède dans l'export.
+   */
+  function lireExport(lignes) {
+    if (!lignes || !lignes.length) return { ecritures: [], ventilations: [] };
+    var idx = indexEntetes(lignes[0]);
+    var g = function (r, k) { return idx[k] >= 0 ? r[idx[k]] : ''; };
+    var ecritures = [], ventilations = [], courante = null, vus = {};
+    for (var i = 1; i < lignes.length; i++) {
+      var r = lignes[i], type = cle(g(r, 'type'));
+      if (type === 'ecriture') {
+        courante = {
+          id: 'E' + ecritures.length, date: dateIso(g(r, 'date')), intitule: txt(g(r, 'intitule')),
+          depense: num(g(r, 'depense')), recette: num(g(r, 'recette')), piece: txt(g(r, 'piece')),
+          mode: txt(g(r, 'mode')), tiersCat: txt(g(r, 'tiersCat')), tiers: txt(g(r, 'tiers')),
+          compte: txt(g(r, 'compte')), rappro: txt(g(r, 'rappro')), compte2: txt(g(r, 'compte2')),
+          rappro2: txt(g(r, 'rappro2')), nbVentil: 0
+        };
+        ecritures.push(courante);
+      } else if (type === 'ventilation') {
+        var v = {
+          date: dateIso(g(r, 'date')), intitule: txt(g(r, 'intitule')), nature: txt(g(r, 'nature')),
+          activite: txt(g(r, 'activite')), branche: txt(g(r, 'branche')),
+          depense: num(g(r, 'depV')), recette: num(g(r, 'recV')),
+          ecriture: courante && courante.intitule === txt(g(r, 'intitule')) ? courante.id : '',
+          piece: txt(g(r, 'piece'))
+        };
+        if (courante && v.ecriture) { courante.nbVentil++; if (!v.piece) v.piece = courante.piece; }
+        // Clé stable pour les corrections manuelles : contenu + rang parmi les doublons.
+        var base = [v.date, v.intitule, v.nature, v.activite, v.branche, v.depense, v.recette].join('|');
+        vus[base] = (vus[base] || 0) + 1;
+        v.cle = base + '#' + vus[base];
+        ventilations.push(v);
+      }
+    }
+    return { ecritures: ecritures, ventilations: ventilations };
+  }
+
+  /* ------------------------------------------------------- classement */
+  var INTERNE = '(Mouvement interne)';
+
+  /**
+   * Règles : [{activite, nature, ligne}] — '*' = n'importe laquelle.
+   * Priorité : activité+nature exactes > nature seule > activité seule.
+   */
+  function compilerRegles(regles) {
+    var exact = {}, parNature = {}, parActivite = {};
+    (regles || []).forEach(function (r) {
+      var a = cle(r.activite), n = cle(r.nature), l = txt(r.ligne);
+      if (!l) return;
+      if (a && a !== '*' && n && n !== '*') exact[a + '¦' + n] = l;
+      else if ((!a || a === '*') && n && n !== '*') parNature[n] = l;
+      else if (a && a !== '*') parActivite[a] = l;
+    });
+    return function (activite, nature) {
+      var a = cle(activite), n = cle(nature);
+      return exact[a + '¦' + n] || parNature[n] || parActivite[a] || '';
+    };
+  }
+
+  /** Branche/Pôle Comptaweb → unité suivie. */
+  function compilerUnites(unites) {
+    var m = {};
+    (unites || []).forEach(function (u) { if (txt(u.branche)) m[cle(u.branche)] = txt(u.unite); });
+    return function (branche) {
+      var b = cle(branche);
+      if (m[b]) return m[b];
+      if (b.indexOf('compagnons') === 0) return m['compagnons'] || 'Compagnons';
+      return txt(branche) || 'Groupe';
+    };
+  }
+
+  /**
+   * Classe toutes les ventilations. corrections : {cle: ligne} pour les
+   * exceptions saisies une par une.
+   */
+  function classer(ventilations, regles, unites, corrections) {
+    var regle = compilerRegles(regles), unite = compilerUnites(unites), corr = corrections || {};
+    return ventilations.map(function (v) {
+      var ligne = corr[v.cle], source = 'correction';
+      if (!ligne) { ligne = regle(v.activite, v.nature); source = ligne ? 'regle' : 'aucune'; }
+      var o = {};
+      for (var k in v) o[k] = v[k];
+      o.ligne = ligne; o.source = source; o.unite = unite(v.branche);
+      return o;
+    });
+  }
+
+  /* -------------------------------------------------------- budget */
+  /** Effectifs : [{saison, unite, jeunes}] → fonction (saison, unite) → nombre. */
+  function compilerEffectifs(effectifs) {
+    var m = {};
+    (effectifs || []).forEach(function (e) {
+      var s = txt(e.saison);
+      m[s] = m[s] || { total: 0 };
+      m[s][cle(e.unite)] = num(e.jeunes);
+      if (cle(e.unite) !== 'groupe') m[s].total += num(e.jeunes);
+    });
+    return {
+      unite: function (s, u) { return (m[s] && m[s][cle(u)]) || 0; },
+      total: function (s) {
+        if (!m[s]) return 0;
+        return m[s].groupe || m[s].total;
+      }
+    };
+  }
+
+  var METHODES = {
+    montant: 'Montant',
+    qte_pu: 'Quantité × prix',
+    par_jeune: '€ par jeune de l’unité',
+    par_jeune_groupe: '€ par jeune du groupe'
+  };
+
+  /** Montant d'un poste de budget selon sa méthode. */
+  function montantPoste(p, eff) {
+    var m = txt(p.methode) || 'montant';
+    if (m === 'qte_pu') return arrondi(num(p.quantite) * num(p.prix));
+    if (m === 'par_jeune') return arrondi(eff.unite(p.saison, p.unite) * num(p.prix));
+    if (m === 'par_jeune_groupe') return arrondi(eff.total(p.saison) * num(p.prix));
+    return arrondi(num(p.montant));
+  }
+
+  /** Quantité affichée d'un poste (effectif pour les méthodes par jeune). */
+  function quantitePoste(p, eff) {
+    var m = txt(p.methode);
+    if (m === 'par_jeune') return eff.unite(p.saison, p.unite);
+    if (m === 'par_jeune_groupe') return eff.total(p.saison);
+    if (m === 'qte_pu') return num(p.quantite);
+    return null;
+  }
+
+  /* ------------------------------------------------------ synthèse */
+  /**
+   * Agrège les ventilations classées par ligne : {ligne: {r, d}}.
+   * Les mouvements internes et non classées sont mis à part.
+   */
+  function agreger(classees) {
+    var t = {};
+    classees.forEach(function (v) {
+      if (v.ligne === INTERNE) return;
+      var k = v.ligne || '';
+      t[k] = t[k] || { r: 0, d: 0 };
+      t[k].r += v.recette; t[k].d += v.depense;
+    });
+    for (var k in t) { t[k].r = arrondi(t[k].r); t[k].d = arrondi(t[k].d); }
+    return t;
+  }
+
+  function sommeBudget(budget, saison, eff) {
+    var t = {};
+    (budget || []).forEach(function (p) {
+      if (txt(p.saison) !== saison) return;
+      var k = txt(p.ligne), s = cle(p.sens) === 'recette' ? 'r' : 'd';
+      t[k] = t[k] || { r: 0, d: 0 };
+      t[k][s] += montantPoste(p, eff);
+    });
+    for (var k in t) { t[k].r = arrondi(t[k].r); t[k].d = arrondi(t[k].d); }
+    return t;
+  }
+
+  function sommeEngagements(engagements, saison) {
+    var t = {};
+    (engagements || []).forEach(function (e) {
+      if (txt(e.saison) !== saison || cle(e.statut) === 'regle' || cle(e.statut) === 'annule') return;
+      var k = txt(e.ligne), s = cle(e.sens) === 'recette' ? 'r' : 'd';
+      t[k] = t[k] || { r: 0, d: 0 };
+      t[k][s] += num(e.montant);
+    });
+    for (var k in t) { t[k].r = arrondi(t[k].r); t[k].d = arrondi(t[k].d); }
+    return t;
+  }
+
+  /**
+   * Construit la synthèse de la saison `saison`.
+   * donnees = { saisons:[{code}], classees:{code:[ventilations classées]},
+   *             lignes:[{ligne, recette, section, horsBudget, ordre}], budget, engagements, effectifs }
+   * Retourne { colonnes, sections:[{titre, sens, lignes:[...], total}], net, horsBudget, aClasser }.
+   * Montants signés : recettes positives, dépenses négatives.
+   */
+  function synthese(donnees, saison) {
+    var codes = donnees.saisons.map(function (s) { return s.code; });
+    var i = codes.indexOf(saison);
+    var n1 = i > 0 ? codes[i - 1] : null, n2 = i > 1 ? codes[i - 2] : null;
+    var eff = compilerEffectifs(donnees.effectifs);
+    var reel = {};
+    [saison, n1, n2].forEach(function (c) { if (c) reel[c] = agreger(donnees.classees[c] || []); });
+    var bud = sommeBudget(donnees.budget, saison, eff);
+    var eng = sommeEngagements(donnees.engagements, saison);
+    var vide = { r: 0, d: 0 };
+
+    var lignes = (donnees.lignes || []).slice().sort(function (a, b) { return num(a.ordre) - num(b.ordre); });
+    var connues = {};
+    lignes.forEach(function (l) { connues[txt(l.ligne)] = l; });
+
+    function rangee(nom, s) {
+      var get = function (t) { return (t && t[nom]) || vide; };
+      var sg = s === 'r' ? 1 : -1;
+      var r2 = n2 ? sg * get(reel[n2])[s] : null, r1 = n1 ? sg * get(reel[n1])[s] : null;
+      var b = sg * get(bud)[s], r = sg * get(reel[saison])[s], e = sg * get(eng)[s];
+      var p = r + e;
+      return {
+        ligne: nom, n2: r2, n1: r1, budget: arrondi(b), varN1: r1 === null ? null : arrondi(b - r1),
+        reel: arrondi(r), varBudget: arrondi(r - b), engage: arrondi(e), projete: arrondi(p),
+        varProjete: arrondi(p - b)
+      };
+    }
+    function nonVide(x) { return x.n2 || x.n1 || x.budget || x.reel || x.engage; }
+    function total(rs) {
+      var t = { ligne: 'Total' };
+      ['n2', 'n1', 'budget', 'varN1', 'reel', 'varBudget', 'engage', 'projete', 'varProjete'].forEach(function (k) {
+        var any = rs.some(function (x) { return x[k] !== null && x[k] !== undefined; });
+        t[k] = any ? arrondi(rs.reduce(function (a, x) { return a + (x[k] || 0); }, 0)) : null;
+      });
+      return t;
+    }
+
+    // Toutes les lignes qui ont un montant quelque part.
+    var presentes = {};
+    [reel[saison], reel[n1], reel[n2], bud, eng].forEach(function (t) { if (t) for (var k in t) presentes[k] = true; });
+    delete presentes[''];
+
+    var sections = [], hors = [];
+    // Recettes du groupe
+    var rec = [];
+    lignes.forEach(function (l) {
+      if (l.horsBudget) return;
+      var x = rangee(txt(l.ligne), 'r');
+      if (l.recette || nonVide(x)) rec.push(x);
+    });
+    sections.push({ titre: 'Recettes du groupe', sens: 'r', lignes: rec, total: total(rec) });
+    // Dépenses par section
+    var noms = [];
+    // Ordre des sections : celui de leur première ligne purement « dépense ».
+    [false, true].forEach(function (avecRecette) {
+      lignes.forEach(function (l) {
+        if (!l.horsBudget && !!l.recette === avecRecette && txt(l.section) && noms.indexOf(txt(l.section)) < 0) noms.push(txt(l.section));
+      });
+    });
+    var depParSection = {};
+    noms.forEach(function (sn) { depParSection[sn] = []; });
+    var autres = [];
+    lignes.forEach(function (l) {
+      if (l.horsBudget) return;
+      var x = rangee(txt(l.ligne), 'd');
+      if (txt(l.section)) depParSection[txt(l.section)].push(x);
+      else if (nonVide(x)) autres.push(x);
+    });
+    noms.forEach(function (sn) {
+      var rs = depParSection[sn];
+      sections.push({ titre: 'Dépenses — ' + sn, sens: 'd', lignes: rs, total: total(rs) });
+    });
+    // Lignes inconnues du référentiel (créées par une règle sans être déclarées)
+    Object.keys(presentes).forEach(function (k) {
+      if (connues[k] || k === INTERNE) return;
+      var xr = rangee(k, 'r'), xd = rangee(k, 'd');
+      if (nonVide(xr)) rec.push(xr);
+      if (nonVide(xd)) autres.push(xd);
+    });
+    sections[0].total = total(rec);
+    if (autres.length) sections.push({ titre: 'Dépenses — Autres', sens: 'd', lignes: autres, total: total(autres) });
+
+    var net = total(sections.map(function (s) { return s.total; }));
+    net.ligne = 'Résultat du groupe';
+
+    // Hors budget : flux de passage
+    lignes.forEach(function (l) {
+      if (!l.horsBudget) return;
+      var nom = txt(l.ligne), xr = rangee(nom, 'r'), xd = rangee(nom, 'd');
+      hors.push({ ligne: nom, recettes: xr, depenses: xd, solde: total([xr, xd]) });
+    });
+    var soldeHors = total(hors.map(function (h) { return h.solde; }));
+    soldeHors.ligne = 'Solde des flux hors budget';
+
+    var aClasser = (donnees.classees[saison] || []).filter(function (v) { return !v.ligne; });
+    var nc = agreger(aClasser)[''] || vide;
+
+    return {
+      saison: saison, n1: n1, n2: n2, sections: sections, net: net, horsBudget: hors,
+      soldeHorsBudget: soldeHors, aClasser: { nombre: aClasser.length, recettes: nc.r, depenses: nc.d }
+    };
+  }
+
+  /* ---------------------------------------------- flux par unité (camps…) */
+  /** Recettes / dépenses par unité pour les lignes hors budget de la saison. */
+  function fluxParUnite(classees, lignes) {
+    var hors = {};
+    (lignes || []).forEach(function (l) { if (l.horsBudget) hors[txt(l.ligne)] = true; });
+    var t = {};
+    classees.forEach(function (v) {
+      if (!hors[v.ligne]) return;
+      var u = v.unite || 'Groupe';
+      t[u] = t[u] || {};
+      t[u][v.ligne] = t[u][v.ligne] || { r: 0, d: 0 };
+      t[u][v.ligne].r += v.recette; t[u][v.ligne].d += v.depense;
+    });
+    return t;
+  }
+
+  /** Réel par ligne et par unité (pour le € par jeune N-1). */
+  function reelParUnite(classees, ligne) {
+    var t = {};
+    classees.forEach(function (v) {
+      if (v.ligne !== ligne) return;
+      t[v.unite] = arrondi((t[v.unite] || 0) + v.depense - v.recette);
+    });
+    return t;
+  }
+
+  /* --------------------------------------------------------- contrôles */
+  /** Identifiant de justificatif depuis un nom de fichier « 20260919_13 - …pdf ». */
+  function idFichier(nom) {
+    var m = txt(nom).match(/^(\d{7,8}_\d+)/);
+    return m ? m[1] : '';
+  }
+
+  var MODES_SANS_PIECE = ['caisse (depot)', 'caisse (retrait)', 'caisse (transfert)', 'especes', 'cheque'];
+
+  /**
+   * Justificatifs : écritures de dépense qui en demandent un, et leur état.
+   * Ne sont pas concernés : prélèvements de l'échelon national, mouvements internes,
+   * recettes, montants négatifs (remboursements).
+   */
+  function controleJustificatifs(ecritures, fichiers) {
+    var ids = {};
+    (fichiers || []).forEach(function (f) { var id = idFichier(f); if (id) ids[id] = f; });
+    var utilises = {}, manquants = [];
+    ecritures.forEach(function (e) {
+      if (e.piece && ids[e.piece]) utilises[e.piece] = true;
+      if (!(e.depense > 0)) return;
+      if (cle(e.tiersCat) === 'echelon national' || cle(e.tiersCat) === 'mon groupe') return;
+      if (MODES_SANS_PIECE.indexOf(cle(e.mode)) >= 0 && cle(e.mode) !== 'cheque') return;
+      if (!e.piece) manquants.push({ ecriture: e, probleme: 'Pas de n° de pièce' });
+      else if (!ids[e.piece]) manquants.push({ ecriture: e, probleme: 'Justificatif absent du Drive' });
+    });
+    var orphelins = Object.keys(ids).filter(function (id) { return !utilises[id]; }).map(function (id) { return ids[id]; });
+    return { manquants: manquants, orphelins: orphelins };
+  }
+
+  /** Écritures bancaires non rapprochées depuis plus de `jours` jours. */
+  function nonRapprochees(ecritures, aujourdHui, jours) {
+    var limite = new Date(aujourdHui.getTime() - (jours || 15) * 86400000);
+    var lim = dateIso(limite);
+    return ecritures.filter(function (e) {
+      var r1 = e.compte && cle(e.rappro) === 'non', r2 = e.compte2 && cle(e.rappro2) === 'non';
+      return (r1 || r2) && e.date && e.date <= lim;
+    });
+  }
+
+  /**
+   * Engagements ouverts pour lesquels une écriture correspondante est arrivée :
+   * même ligne, même sens, montant à 1 € ou 2 % près, datée au plus 60 jours avant l'engagement.
+   * Une ventilation ne sert qu'à un engagement. → [{engagement, ventilation}]
+   */
+  function correspondancesEngagements(engagements, classees, saison) {
+    var prises = {}, out = [];
+    (engagements || []).filter(function (e) {
+      return txt(e.saison) === saison && cle(e.statut) !== 'regle' && cle(e.statut) !== 'annule' && num(e.montant) > 0;
+    }).sort(function (a, b) { return txt(a.date) < txt(b.date) ? -1 : 1; }).forEach(function (e) {
+      var m = num(e.montant), recette = cle(e.sens) === 'recette', tol = Math.max(1, m * 0.02);
+      var avant = e.date ? dateIso(new Date(new Date(txt(e.date) + 'T12:00:00').getTime() - 60 * 86400000)) : '';
+      var v = (classees || []).filter(function (x) {
+        return !prises[x.cle] && x.ligne === e.ligne && Math.abs((recette ? x.recette : x.depense) - m) <= tol && (!avant || x.date >= avant);
+      }).sort(function (a, b) { return Math.abs((recette ? a.recette : a.depense) - m) - Math.abs((recette ? b.recette : b.depense) - m); })[0];
+      if (v) { prises[v.cle] = 1; out.push({ engagement: e, ventilation: v }); }
+    });
+    return out;
+  }
+
+  return {
+    correspondancesEngagements: correspondancesEngagements,
+    txt: txt, cle: cle, num: num, arrondi: arrondi, dateIso: dateIso,
+    INTERNE: INTERNE, METHODES: METHODES,
+    lireExport: lireExport, classer: classer, compilerRegles: compilerRegles,
+    compilerEffectifs: compilerEffectifs, montantPoste: montantPoste, quantitePoste: quantitePoste,
+    agreger: agreger, synthese: synthese, fluxParUnite: fluxParUnite, reelParUnite: reelParUnite,
+    idFichier: idFichier, controleJustificatifs: controleJustificatifs, nonRapprochees: nonRapprochees
+  };
+})();
+
+if (typeof module !== 'undefined') module.exports = Engine;
+
+</script>
+<script>
+/* =====================================================================
+ * Interface — Budget & suivi d'un groupe Scouts et Guides de France
+ * ===================================================================== */
+var D = null;          // données lues dans le classeur
+var C = {};            // ventilations classées par saison
+var ETAT = { vue: 'synthese', saison: '', param: 'groupe', modifie: false, filtre: { ligne: '', unite: '', texte: '', limite: 200 }, ouverts: {} };
+var VUES = [
+  ['synthese', 'Synthèse'], ['routine', 'Routine du mois'], ['budget', 'Budget - Dépenses'], ['recettes', 'Budget - Recettes'], ['realise', 'Réalisé'], ['engagements', 'À venir'],
+  ['flux', 'Camps & flux'], ['controles', 'Contrôles'], ['parametres', 'Paramètres']
+];
+/* Menu : groupes séparés par un trait ; Contrôles et Paramètres en bas (comme l'app Budget famille). */
+var LOGO = '/*LOGO*/';   // remplacé au build par le logo du groupe (app/src/logo.png)
+var NAV_GROUPES = [['synthese', 'routine'], ['budget', 'recettes'], ['realise', 'engagements'], ['flux']];
+var ICONES = {
+  synthese: '<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1z"/>',
+  routine: '<path d="M9 6h11M9 12h11M9 18h11"/><path d="M4 6l1 1 2-2M4 12l1 1 2-2M4 18l1 1 2-2"/>',
+  budget: '<path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/>',
+  recettes: '<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M12 13v4M10 15h4"/>',
+  realise: '<path d="M4 7h16v12H4z"/><path d="M4 11h16M8 15h3M16 4l-3 3M8 4l3 3"/>',
+  engagements: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  flux: '<path d="M2 20h20M12 4L3 20M12 4l9 16"/><path d="M12 12l-3 8M12 12l3 8"/>',
+  controles: '<path d="M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/>',
+  parametres: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/>'
+};
+function svg(trace, style) {
+  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"' + (style ? ' style="' + style + '"' : '') + '>' + trace + '</svg>';
+}
+
+/* ------------------------------------------------------------ utilitaires */
+function $(id) { return document.getElementById(id); }
+function esc(s) { return String(s === null || s === undefined ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+var NF0 = new Intl.NumberFormat('fr-FR', { maximumFractionDigits: 0 });
+var NF2 = new Intl.NumberFormat('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+/** Montant entier, négatifs entre parenthèses, zéro en tiret. */
+function fmt(n) {
+  if (n === null || n === undefined || n === '') return '';
+  var r = Math.round(n);
+  if (r === 0) return '<span class="zero">–</span>';
+  return r < 0 ? '(' + NF0.format(-r) + ')' : NF0.format(r);
+}
+function fmt2(n) { n = Math.round((n || 0) * 100) / 100; return n ? NF2.format(n) : ''; }
+function euros(n) { return NF0.format(Math.round(n || 0)) + ' €'; }
+function ecart(n) {
+  if (n === null || n === undefined) return '';
+  var r = Math.round(n);
+  return '<span class="' + (r > 0 ? 'positif' : r < 0 ? 'negatif' : 'zero') + '">' + fmt(n) + '</span>';
+}
+function dateFr(iso) { var m = String(iso || '').match(/^(\d{4})-(\d{2})-(\d{2})/); return m ? m[3] + '/' + m[2] + '/' + m[1].slice(2) : ''; }
+function toast(msg, ko) {
+  var t = $('toast'); t.textContent = msg; t.className = 'toast visible' + (ko ? ' ko' : '');
+  clearTimeout(toast.t); toast.t = setTimeout(function () { t.className = 'toast'; }, ko ? 6000 : 2800);
+}
+function appel(nom) {
+  var args = Array.prototype.slice.call(arguments, 1);
+  return new Promise(function (ok, ko) {
+    var r = google.script.run.withSuccessHandler(ok).withFailureHandler(function (e) { ko(e && e.message ? e : new Error(String(e))); });
+    r[nom].apply(r, args);
+  });
+}
+function erreur(e) { toast(e.message || String(e), true); console.error(e); }
+function options(liste, choisi, vide) {
+  return (vide !== undefined ? '<option value="">' + esc(vide) + '</option>' : '') + liste.map(function (o) {
+    var v = typeof o === 'object' ? o.v : o, l = typeof o === 'object' ? o.l : o;
+    return '<option value="' + esc(v) + '"' + (String(v) === String(choisi) ? ' selected' : '') + '>' + esc(l) + '</option>';
+  }).join('');
+}
+function modale(html) { $('modaleBoite').innerHTML = html; $('modale').hidden = false; }
+function fermerModale() { $('modale').hidden = true; }
+
+/* ---------------------------------------------------------- données */
+function codes() { return D.saisons.map(function (s) { return s.code; }); }
+function courante() { var c = D.saisons.filter(function (s) { return s.courante; })[0]; return c ? c.code : codes().slice(-1)[0]; }
+function precedente(s) { var i = codes().indexOf(s); return i > 0 ? codes()[i - 1] : null; }
+function nomsLignes() { return D.lignes.slice().sort(function (a, b) { return a.ordre - b.ordre; }).map(function (l) { return l.ligne; }); }
+function nomsUnites() { return D.unites.slice().sort(function (a, b) { return a.ordre - b.ordre; }).map(function (u) { return u.unite; }).filter(function (u, i, t) { return t.indexOf(u) === i; }); }
+function reclasser() {
+  C = {};
+  codes().forEach(function (s) { C[s] = Engine.classer(D.ventilations[s] || [], D.regles, D.unites, D.corrections); });
+}
+/** Données du moteur ; `source` = id d'une version figée pour en utiliser le budget (sinon budget de travail). */
+function donneesSynthese(source) {
+  return { saisons: D.saisons, classees: C, lignes: D.lignes, budget: budgetPour(source), engagements: D.engagements, effectifs: D.effectifs };
+}
+/* --- versions du budget --- */
+function versionsSaison(s) {
+  return (D.versions || []).filter(function (v) { return v.saison === (s || ETAT.saison); }).sort(function (a, b) { return String(a.date) < String(b.date) ? -1 : 1; });
+}
+function versionReference(s) { return versionsSaison(s).filter(function (v) { return v.reference; })[0] || null; }
+function versionParId(id) { return (D.versions || []).filter(function (v) { return v.id === id; })[0] || null; }
+/** Postes d'une version figée, en montants gelés. */
+function postesVersion(id) {
+  return (D.budgetFige || []).filter(function (p) { return p.version === id; }).map(function (p) {
+    return { saison: p.saison, ligne: p.ligne, sens: p.sens, poste: p.poste, unite: p.unite, methode: 'montant', montant: Engine.num(p.montant), commentaire: p.commentaire, evenement: p.evenement };
+  });
+}
+function budgetPour(source) {
+  var v = source && source !== 'courant' ? versionParId(source) : null;
+  if (!v) return D.budget;
+  return D.budget.filter(function (p) { return p.saison !== v.saison; }).concat(postesVersion(v.id));
+}
+function charger(silencieux) {
+  if (!silencieux) $('vue').innerHTML = '<div class="chargement">Lecture du classeur…</div>';
+  return appel('getDonnees').then(function (d) {
+    D = d;
+    if (!ETAT.saison || codes().indexOf(ETAT.saison) < 0) ETAT.saison = courante();
+    // Pièce comptable (AAAAMMJJ_n) → fichier du dossier Drive des justificatifs
+    D.pieces = {};
+    (D.fichiers || []).forEach(function (nom) { var id = Engine.idFichier(nom); if (id && !D.pieces[id]) D.pieces[id] = { nom: nom, url: (D.liensFichiers || {})[nom] || '' }; });
+    reclasser();
+    $('saison').innerHTML = options(codes().slice().reverse(), ETAT.saison);
+    var jExp = joursAvantExpiration();
+    $('alertes').innerHTML = (D.groupe && !D.groupe.configure ? '<div class="alerte info">Bienvenue ! Commence par renseigner ton groupe (nom, logo, adresse) dans ' +
+      '<a href="#" onclick="ETAT.param=\'groupe\';aller(\'parametres\');return false">Paramètres › Groupe</a>, puis suis le guide d\u2019installation.</div>' : '') +
+      (D.erreurs || []).map(function (e) { return '<div class="alerte ko">' + esc(e) + '</div>'; }).join('') +
+      (jExp !== null && jExp <= 30 ? '<div class="alerte' + (jExp <= 7 ? ' ko' : '') + '">⏳ Le jeton GitHub du robot ' + (jExp < 0 ? 'a expiré' : 'expire dans ' + jExp + ' jour(s)') +
+        ' (' + dateFr(D.github.expiration) + '). Crée-en un nouveau et colle-le dans <a href="#" onclick="ETAT.param=\'imports\';aller(\'parametres\');return false">Paramètres › Imports</a>.</div>' : '');
+    $('infoDonnees').textContent = D.journal.length ? 'Comptaweb du ' + dernierRobot() : 'Pas encore de données Comptaweb';
+    $('infoDonnees').title = 'Classeur lu à ' + new Date(D.maintenant).toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' });
+    afficher();
+  }).catch(erreur);
+}
+function dernierRobot() {
+  var j = D.journal[D.journal.length - 1];
+  if (!j) return '';
+  var d = new Date(j.date);
+  return isNaN(d) ? j.date : d.toLocaleString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' });
+}
+
+/* ------------------------------------------------------------ navigation */
+function menu() {
+  var lib = {}; VUES.forEach(function (v) { lib[v[0]] = v[1]; });
+  var syn = Engine.synthese(donneesSynthese(), ETAT.saison), pastilles = {};
+  if (syn.aClasser.nombre) pastilles.realise = ['wa', syn.aClasser.nombre];
+  var ouverts = D.engagements.filter(function (e) { return e.saison === ETAT.saison && ['regle', 'annule'].indexOf(Engine.cle(e.statut)) < 0; }).length;
+  if (ouverts) pastilles.engagements = ['pl', ouverts];
+  try { var reste = routineEtapes().etapes.filter(function (e) { return !e.fait; }).length; if (reste) pastilles.routine = ['pl', reste]; } catch (e) { }
+  try {
+    var j = Engine.controleJustificatifs(D.ecritures[ETAT.saison] || [], D.fichiers).manquants.length;
+    if (j) pastilles.controles = ['wa', j];
+  } catch (e) { }
+  function bouton(k) {
+    var p = pastilles[k];
+    return '<button data-vue="' + k + '" class="' + (ETAT.vue === k ? 'on' : '') + '">' + svg(ICONES[k]) + esc(lib[k]) +
+      (p ? ' <span class="pill ' + p[0] + '">' + p[1] + '</span>' : '') + '</button>';
+  }
+  var g = D.groupe || {}, logo = g.logo || (LOGO.indexOf('data:') === 0 ? LOGO : '');
+  document.title = g.titre || 'Budget du groupe';
+  $('nav').innerHTML = '<div class="brand">' + (logo ? '<img class="logo-groupe" src="' + esc(logo) + '" alt="Logo du groupe">' : '') +
+    esc(g.titre || 'Budget du groupe') + (g.nom ? '<small>' + esc(g.nom.replace(/^Groupe\s+/i, '')) + '</small>' : '') + '</div>' +
+    '<div class="nav-main">' + NAV_GROUPES.map(function (g) { return g.map(bouton).join(''); }).join('<hr class="nav-sep">') + '</div>' +
+    '<div class="nav-bas">' + bouton('controles') + bouton('parametres') +
+    '<a class="navlien" href="' + esc(D.classeurUrl) + '" target="_blank" rel="noopener" title="Ouvrir le classeur Google Sheets dans un nouvel onglet">' +
+    svg('<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M4 9h16M4 15h16M10 9v12"/>') + 'Google Sheet' +
+    svg('<path d="M14 4h6v6M20 4l-9 9M18 14v6H4V6h6"/>', 'width:12px;height:12px;margin-left:auto') + '</a></div>';
+}
+/** Ouvre une ligne dans la page Budget (bon onglet) et place le curseur sur sa première case. */
+function allerBudget(ligne, sens) {
+  if (sens === 'Recette') aller('recettes');
+  else { ETAT.budgetOnglet = ONGLET_DE_SAISIE[saisie(ligne)] || 'synthese'; aller('budget'); }
+  var sel = saisie(ligne) === 'par_jeune' && sens !== 'Recette' ? '[data-f^="mv|"]' : '[data-f*="|' + ligne.replace(/["\\]/g, '\\$&') + '"]';
+  var e = document.querySelector(sel);
+  if (e) { e.scrollIntoView({ block: 'center' }); e.focus(); if (e.select) e.select(); }
+}
+/** Ouvre le Réalisé filtré sur une ligne, pour une saison donnée. */
+function allerReel(ligne, saison, extra) {
+  extra = extra || {};
+  if (saison && saison !== ETAT.saison) { ETAT.saison = saison; $('saison').value = saison; }
+  aller('realise', { ligne: ligne, unite: extra.unite || '', texte: '', cat: extra.cat || null });
+}
+/** Cellule de réel cliquable : ouvre le Réalisé de la saison, filtré sur la ligne (et l'unité ou la catégorie). */
+function tdReel(montant, ligne, saison, extra, classes) {
+  var c = 'n' + (classes ? ' ' + classes : '');
+  if (!montant || !saison) return '<td class="' + c + '">' + fmt(montant) + '</td>';
+  return '<td class="' + c + ' lien" title="Voir les écritures ' + esc(saison) + '" onclick="allerReel(' + jsArg(ligne) + ',' + jsArg(saison) + ',' + jsArg(extra || {}) + ')">' + fmt(montant) + '</td>';
+}
+function aller(vue, filtre) {
+  if (ETAT.modifie && vue !== ETAT.vue && !confirm('Des modifications ne sont pas enregistrées. Les abandonner ?')) return;
+  if (vue !== ETAT.vue) ETAT.modifie = false;
+  ETAT.vue = vue;
+  if (filtre) { for (var k in filtre) ETAT.filtre[k] = filtre[k]; ETAT.filtre.limite = 200; }
+  afficher();
+  window.scrollTo(0, 0);
+}
+function afficher() {
+  if (!D) return;
+  $('robotEntete').innerHTML = boutonRobot('discret');
+  menu();
+  var v = VUES.filter(function (x) { return x[0] === ETAT.vue; })[0];
+  $('titre').textContent = v[1];
+  var f = { synthese: vueSynthese, routine: vueRoutine, budget: vueBudget, recettes: vueRecettes, realise: vueRealise, engagements: vueEngagements, flux: vueFlux, controles: vueControles, parametres: vueParametres }[ETAT.vue];
+  $('vue').innerHTML = f();
+}
+
+/* ------------------------------------------------------------- synthèse */
+function vueSynthese() {
+  var src = ETAT.versionSynthese && versionParId(ETAT.versionSynthese) && versionParId(ETAT.versionSynthese).saison === ETAT.saison ? ETAT.versionSynthese : 'courant';
+  var syn = Engine.synthese(donneesSynthese(src), ETAT.saison);
+  var rec = syn.sections[0].total, dep = syn.sections.slice(1);
+  var depB = dep.reduce(function (a, s) { return a + (s.total.budget || 0); }, 0);
+  var depR = dep.reduce(function (a, s) { return a + (s.total.reel || 0); }, 0);
+  var just = Engine.controleJustificatifs(D.ecritures[ETAT.saison] || [], D.fichiers);
+  var h = '<div class="tuiles">' +
+    tuile('Résultat projeté', fmt(syn.net.projete), 'budget ' + fmt(syn.net.budget) + ' · écart ' + ecart(syn.net.varProjete)) +
+    tuile('Recettes encaissées', euros(rec.reel), 'sur ' + euros(rec.budget) + ' budgétées', jauge(rec.reel, rec.budget, true)) +
+    tuile('Dépenses réalisées', euros(-depR), 'sur ' + euros(-depB) + ' budgétées', jauge(-depR, -depB)) +
+    tuile('Flux hors budget', fmt(syn.soldeHorsBudget.reel), 'camps, cotisations, extra-jobs') +
+    tuile('À classer', syn.aClasser.nombre, syn.aClasser.nombre ? 'écritures sans ligne' : 'tout est classé', '', "aller('realise',{ligne:'__aclasser'})") +
+    tuile('Justificatifs', just.manquants.length, just.manquants.length ? 'dépenses sans pièce' : 'tout est en ordre', '', "aller('controles')") +
+    '</div>';
+  var n2 = syn.n2 ? 'Réel ' + syn.n2 : '', n1 = syn.n1 ? 'Réel ' + syn.n1 : '';
+  var vs = versionsSaison();
+  if (vs.length) {
+    h += '<div class="filtres"><span class="aide">Budget affiché :</span><select onchange="ETAT.versionSynthese=this.value;afficher()">' +
+      options([{ v: 'courant', l: 'Version de travail (en cours)' }].concat(vs.slice().reverse().map(function (v) { return { v: v.id, l: (v.reference ? '★ ' : '') + v.nom + ' (' + String(v.date).slice(0, 10) + ')' }; })), src) +
+      '</select>' + (src !== 'courant' ? '<span class="pill pl">version figée</span>' : '') + '</div>';
+  }
+  h += '<div class="carte"><div class="tableau-defile"><table class="synthese budget">' + cols(['lib'].concat(syn.n2 ? ['n'] : [], syn.n1 ? ['n'] : [], ['bn'], syn.n1 ? ['n'] : [], ['n', 'n', 'n', 'n', 'n'])) + '<thead><tr><th></th>' +
+    (n2 ? '<th class="n masque-mobile">' + n2 + '</th>' : '') + (n1 ? '<th class="n">' + n1 + '</th>' : '') +
+    '<th class="n col-n">Budget</th>' + (n1 ? '<th class="n masque-mobile">vs N-1</th>' : '') +
+    '<th class="n col-n">Réel</th><th class="n masque-mobile">vs budget</th>' +
+    '<th class="n col-n">À venir</th><th class="n">Projeté</th><th class="n">vs budget</th></tr></thead><tbody>';
+  // Cellules cliquables : budget → page Budget, réels → Réalisé de la saison, à venir → engagements
+  function rangee(l, cls, sens) {
+    var L = jsArg(l.ligne);
+    function lien(action, titre) { return sens ? ' lien" title="' + titre + '" onclick="' + action : ''; }
+    return '<tr class="' + (cls || '') + '"><td>' + esc(l.ligne) + '</td>' +
+      (n2 ? '<td class="n masque-mobile' + lien('allerReel(' + L + ',\'' + syn.n2 + '\')', 'Voir les écritures ' + syn.n2) + '">' + fmt(l.n2) + '</td>' : '') +
+      (n1 ? '<td class="n' + lien('allerReel(' + L + ',\'' + syn.n1 + '\')', 'Voir les écritures ' + syn.n1) + '">' + fmt(l.n1) + '</td>' : '') +
+      '<td class="n col-n' + lien('allerBudget(' + L + ',\'' + sens + '\')', 'Ouvrir dans le budget') + '">' + fmt(l.budget) + '</td>' +
+      (n1 ? '<td class="n masque-mobile">' + ecart(l.varN1) + '</td>' : '') +
+      '<td class="n col-n' + lien('allerReel(' + L + ',ETAT.saison)', 'Voir les écritures') + '">' + fmt(l.reel) + '</td><td class="n masque-mobile">' + ecart(l.varBudget) + '</td>' +
+      '<td class="n col-n' + lien('aller(\'engagements\')', 'Voir les engagements') + '">' + fmt(l.engage) + '</td><td class="n"><b>' + fmt(l.projete) + '</b></td><td class="n">' + ecart(l.varProjete) + '</td></tr>';
+  }
+  var ncol = 7 + (n1 ? 2 : 0) + (n2 ? 1 : 0);
+  syn.sections.forEach(function (s) {
+    h += '<tr class="section"><td colspan="' + ncol + '">' + esc(s.titre) + '</td></tr>';
+    s.lignes.forEach(function (l) { h += rangee(l, '', s.sens === 'r' ? 'Recette' : 'Dépense'); });
+    h += rangee(s.total, 'total');
+  });
+  h += rangee(syn.net, 'grand-total');
+  h += '</tbody></table></div><p class="aide">Recettes en positif, dépenses entre parenthèses. Un écart positif est favorable. ' +
+    '« À venir » = engagements saisis et non réglés. Clique un montant de budget pour l\u2019ouvrir dans le budget, un réel pour voir ses écritures.</p></div>';
+
+  // Hors budget
+  h += '<div class="carte"><div class="entete-carte"><div><h2>Flux hors budget du groupe</h2><p class="sous">Camps, cotisations reversées au National, extra-jobs des unités, régularisations N-1.</p></div>' +
+    '<a href="#" onclick="aller(\'flux\');return false">Détail par unité →</a></div><div class="tableau-defile"><table><thead><tr><th></th>' +
+    (n1 ? '<th class="n">Recettes N-1</th><th class="n">Dépenses N-1</th><th class="n">Solde N-1</th>' : '') +
+    '<th class="n col-n">Recettes</th><th class="n">Dépenses</th><th class="n">Solde</th></tr></thead><tbody>';
+  syn.horsBudget.forEach(function (x) {
+    h += '<tr class="cliquable" onclick="aller(\'realise\',{ligne:' + esc(JSON.stringify(x.ligne)) + '})"><td>' + esc(x.ligne) + '</td>' +
+      (n1 ? '<td class="n">' + fmt(x.recettes.n1) + '</td><td class="n">' + fmt(x.depenses.n1) + '</td><td class="n">' + fmt(x.solde.n1) + '</td>' : '') +
+      '<td class="n col-n">' + fmt(x.recettes.reel) + '</td><td class="n">' + fmt(x.depenses.reel) + '</td><td class="n"><b>' + fmt(x.solde.reel) + '</b></td></tr>';
+  });
+  h += '<tr class="total"><td>Solde</td>' + (n1 ? '<td></td><td></td><td class="n">' + fmt(syn.soldeHorsBudget.n1) + '</td>' : '') +
+    '<td class="col-n"></td><td></td><td class="n">' + fmt(syn.soldeHorsBudget.reel) + '</td></tr></tbody></table></div></div>';
+  if (syn.aClasser.nombre) {
+    h += '<div class="alerte">' + syn.aClasser.nombre + ' ventilation(s) sans ligne de budget (' + euros(syn.aClasser.depenses) + ' de dépenses, ' +
+      euros(syn.aClasser.recettes) + ' de recettes) ne sont pas dans la synthèse. <a href="#" onclick="aller(\'realise\',{ligne:\'__aclasser\'});return false">Les classer</a></div>';
+  }
+  return h;
+}
+function tuile(lib, val, det, extra, clic) {
+  return '<div class="tuile' + (clic ? ' cliquable" onclick="' + clic : '') + '"><div class="lib">' + esc(lib) + '</div><div class="val">' + val + '</div>' +
+    (det ? '<div class="det">' + det + '</div>' : '') + (extra || '') + '</div>';
+}
+function jauge(v, total, recette) {
+  if (!total) return '';
+  var p = Math.round(100 * v / total);
+  return '<div class="jauge" style="margin-top:6px" title="' + p + ' %"><i class="' + (p > 100 && !recette ? 'depasse' : '') + '" style="width:' + Math.min(100, Math.max(0, p)) + '%"></i></div>';
+}
+
+/* --------------------------------------------------------------- budget */
+/* Page « Budget - Dépenses » : onglets Synthèse, Sorties, Week-ends, Dîners, Fonctionnement.
+ * Page « Budget - Recettes » : un montant par ligne.
+ * Chaque ligne de dépense a une « saisie » (colonne Saisie du budget de l'onglet Lignes). */
+var SAISIES = [
+  { v: '', l: 'Automatique' }, { v: 'par_unite', l: 'Sorties : € par jeune et par unité' }, { v: 'weekend', l: 'Week-end : bloc par catégorie' },
+  { v: 'diner', l: 'Dîner : alimentation + divers' }, { v: 'montant', l: 'Fonctionnement : montant' }, { v: 'par_jeune', l: 'Mouvement : barème par jeune' }
+];
+var ONGLETS_DEP = [['synthese', 'Synthèse'], ['sorties', 'Sorties & WE d’unité'], ['weekends', 'Week-ends'], ['diners', 'Dîners'], ['mouvement', 'Mouvement'], ['fonctionnement', 'Fonctionnement'], ['versions', 'Versions']];
+var ONGLET_DE_SAISIE = { par_unite: 'sorties', weekend: 'weekends', diner: 'diners', montant: 'fonctionnement', par_jeune: 'mouvement' };
+var COMPOSANTES_MVT = ['Territoire', 'Fond de solidarité interterritorial', 'Fond de péréquation', 'Fonctionnement échelon National'];
+/** Composante du barème du Mouvement d'après un libellé de poste ou une nature Comptaweb (« Participation au FSI »…). */
+function composante(nom) {
+  var c = Engine.cle(nom);
+  if (/fsi|solidarit/.test(c)) return COMPOSANTES_MVT[1];
+  if (/perequation/.test(c)) return COMPOSANTES_MVT[2];
+  if (/territoire/.test(c)) return COMPOSANTES_MVT[0];
+  if (/mouvement|national/.test(c)) return COMPOSANTES_MVT[3];
+  return null;
+}
+var CATEGORIES = {
+  weekend: ['Lieu', 'Transport', 'Camion & Essence', 'Alimentation', 'Autre'],
+  diner: ['Alimentation', 'Divers']
+};
+
+/** Façon de saisir le budget de dépenses d'une ligne (colonne « Saisie du budget », sinon devinée d'après le nom). */
+function saisie(ligne) {
+  var l = D.lignes.filter(function (x) { return x.ligne === ligne; })[0];
+  var v = l && l.budget ? ({ evenements: 'weekend', detail: 'montant', direct: 'montant' }[l.budget] || l.budget) : '';
+  if (v && ONGLET_DE_SAISIE[v]) return v;
+  var c = Engine.cle(ligne);
+  if (/^sorties/.test(c)) return 'par_unite';
+  if (/^week-?end/.test(c)) return 'weekend';
+  if (/^d[iî]ner/.test(c)) return 'diner';
+  if (/^participation au mouvement/.test(c)) return 'par_jeune';
+  return 'montant';
+}
+/** Catégorie d'un libellé (poste de budget ou nature Comptaweb) pour un bloc week-end ou dîner. */
+function categorie(nom, type) {
+  var cats = CATEGORIES[type || 'weekend'];
+  if (cats.indexOf(nom) >= 0) return nom;
+  var c = Engine.cle(nom);
+  if (type === 'diner') return /aliment|intendance|nourriture|boisson|repas|course|traiteur/.test(c) ? 'Alimentation' : 'Divers';
+  if (/camion|essence|carbur|peage|gasoil|location vehicule|vehicule/.test(c)) return 'Camion & Essence';
+  if (/transport|autocar|\bcar\b|train|bus|billet|metro|rer/.test(c)) return 'Transport';
+  if (/lieu|heberg|gite|salle|terrain|taxe de sejour|seminaire/.test(c)) return 'Lieu';
+  if (/aliment|intendance|nourriture|boisson|repas|course/.test(c)) return 'Alimentation';
+  return 'Autre';
+}
+function postesDe(ligne, sens, saison) {
+  saison = saison || ETAT.saison;
+  return D.budget.filter(function (p) { return p.saison === saison && p.ligne === ligne && p.sens === sens; });
+}
+function unitesJeunes() { return nomsUnites().filter(function (u) { return u !== 'Groupe' && u !== 'National'; }); }
+function jsArg(v) { return esc(JSON.stringify(v)); }
+function nombre(v) { return v === '' || v === null || v === undefined ? 0 : Engine.num(v); }
+/** Lignes de dépenses du budget du groupe, dans l'ordre. */
+function lignesDepenses() {
+  return D.lignes.filter(function (l) { return l.section && !l.horsBudget; })
+    .sort(function (a, b) { return (Number(a.ordre) || 0) - (Number(b.ordre) || 0); }).map(function (l) { return l.ligne; });
+}
+function lignesRecettes() {
+  return D.lignes.filter(function (l) { return l.recette && !l.horsBudget; })
+    .sort(function (a, b) { return (Number(a.ordre) || 0) - (Number(b.ordre) || 0); }).map(function (l) { return l.ligne; });
+}
+/** Dépense nette (dépenses − remboursements) d'une saison pour une ligne, éventuellement filtrée. */
+function reelDep(saison, ligne, filtre) {
+  return (C[saison] || []).reduce(function (a, v) { return v.ligne === ligne && (!filtre || filtre(v)) ? a + v.depense - v.recette : a; }, 0);
+}
+/** Réels N-2, N-1, N et budget par ligne, côté dépenses (positifs) et recettes, tels que la synthèse les calcule. */
+function chiffresLignes(source) {
+  var syn = Engine.synthese(donneesSynthese(source), ETAT.saison), out = { dep: {}, rec: {} };
+  syn.sections.forEach(function (sec, i) {
+    var signe = i === 0 ? 1 : -1, cible = i === 0 ? out.rec : out.dep;
+    sec.lignes.forEach(function (l) { cible[l.ligne] = { n2: signe * (l.n2 || 0), n1: signe * (l.n1 || 0), b: signe * (l.budget || 0), r: signe * (l.reel || 0) }; });
+  });
+  return out;
+}
+function budgetLigne(ligne, sens, saison) {
+  var eff = Engine.compilerEffectifs(D.effectifs);
+  return postesDe(ligne, sens, saison).reduce(function (a, p) { return a + Engine.montantPoste(p, eff); }, 0);
+}
+/** Largeurs et bandes de colonnes d'un tableau : lib (libellé, prend la place), n (nombre), bn (colonne du budget N, teintée). */
+function cols(types) { return '<colgroup>' + types.map(function (t) { return '<col class="c-' + t + '">'; }).join('') + '</colgroup>'; }
+/** Valeur d'une cellule de saisie : vide si zéro. */
+function val(n) { return n ? Engine.arrondi(n) : ''; }
+
+/* --- enregistrement : file d'attente, ids provisoires, mise à jour immédiate de l'écran --- */
+var FILE = Promise.resolve(), IDS = {}, NTMP = 0;
+function vraiId(id) { return IDS[id] || id; }
+function majPostes(suppr, postes) {
+  suppr = suppr || []; postes = postes || [];
+  postes.forEach(function (p) { if (!p.id) p.id = 'tmp' + (++NTMP); });
+  D.budget = D.budget.filter(function (p) { return suppr.indexOf(p.id) < 0; });
+  postes.forEach(function (p) {
+    if (D.budget.indexOf(p) >= 0) return;
+    var j = D.budget.map(function (x) { return x.id; }).indexOf(p.id);
+    if (j < 0) D.budget.push(p); else D.budget[j] = p;
+  });
+  rafraichir();
+  FILE = FILE.then(function () {
+    var envoi = postes.map(function (p) {
+      var o = {}; for (var k in p) o[k] = p[k];
+      o.id = /^tmp/.test(o.id) ? (IDS[o.id] || '') : o.id;
+      return o;
+    });
+    return appel('majPostes', suppr.map(vraiId).filter(function (id) { return !/^tmp/.test(id); }), envoi).then(function (out) {
+      out.forEach(function (o, i) { if (/^tmp/.test(postes[i].id)) IDS[postes[i].id] = o.id; });
+      toast('Enregistré');
+    });
+  }).catch(function (e) { erreur(e); charger(true); });
+  return FILE;
+}
+/** Ré-affiche en gardant la position et le champ actif (repéré par data-f). */
+function rafraichir() {
+  setTimeout(function () {
+    var a = document.activeElement, f = a && a.dataset ? a.dataset.f : null, y = window.scrollY;
+    afficher(); window.scrollTo(0, y);
+    if (f) { var e = document.querySelector('[data-f="' + f.replace(/"/g, '\\"') + '"]'); if (e) { e.focus(); if (e.select) e.select(); } }
+  }, 0);
+}
+/** Ramène les postes d'une ligne à un seul poste (garde la trace des anciens en commentaire). */
+function posteUnique(ligne, sens, filtre, modele) {
+  var ps = postesDe(ligne, sens).filter(filtre || function () { return true; });
+  var eff = Engine.compilerEffectifs(D.effectifs);
+  var p = ps.length === 1 ? ps[0] : null;
+  var trace = ps.length > 1 ? ps.map(function (q) { return q.poste + ' ' + NF0.format(Engine.montantPoste(q, eff)); }).join(', ') : '';
+  return { suppr: p ? [] : ps.map(function (q) { return q.id; }), poste: p, trace: trace, modele: modele };
+}
+function enregistrerMontant(ligne, sens, filtre, modele, valeurs) {
+  var u = posteUnique(ligne, sens, filtre);
+  var vide = !nombre(valeurs.montant) && !nombre(valeurs.prix);
+  if (vide) return majPostes(u.poste ? [u.poste.id] : u.suppr, []);
+  var p = u.poste || {}; var k;
+  for (k in modele) if (p[k] === undefined || k === 'methode' || k === 'unite') p[k] = modele[k];
+  for (k in valeurs) p[k] = valeurs[k];
+  p.saison = ETAT.saison; p.ligne = ligne; p.sens = sens;
+  if (u.trace) p.commentaire = 'Avant : ' + u.trace;
+  majPostes(u.suppr, [p]);
+}
+
+/* --- page Budget - Dépenses --- */
+function bandeauVersion() {
+  var ref = versionReference(), vs = versionsSaison();
+  if (!vs.length) return '';
+  var cur = Engine.synthese(donneesSynthese(), ETAT.saison).net.budget;
+  if (!ref) return '<p class="aide bandeau-version">Version de travail · ' + vs.length + ' version(s) figée(s), aucune de référence. <a href="#" onclick="ETAT.budgetOnglet=\'versions\';aller(\'budget\');return false">Versions</a></p>';
+  var r = Engine.synthese(donneesSynthese(ref.id), ETAT.saison).net.budget;
+  return '<p class="aide bandeau-version">Version de travail · référence <b>★ ' + esc(ref.nom) + '</b> (' + String(ref.date).slice(0, 10) + ') : résultat ' + fmt(r) +
+    ' → ' + fmt(cur) + (Math.abs(cur - r) >= 0.5 ? ', écart ' + ecart(cur - r) : ' (inchangé)') +
+    ' · <a href="#" onclick="ETAT.budgetOnglet=\'versions\';aller(\'budget\');return false">Versions</a></p>';
+}
+function vueBudget() {
+  var o = ETAT.budgetOnglet || 'synthese';
+  var h = bandeauVersion() + '<div class="onglets">' + ONGLETS_DEP.map(function (x) {
+    return '<button class="' + (o === x[0] ? 'actif' : '') + '" onclick="ETAT.budgetOnglet=\'' + x[0] + '\';afficher()">' + esc(x[1]) + '</button>';
+  }).join('') + '</div>';
+  return h + ({ synthese: depSynthese, sorties: depSorties, weekends: function () { return depBlocs('weekend'); },
+    diners: function () { return depBlocs('diner'); }, mouvement: depMouvement, fonctionnement: depFonctionnement, versions: vueVersions }[o])();
+}
+function boutonPreremplir(onglet) {
+  var n1 = precedente(ETAT.saison);
+  return n1 ? '<button class="btn discret" title="Remplit seulement les cases vides : budget ' + n1 + ' s’il existe, sinon réel ' + n1 + '" onclick="preremplir(\'' + onglet + '\')">Préremplir depuis ' + n1 + '</button>' : '';
+}
+
+/* Synthèse des dépenses */
+function depSynthese() {
+  var s = ETAT.saison, n1 = precedente(s), n2 = n1 ? precedente(n1) : null;
+  var eff = Engine.compilerEffectifs(D.effectifs), syn = Engine.synthese(donneesSynthese(), s);
+  var lignes = lignesDepenses(), groupes = {};
+  lignes.forEach(function (l) { var g = ONGLET_DE_SAISIE[saisie(l)]; (groupes[g] = groupes[g] || []).push(l); });
+  var ref = versionReference(), CV = ref ? chiffresLignes(ref.id).dep : null, K = ['n2', 'n1', 'b', 'r', 'v'];
+  var T = { n2: 0, n1: 0, b: 0, r: 0, v: 0 }, CH = chiffresLignes().dep;
+  var corps = '';
+  ONGLETS_DEP.slice(1).forEach(function (o) {
+    var ls = groupes[o[0]] || [];
+    if (!ls.length) return;
+    var t = { n2: 0, n1: 0, b: 0, r: 0, v: 0 };
+    var rangs = ls.map(function (l) {
+      var x = CH[l] || { n2: 0, n1: 0, b: 0, r: 0 };
+      x.v = CV && CV[l] ? CV[l].b : 0;
+      K.forEach(function (k) { t[k] += x[k] || 0; });
+      return rangSynthese(l, x, n1, n2, '', true, !!ref);
+    }).join('');
+    K.forEach(function (k) { T[k] += t[k]; });
+    corps += '<tr class="section"><td colspan="' + (ref ? 10 : 8) + '">' + esc(o[1]) + '</td></tr>' + rangs + (ls.length > 1 ? rangSynthese('Total', t, n1, n2, 'total', false, !!ref) : '');
+  });
+  var jeunes = eff.total(s), j1 = n1 ? eff.total(n1) : 0;
+  var h = '<div class="tuiles">' +
+    tuile('Dépenses budgétées', euros(T.b), n1 ? 'réel ' + n1 + ' : ' + euros(T.n1) + ' · ' + ecart(T.n1 - T.b) : '') +
+    tuile('Coût par jeune', jeunes ? euros(T.b / jeunes) : '–', jeunes + ' jeunes' + (j1 ? ' · ' + n1 + ' : ' + euros(T.n1 / j1) : '')) +
+    tuile('Dépensé à date', euros(T.r), 'sur ' + euros(T.b) + ' budgétés', jauge(T.r, T.b)) +
+    tuile('Résultat budgété', fmt(syn.net.budget), 'recettes ' + euros(syn.sections[0].total.budget) + ' − dépenses', '', "aller('recettes')") + '</div>';
+  h += '<div class="carte"><div class="tableau-defile"><table class="budget">' + cols(['lib', 'n', 'n', 'bn'].concat(ref ? ['n', 'n'] : [], ['n', 'n', 'n', 'n'])) + '<thead><tr><th></th>' + (n2 ? '<th class="n masque-mobile">Réel ' + n2 + '</th>' : '<th></th>') +
+    (n1 ? '<th class="n">Réel ' + n1 + '</th>' : '<th></th>') + '<th class="n col-n">Budget ' + s + '</th>' +
+    (ref ? '<th class="n" title="' + esc(ref.nom) + '">Voté</th><th class="n masque-mobile">vs voté</th>' : '') + '<th class="n masque-mobile">vs N-1</th>' +
+    '<th class="n col-n">Réel ' + s + '</th><th class="n">Reste</th><th class="n masque-mobile">Consommé</th></tr></thead><tbody>' + corps +
+    rangSynthese('Total dépenses', T, n1, n2, 'grand-total', false, !!ref) + '</tbody></table></div>' +
+    '<p class="aide">Montants en dépenses (positifs). « vs N-1 » : en vert si le budget est inférieur au réel N-1. Clique un budget pour l’ouvrir dans son onglet, un réel pour voir ses écritures.</p></div>';
+  return h;
+}
+function rangSynthese(nom, x, n1, n2, cls, liens, vote) {
+  var p = x.b ? Math.round(100 * x.r / x.b) : null, L = jsArg(nom);
+  function lien(action, titre) { return liens ? ' lien" title="' + titre + '" onclick="' + action : ''; }
+  return '<tr class="' + (cls || '') + '"><td>' + esc(nom) + '</td>' +
+    (n2 ? '<td class="n masque-mobile' + lien('allerReel(' + L + ',\'' + n2 + '\')', 'Voir les écritures ' + n2) + '">' + fmt(x.n2) + '</td>' : '<td></td>') +
+    (n1 ? '<td class="n' + lien('allerReel(' + L + ',\'' + n1 + '\')', 'Voir les écritures ' + n1) + '">' + fmt(x.n1) + '</td>' : '<td></td>') +
+    '<td class="n col-n' + lien('allerBudget(' + L + ',\'Dépense\')', 'Ouvrir dans son onglet') + '"><b>' + fmt(x.b) + '</b></td>' +
+    (vote ? '<td class="n">' + fmt(x.v) + '</td><td class="n masque-mobile">' + ecart((x.v || 0) - x.b) + '</td>' : '') +
+    '<td class="n masque-mobile">' + (n1 ? ecart(x.n1 - x.b) : '') + '</td><td class="n col-n' + lien('allerReel(' + L + ',ETAT.saison)', 'Voir les écritures') + '">' + fmt(x.r) + '</td>' +
+    '<td class="n">' + ecart(x.b - x.r) + '</td><td class="n masque-mobile">' + (p === null ? '' : '<span class="' + (p > 100 ? 'negatif' : '') + '">' + p + ' %</span>') + '</td></tr>';
+}
+
+/* Sorties, Activités & WE d'unité : € par jeune et par unité */
+function depSorties() {
+  var lignes = lignesDepenses().filter(function (l) { return saisie(l) === 'par_unite'; });
+  if (!lignes.length) return '<div class="vide">Aucune ligne en « Sorties : € par jeune et par unité » (Paramètres › Lignes budgétaires).</div>';
+  return lignes.map(tableauSorties).join('');
+}
+function tableauSorties(ligne) {
+  var s = ETAT.saison, n1 = precedente(s);
+  var eff = Engine.compilerEffectifs(D.effectifs), postes = postesDe(ligne, 'Dépense');
+  var r1 = n1 ? Engine.reelParUnite(C[n1] || [], ligne) : {}, r0 = Engine.reelParUnite(C[s] || [], ligne);
+  var u = unitesJeunes(), T = { j1: 0, a1: 0, j: 0, b: 0, r: 0 };
+  var h = '<div class="carte"><div class="entete-carte"><div><h2>' + esc(ligne) + '</h2><p class="sous">Saisis le nombre de jeunes et le budget par jeune de chaque unité.</p></div>' +
+    boutonPreremplir('sorties') + '</div><div class="tableau-defile"><table class="edit sorties budget">' + cols(['lib'].concat(n1 ? ['n', 'n', 'n'] : [], ['bn', 'bn', 'bn', 'n'])) + '<thead>' +
+    '<tr><th></th>' + (n1 ? '<th colspan="3" class="groupe-col">' + n1 + '</th>' : '') + '<th colspan="3" class="groupe-col col-n">Budget ' + s + '</th><th class="groupe-col col-n">' + s + '</th></tr>' +
+    '<tr><th>Unité</th>' + (n1 ? '<th class="n">Jeunes</th><th class="n">Réel</th><th class="n">€ / jeune</th>' : '') +
+    '<th class="n col-n">Jeunes</th><th class="n">€ / jeune</th><th class="n">Budget</th><th class="n col-n">Réel</th></tr></thead><tbody>';
+  u.forEach(function (x) {
+    var p = postes.filter(function (q) { return q.unite === x && q.methode === 'par_jeune'; })[0];
+    var j1 = n1 ? eff.unite(n1, x) : 0, a1 = r1[x] || 0, j = eff.unite(s, x), b = p ? Engine.montantPoste(p, eff) : 0;
+    T.j1 += j1; T.a1 += a1; T.j += j; T.b += b; T.r += r0[x] || 0;
+    h += '<tr><td>' + esc(x) + '</td>' +
+      (n1 ? '<td class="n">' + (j1 || '–') + '</td>' + tdReel(a1, ligne, n1, { unite: x }) + '<td class="n aide">' + (j1 && a1 ? NF0.format(a1 / j1) : '') + '</td>' : '') +
+      '<td class="col-n" style="width:84px"><input class="n eff" type="number" min="0" data-unite="' + esc(x) + '" data-f="eff|' + esc(x) + '" value="' + (j || '') + '" onchange="enregistrerEffectifs()"></td>' +
+      '<td style="width:100px"><input class="n saisie" type="number" step="any" data-f="pj|' + esc(ligne) + '|' + esc(x) + '" value="' + (p ? val(nombre(p.prix)) : '') +
+      '" onchange="majParJeune(' + jsArg(ligne) + ',' + jsArg(x) + ',this.value)"></td>' +
+      '<td class="n calc">' + fmt(b) + '</td>' + tdReel(r0[x] || 0, ligne, s, { unite: x }, 'col-n') + '</tr>';
+  });
+  var autres = postes.filter(function (q) { return !(q.methode === 'par_jeune' && u.indexOf(q.unite) >= 0); });
+  var g = autres.reduce(function (a, q) { return a + Engine.montantPoste(q, eff); }, 0);
+  var g1 = (r1.Groupe || 0) + (r1.National || 0), g0 = (r0.Groupe || 0) + (r0.National || 0);
+  T.a1 += g1; T.b += g; T.r += g0;
+  h += '<tr><td>Groupe <span class="aide">(activités communes)</span></td>' + (n1 ? '<td></td>' + tdReel(g1, ligne, n1, { unite: 'Groupe' }) + '<td></td>' : '') +
+    '<td class="col-n"></td><td></td><td style="width:100px"><input class="n saisie" type="number" step="any" data-f="pj|' + esc(ligne) + '|Groupe" value="' + val(g) +
+    '" onchange="majGroupe(' + jsArg(ligne) + ',this.value)"></td>' + tdReel(g0, ligne, s, { unite: 'Groupe' }, 'col-n') + '</tr>';
+  h += '<tr class="total"><td>Total</td>' + (n1 ? '<td class="n">' + T.j1 + '</td>' + tdReel(T.a1, ligne, n1) + '<td class="n">' + (T.j1 ? NF0.format(T.a1 / T.j1) : '') + '</td>' : '') +
+    '<td class="n col-n">' + T.j + '</td><td class="n">' + (T.j ? NF0.format(T.b / T.j) : '') + '</td><td class="n">' + fmt(T.b) + '</td>' + tdReel(T.r, ligne, s, null, 'col-n') + '</tr>';
+  return h + '</tbody></table></div><p class="aide">Les effectifs saisis ici servent aussi à la Participation au Mouvement. Total groupe : ' + eff.total(s) + ' jeunes.</p></div>';
+}
+function majParJeune(ligne, unite, valeur) {
+  var v = nombre(valeur);
+  enregistrerMontant(ligne, 'Dépense', function (q) { return q.unite === unite && q.methode === 'par_jeune'; },
+    { poste: ligne + ' ' + unite, unite: unite, methode: 'par_jeune' }, { prix: v, montant: '' });
+}
+function majGroupe(ligne, valeur) {
+  var u = unitesJeunes();
+  enregistrerMontant(ligne, 'Dépense', function (q) { return !(q.methode === 'par_jeune' && u.indexOf(q.unite) >= 0); },
+    { poste: 'Activités du groupe', unite: 'Groupe', methode: 'montant' }, { montant: nombre(valeur), prix: '', quantite: '' });
+}
+
+/* Week-ends et dîners : un bloc par ligne, catégories en ligne */
+function depBlocs(type) {
+  var s = ETAT.saison, n1 = precedente(s);
+  var lignes = lignesDepenses().filter(function (l) { return saisie(l) === type; });
+  var nom = type === 'weekend' ? 'week-end' : 'dîner';
+  var tot = { n1: 0, b: 0, r: 0 };
+  var blocs = lignes.map(function (l) {
+    var cats = CATEGORIES[type], postes = postesDe(l, 'Dépense'), eff = Engine.compilerEffectifs(D.effectifs);
+    var t = { n1: 0, b: 0, r: 0 };
+    var corps = cats.map(function (c) {
+      var ps = postes.filter(function (p) { return categorie(p.poste, type) === c; });
+      var b = ps.reduce(function (a, p) { return a + Engine.montantPoste(p, eff); }, 0);
+      var a1 = n1 ? reelDep(n1, l, function (v) { return categorie(v.nature, type) === c; }) : 0;
+      var a0 = reelDep(s, l, function (v) { return categorie(v.nature, type) === c; });
+      t.n1 += a1; t.b += b; t.r += a0;
+      var detail = ps.length > 1 || (ps[0] && ps[0].poste !== c) ? ps.map(function (p) { return p.poste + ' : ' + NF2.format(Engine.montantPoste(p, eff)); }).join('\n') : '';
+      return '<tr><td>' + esc(c) + '</td>' + (n1 ? tdReel(a1, l, n1, { cat: { type: type, c: c } }) : '') +
+        '<td style="width:110px" class="col-n"><input class="n saisie" type="number" step="any" data-f="bl|' + esc(l) + '|' + esc(c) + '" value="' + val(b) + '"' +
+        (detail ? ' title="' + esc(detail) + '"' : '') + ' onchange="majCategorie(' + jsArg(l) + ',' + jsArg(type) + ',' + jsArg(c) + ',this.value)"></td>' +
+        tdReel(a0, l, s, { cat: { type: type, c: c } }, 'col-n') + '</tr>';
+    }).join('');
+    tot.n1 += t.n1; tot.b += t.b; tot.r += t.r;
+    return '<div class="carte bloc"><div class="entete-carte"><h2>' + esc(l) + '</h2><span class="aide">Budget <b>' + euros(t.b) + '</b></span></div>' +
+      '<div class="tableau-defile"><table class="edit budget">' + cols(['lib'].concat(n1 ? ['n'] : [], ['bn', 'n'])) + '<thead><tr><th></th>' + (n1 ? '<th class="n">Réel ' + n1 + '</th>' : '') + '<th class="n">Budget ' + s + '</th><th class="n">Réel ' + s + '</th></tr></thead><tbody>' +
+      corps + '<tr class="total"><td>Total</td>' + (n1 ? tdReel(t.n1, l, n1) : '') + '<td class="n col-n">' + fmt(t.b) + '</td>' + tdReel(t.r, l, s, null, 'col-n') + '</tr></tbody></table></div></div>';
+  });
+  var h = '<div class="filtres"><span class="aide">' + lignes.length + ' ' + nom + (lignes.length > 1 ? 's' : '') + ' · budget <b>' + euros(tot.b) + '</b>' +
+    (n1 ? ' · réel ' + n1 + ' ' + euros(tot.n1) : '') + '</span><span style="margin-left:auto"></span>' + boutonPreremplir(type === 'weekend' ? 'weekends' : 'diners') +
+    '<button class="btn secondaire" onclick="nouveauBloc(\'' + type + '\')">+ Ajouter un ' + nom + '</button></div>';
+  h += blocs.length ? '<div class="grille-blocs">' + blocs.join('') + '</div>' : '<div class="vide">Aucun ' + nom + ' pour l’instant.</div>';
+  h += '<p class="aide">Le réel est réparti par catégorie d’après la nature Comptaweb (ex. « Hébergement » → Lieu, « Location véhicule » → Camion & Essence).</p>';
+  return h;
+}
+function majCategorie(ligne, type, cat, valeur) {
+  enregistrerMontant(ligne, 'Dépense', function (p) { return categorie(p.poste, type) === cat; },
+    { poste: cat, unite: 'Groupe', methode: 'montant' }, { poste: cat, montant: nombre(valeur), prix: '', quantite: '', evenement: '' });
+}
+function nouveauBloc(type) {
+  var nom = type === 'weekend' ? 'week-end' : 'dîner';
+  modale('<h2>Ajouter un ' + nom + '</h2><p class="aide">Une nouvelle ligne de budget est créée. Pour suivre son réel, crée la même activité dans Comptaweb : ' +
+    'l’app y rattachera automatiquement les écritures.</p><div class="formulaire" style="grid-template-columns:1fr">' +
+    '<label>Nom de la ligne<input type="text" id="nbNom" placeholder="' + (type === 'weekend' ? 'ex. Week-end de Groupe printemps' : 'ex. Dîner de Noël maîtrise') + '"></label>' +
+    '<label>Activité Comptaweb (pour classer le réel)<input type="text" id="nbActivite" placeholder="identique au nom si vide"></label></div>' +
+    '<div class="actions"><button class="btn discret" onclick="fermerModale()">Annuler</button><button class="btn" id="nbOk">Créer</button></div>');
+  $('nbNom').focus();
+  $('nbOk').onclick = function () {
+    var ligne = $('nbNom').value.trim(), act = $('nbActivite').value.trim() || ligne;
+    if (!ligne) return toast('Donne un nom.', true);
+    var ref = D.lignes.filter(function (l) { return saisie(l.ligne) === type; }).sort(function (a, b) { return b.ordre - a.ordre; })[0];
+    var o = { ligne: ligne, recette: false, section: ref ? ref.section : 'Activités', horsBudget: false, ordre: ref ? Number(ref.ordre) + 1 : 999, budget: type };
+    fermerModale();
+    FILE = FILE.then(function () { return appel('ajouterLigne', o, { activite: act, nature: '*' }); }).then(function () {
+      D.lignes.push(o);
+      D.regles = D.regles.filter(function (r) { return !(Engine.cle(r.activite) === Engine.cle(act) && r.nature === '*'); }).concat([{ activite: act, nature: '*', ligne: ligne }]);
+      reclasser(); afficher(); toast('« ' + ligne + ' » ajouté');
+    }).catch(erreur);
+  };
+}
+
+/* Participation au Mouvement : barème par jeune × effectif total (onglet Sorties) */
+function depMouvement() {
+  var lignes = lignesDepenses().filter(function (l) { return saisie(l) === 'par_jeune'; });
+  if (!lignes.length) return '<div class="vide">Aucune ligne en « Mouvement : barème par jeune » (Paramètres › Lignes budgétaires).</div>';
+  return lignes.map(tableauMouvement).join('');
+}
+function tableauMouvement(ligne) {
+  var s = ETAT.saison, n1 = precedente(s), eff = Engine.compilerEffectifs(D.effectifs);
+  var j = eff.total(s), j1 = n1 ? eff.total(n1) : 0, postes = postesDe(ligne, 'Dépense'), T = { a1: 0, p1: 0, p: 0, b: 0, r: 0 };
+  var h = '<div class="carte"><div class="entete-carte"><div><h2>' + esc(ligne) + '</h2><p class="sous">Saisis le barème par jeune de chaque composante. ' +
+    'Le nombre de jeunes est le total de l\u2019onglet Sorties & WE d\u2019unité (<b>' + j + '</b>).</p></div>' + boutonPreremplir('mouvement') + '</div>' +
+    '<div class="tableau-defile"><table class="edit sorties budget">' + cols(['lib'].concat(n1 ? ['n', 'n'] : [], ['bn', 'bn', 'bn', 'n'])) + '<thead>' +
+    '<tr><th></th>' + (n1 ? '<th colspan="2" class="groupe-col">' + n1 + ' (' + j1 + ' jeunes)</th>' : '') + '<th colspan="3" class="groupe-col col-n">Budget ' + s + '</th><th class="groupe-col col-n">' + s + '</th></tr>' +
+    '<tr><th>Composante</th>' + (n1 ? '<th class="n">Réel</th><th class="n">€ / jeune</th>' : '') +
+    '<th class="n col-n">€ / jeune</th><th class="n">Jeunes</th><th class="n">Budget</th><th class="n col-n">Réel</th></tr></thead><tbody>';
+  COMPOSANTES_MVT.forEach(function (c) {
+    var ps = postes.filter(function (p) { return composante(p.poste) === c; });
+    var b = ps.reduce(function (a, p) { return a + Engine.montantPoste(p, eff); }, 0);
+    var prix = ps.reduce(function (a, p) { return a + (p.methode === 'montant' ? 0 : nombre(p.prix)); }, 0);
+    var a1 = n1 ? reelDep(n1, ligne, function (v) { return composante(v.nature) === c; }) : 0;
+    var a0 = reelDep(s, ligne, function (v) { return composante(v.nature) === c; });
+    var ancien = ps.some(function (p) { return p.methode !== 'par_jeune_groupe'; }) && Math.abs(b - prix * j) > 0.5;
+    T.a1 += a1; T.p += prix; T.b += b; T.r += a0; T.p1 += j1 ? a1 / j1 : 0;
+    h += '<tr><td>' + esc(c) + '</td>' + (n1 ? tdReel(a1, ligne, n1, { cat: { type: 'mouvement', c: c } }) + '<td class="n aide">' + (j1 && a1 ? NF2.format(a1 / j1) : '') + '</td>' : '') +
+      '<td class="col-n" style="width:110px"><input class="n saisie" type="number" step="any" data-f="mv|' + esc(c) + '" value="' + (prix || '') +
+      '" onchange="majComposante(' + jsArg(ligne) + ',' + jsArg(c) + ',this.value)"></td><td class="n">' + j + '</td>' +
+      '<td class="n calc">' + fmt(b) + (ancien ? ' <span class="negatif" title="Calculé sur un ancien nombre de jeunes : retape le barème">*</span>' : '') + '</td>' +
+      tdReel(a0, ligne, s, { cat: { type: 'mouvement', c: c } }, 'col-n') + '</tr>';
+  });
+  var autres = postes.filter(function (p) { return !composante(p.poste); });
+  if (autres.length) {
+    var ba = autres.reduce(function (a, p) { return a + Engine.montantPoste(p, eff); }, 0); T.b += ba;
+    h += '<tr><td class="aide">Autres postes (' + esc(autres.map(function (p) { return p.poste; }).join(', ')) + ')</td>' + (n1 ? '<td></td><td></td>' : '') +
+      '<td class="col-n"><button class="btn danger" onclick="supprimerAutresMvt(' + jsArg(ligne) + ')">Retirer</button></td><td></td><td class="n">' + fmt(ba) + '</td><td class="col-n"></td></tr>';
+  }
+  h += '<tr class="total"><td>Total</td>' + (n1 ? tdReel(T.a1, ligne, n1) + '<td class="n">' + (T.p1 ? NF2.format(T.p1) : '') + '</td>' : '') +
+    '<td class="n col-n">' + (T.p ? NF2.format(T.p) : '') + '</td><td class="n">' + j + '</td><td class="n">' + fmt(T.b) + '</td>' + tdReel(T.r, ligne, s, null, 'col-n') + '</tr>';
+  var anciens = postes.filter(function (p) { return composante(p.poste) && p.methode !== 'par_jeune_groupe'; });
+  if (anciens.length) h = h.replace('<div class="tableau-defile">', '<div class="alerte">' + anciens.length + ' composante(s) marquée(s) * sont encore calculées sur un nombre de jeunes saisi à la main (' +
+    esc(String(anciens[0].quantite || '?')) + '). <button class="btn" onclick="appliquerEffectifMvt(' + jsArg(ligne) + ')">Appliquer les ' + j + ' jeunes</button></div><div class="tableau-defile">');
+  return h + '</tbody></table></div><p class="aide">Le réel est réparti d\u2019après la nature Comptaweb des prélèvements nationaux (Participation au Fct du Territoire, au FSI, Péréquation, au Fct du Mouvement).</p></div>';
+}
+function majComposante(ligne, c, valeur) {
+  enregistrerMontant(ligne, 'Dépense', function (p) { return composante(p.poste) === c; },
+    { poste: c, unite: 'Groupe', methode: 'par_jeune_groupe' }, { poste: c, prix: nombre(valeur), montant: '', quantite: '' });
+}
+function appliquerEffectifMvt(ligne) {
+  var ps = postesDe(ligne, 'Dépense').filter(function (p) { return composante(p.poste) && p.methode !== 'par_jeune_groupe'; });
+  ps.forEach(function (p) { p.methode = 'par_jeune_groupe'; p.quantite = ''; p.montant = ''; p.unite = 'Groupe'; p.poste = composante(p.poste); });
+  majPostes([], ps);
+}
+function supprimerAutresMvt(ligne) {
+  if (!confirm('Retirer ces postes du budget ?')) return;
+  majPostes(postesDe(ligne, 'Dépense').filter(function (p) { return !composante(p.poste); }).map(function (p) { return p.id; }), []);
+}
+
+/* Fonctionnement : un montant par ligne */
+function depFonctionnement() {
+  var s = ETAT.saison, n1 = precedente(s), eff = Engine.compilerEffectifs(D.effectifs);
+  var lignes = lignesDepenses().filter(function (l) { return ONGLET_DE_SAISIE[saisie(l)] === 'fonctionnement'; });
+  var sections = [];
+  lignes.forEach(function (l) { var sec = D.lignes.filter(function (x) { return x.ligne === l; })[0].section; if (sections.indexOf(sec) < 0) sections.push(sec); });
+  var T = { n1: 0, b: 0, r: 0 }, CH = chiffresLignes().dep, nc = n1 ? 4 : 3;
+  var h = '<div class="carte"><div class="entete-carte"><div><h2>Fonctionnement et autres dépenses</h2><p class="sous">Un montant par poste. ' +
+    'Clique « détailler » pour le découper en plusieurs lignes (ex. une assurance par local).</p></div>' + boutonPreremplir('fonctionnement') + '</div>' +
+    '<div class="tableau-defile"><table class="edit budget">' + cols(['lib'].concat(n1 ? ['n'] : [], ['bn', 'n'])) +
+    '<thead><tr><th>Poste</th>' + (n1 ? '<th class="n">Réel ' + n1 + '</th>' : '') + '<th class="n">Budget ' + s + '</th><th class="n">Réel ' + s + '</th></tr></thead><tbody>';
+  sections.forEach(function (sec) {
+    if (sections.length > 1) h += '<tr class="section"><td colspan="' + nc + '">' + esc(sec) + '</td></tr>';
+    lignes.filter(function (l) { return D.lignes.filter(function (x) { return x.ligne === l; })[0].section === sec; }).forEach(function (l) {
+      var x = CH[l] || { n1: 0, r: 0 }, b = budgetLigne(l, 'Dépense');
+      T.n1 += x.n1; T.b += b; T.r += x.r;
+      var postes = postesDe(l, 'Dépense'), k = 'fo|' + l;
+      var simple = postes.length === 0 || (postes.length === 1 && (postes[0].methode || 'montant') === 'montant' && postes[0].poste === l);
+      var ouvert = !simple || !!ETAT.ouverts[k];
+      var bascule = simple
+        ? ' <a href="#" class="lien-discret" onclick="ETAT.ouverts[' + jsArg(k) + ']=' + (ouvert ? 'false' : 'true') + ';afficher();return false">' + (ouvert ? 'replier' : 'détailler') + '</a>'
+        : ' <span class="aide">' + postes.length + ' ligne' + (postes.length > 1 ? 's' : '') + '</span>';
+      h += '<tr class="' + (ouvert ? 'parent' : '') + '"><td>' + esc(l) + bascule + '</td>' + (n1 ? tdReel(x.n1, l, n1) : '') +
+        '<td class="n">' + (ouvert ? '<b>' + fmt(b) + '</b>'
+          : '<input class="n saisie" type="number" step="any" data-f="fo|' + esc(l) + '" value="' + val(b) + '" onchange="majFonctionnement(' + jsArg(l) + ',this.value,false)">') + '</td>' +
+        tdReel(x.r, l, s) + '</tr>';
+      if (ouvert) {
+        postes.forEach(function (p) {
+          var m = Engine.montantPoste(p, eff), calc = (p.methode || 'montant') !== 'montant';
+          h += '<tr class="detail"><td><div class="detail-lib"><input type="text" data-f="fd|' + esc(l) + '|' + esc(p.id) + '|poste" value="' + esc(p.poste === l ? '' : p.poste) +
+            '" placeholder="Libellé (ex. Local scout)" onchange="majDetail(\'' + esc(p.id) + '\',\'poste\',this.value)">' +
+            '<span class="aide indice">' + (calc ? esc(String(Engine.quantitePoste(p, eff) || '')) + ' × ' + NF2.format(nombre(p.prix)) : '') + '</span>' +
+            '<button class="btn danger" tabindex="-1" title="Supprimer cette ligne" onclick="supprimerDetail(\'' + esc(p.id) + '\')">✕</button></div></td>' + (n1 ? '<td></td>' : '') +
+            '<td class="n"><input class="n saisie" type="number" step="any" data-f="fd|' + esc(l) + '|' + esc(p.id) + '|montant" value="' + val(m) + '" onchange="majDetail(\'' + esc(p.id) + '\',\'montant\',this.value)"></td><td></td></tr>';
+        });
+        h += '<tr class="detail"><td colspan="' + nc + '"><button class="btn discret petit" onclick="ajouterDetail(' + jsArg(l) + ')">+ Ajouter une ligne</button></td></tr>';
+      }
+    });
+  });
+  h += '<tr class="total"><td>Total</td>' + (n1 ? '<td class="n">' + fmt(T.n1) + '</td>' : '') + '<td class="n">' + fmt(T.b) + '</td><td class="n">' + fmt(T.r) + '</td></tr>';
+  return h + '</tbody></table></div></div>';
+}
+function majDetail(id, champ, valeur) {
+  var p = D.budget.filter(function (x) { return x.id === id; })[0]; if (!p) return;
+  if (champ === 'montant') { p.methode = 'montant'; p.montant = nombre(valeur); p.quantite = ''; p.prix = ''; p.unite = 'Groupe'; }
+  else p.poste = String(valeur || '').trim() || p.ligne;
+  majPostes([], [p]);
+}
+function ajouterDetail(ligne) {
+  ETAT.ouverts['fo|' + ligne] = true;
+  var postes = postesDe(ligne, 'Dépense'), ajout = [{ saison: ETAT.saison, ligne: ligne, sens: 'Dépense', poste: 'Nouvelle ligne', unite: 'Groupe', methode: 'montant', montant: 0 }];
+  // Un montant unique sans libellé devient la première ligne du détail
+  if (postes.length === 1 && postes[0].poste === ligne) { postes[0].poste = 'Ligne 1'; ajout.unshift(postes[0]); }
+  majPostes([], ajout);
+  var id = ajout[ajout.length - 1].id;
+  setTimeout(function () {
+    var e = Array.prototype.filter.call(document.querySelectorAll('input[data-f$="|poste"]'), function (x) { return x.dataset.f === 'fd|' + ligne + '|' + id + '|poste'; })[0];
+    if (e) { e.focus(); e.select(); }
+  }, 30);
+}
+function supprimerDetail(id) {
+  var p = D.budget.filter(function (x) { return x.id === id; })[0];
+  if (p && Engine.montantPoste(p, Engine.compilerEffectifs(D.effectifs)) && !confirm('Supprimer « ' + p.poste + ' » ?')) return;
+  majPostes([id], []);
+}
+function majFonctionnement(ligne, valeur, parJeune) {
+  var v = nombre(valeur);
+  if (parJeune) enregistrerMontant(ligne, 'Dépense', null, { poste: ligne, unite: 'Groupe', methode: 'par_jeune_groupe' }, { prix: v, montant: '', quantite: '' });
+  else enregistrerMontant(ligne, 'Dépense', null, { poste: ligne, unite: 'Groupe', methode: 'montant' }, { montant: v, prix: '', quantite: '' });
+}
+
+/* Préremplir les cases vides depuis N-1 (budget N-1 s'il existe, sinon réel N-1) */
+function preremplir(onglet) {
+  var s = ETAT.saison, n1 = precedente(s); if (!n1) return;
+  var eff = Engine.compilerEffectifs(D.effectifs), n = 0, actions = [], CH = chiffresLignes().dep;
+  function aBudget(l) { return postesDe(l, 'Dépense', n1).length > 0; }
+  lignesDepenses().filter(function (l) { return ONGLET_DE_SAISIE[saisie(l)] === onglet; }).forEach(function (l) {
+    var mode = saisie(l);
+    if (mode === 'par_unite') {
+      unitesJeunes().forEach(function (u) {
+        var deja = postesDe(l, 'Dépense').some(function (q) { return q.unite === u && q.methode === 'par_jeune' && nombre(q.prix); });
+        if (deja) return;
+        var p1 = postesDe(l, 'Dépense', n1).filter(function (q) { return q.unite === u && q.methode === 'par_jeune'; })[0];
+        var j1 = eff.unite(n1, u), r = Engine.reelParUnite(C[n1] || [], l)[u] || 0;
+        var prix = p1 ? nombre(p1.prix) : (j1 ? Math.round(r / j1) : 0);
+        if (prix) { actions.push(function () { majParJeune(l, u, prix); }); n++; }
+      });
+    } else if (mode === 'weekend' || mode === 'diner') {
+      CATEGORIES[mode].forEach(function (c) {
+        if (postesDe(l, 'Dépense').some(function (p) { return categorie(p.poste, mode) === c && Engine.montantPoste(p, eff); })) return;
+        var v = aBudget(l) ? postesDe(l, 'Dépense', n1).filter(function (p) { return categorie(p.poste, mode) === c; }).reduce(function (a, p) { return a + Engine.montantPoste(p, eff); }, 0)
+          : reelDep(n1, l, function (x) { return categorie(x.nature, mode) === c; });
+        v = Math.round(v);
+        if (v > 0) { actions.push(function () { majCategorie(l, mode, c, v); }); n++; }
+      });
+    } else {
+      if (mode !== 'par_jeune' && budgetLigne(l, 'Dépense')) return;
+      if (mode === 'par_jeune') {
+        COMPOSANTES_MVT.forEach(function (c) {
+          if (postesDe(l, 'Dépense').some(function (p) { return composante(p.poste) === c && nombre(p.prix); })) return;
+          var p1 = postesDe(l, 'Dépense', n1).filter(function (p) { return composante(p.poste) === c; });
+          var prix = p1.reduce(function (a, p) { return a + (p.methode === 'montant' ? 0 : nombre(p.prix)); }, 0);
+          if (!prix && eff.total(n1)) prix = Math.round(reelDep(n1, l, function (v) { return composante(v.nature) === c; }) / eff.total(n1) * 100) / 100;
+          if (prix) { actions.push(function () { majComposante(l, c, prix); }); n++; }
+        });
+      } else {
+        var v = Math.round(aBudget(l) ? budgetLigne(l, 'Dépense', n1) : (CH[l] ? CH[l].n1 : 0));
+        if (v > 0) { actions.push(function () { majFonctionnement(l, v, false); }); n++; }
+      }
+    }
+  });
+  if (!n) return toast('Rien à préremplir : les cases sont déjà remplies ou N-1 est vide.');
+  if (!confirm(n + ' case(s) vide(s) vont être remplies depuis ' + n1 + '. Continuer ?')) return;
+  actions.forEach(function (f) { f(); });
+}
+
+function enregistrerEffectifs() {
+  var s = ETAT.saison;
+  var autres = D.effectifs.filter(function (e) { return e.saison !== s; });
+  var lus = Array.prototype.map.call(document.querySelectorAll('input.eff'), function (i) {
+    return { saison: s, unite: i.dataset.unite, jeunes: Number(i.value) || 0 };
+  }).filter(function (e) { return e.jeunes; });
+  var tout = autres.concat(lus);
+  D.effectifs = tout; rafraichir();
+  FILE = FILE.then(function () { return appel('enregistrerTable', 'Effectifs', tout); }).then(function () { toast('Effectifs enregistrés'); }).catch(erreur);
+}
+function copierBudget(source) {
+  appel('copierBudget', source, ETAT.saison, false).then(function (n) { toast(n + ' postes repris de ' + source); charger(true); }).catch(erreur);
+}
+
+/* --- onglet Versions : figer, comparer, référence, restaurer --- */
+function totauxVersion(source) {
+  var syn = Engine.synthese(donneesSynthese(source), ETAT.saison);
+  return { r: syn.sections[0].total.budget, d: -syn.sections.slice(1).reduce(function (a, x) { return a + x.total.budget; }, 0), net: syn.net.budget };
+}
+function vueVersions() {
+  var vs = versionsSaison(), cur = totauxVersion('courant');
+  var h = '<div class="carte"><div class="entete-carte"><div><h2>Version de travail</h2><p class="sous">C\u2019est le budget que tu modifies dans les autres onglets. ' +
+    'Fige-le pour en garder une photo (ex. avant le conseil de groupe), puis continue à le réviser : chaque version figée reste consultable et comparable.</p></div>' +
+    '<button class="btn" onclick="figerVersion()">Figer cette version…</button></div>' +
+    '<div class="tuiles" style="margin:0">' + tuile('Recettes', euros(cur.r)) + tuile('Dépenses', euros(cur.d)) + tuile('Résultat', fmt(cur.net)) + '</div></div>';
+  h += '<div class="carte"><h2>Versions figées — ' + esc(ETAT.saison) + '</h2>';
+  if (!vs.length) h += '<div class="vide">Aucune version figée pour l\u2019instant.</div>';
+  else {
+    h += '<div class="tableau-defile"><table class="budget">' + cols(['lib', 'n', 'n', 'n', 'n', 'act']) + '<thead><tr><th>Version</th><th class="n">Recettes</th><th class="n">Dépenses</th><th class="n">Résultat</th>' +
+      '<th class="n">Travail − version</th><th></th></tr></thead><tbody>';
+    vs.slice().reverse().forEach(function (v) {
+      var t = totauxVersion(v.id);
+      h += '<tr><td>' + (v.reference ? '<span class="pill ok" title="Budget de référence (voté)">★ Référence</span> ' : '') + '<b>' + esc(v.nom) + '</b><br><span class="aide">figée le ' + esc(v.date) +
+        (v.commentaire ? ' · ' + esc(v.commentaire) : '') + '</span></td><td class="n">' + fmt(t.r) + '</td><td class="n">' + fmt(t.d) + '</td><td class="n"><b>' + fmt(t.net) + '</b></td>' +
+        '<td class="n">' + (Math.abs(cur.net - t.net) >= 0.5 ? ecart(cur.net - t.net) : '<span class="zero">=</span>') + '</td>' +
+        '<td style="white-space:nowrap"><button class="btn discret petit" onclick="ETAT.comparer={a:\'' + v.id + '\',b:\'courant\'};afficher()">Comparer</button> ' +
+        '<button class="btn discret petit" onclick="referenceVersion(\'' + v.id + '\',' + (v.reference ? 'false' : 'true') + ')">' + (v.reference ? 'Retirer ★' : '★ Référence') + '</button> ' +
+        '<button class="btn discret petit" onclick="restaurerVersion(\'' + v.id + '\')" title="Remplacer la version de travail par celle-ci">Restaurer</button> ' +
+        '<button class="btn danger" title="Supprimer" onclick="supprimerVersion(\'' + v.id + '\')">✕</button></td></tr>';
+    });
+    h += '</tbody></table></div><p class="aide">★ Référence : le budget voté, affiché en colonne « Voté » dans la Synthèse des dépenses et rappelé en haut des pages Budget. ' +
+      'Les postes calculés (par jeune, quantité × prix) sont figés avec leur montant du moment.</p>';
+  }
+  h += '</div>';
+  if (vs.length) h += carteComparaison(vs);
+  return h;
+}
+function carteComparaison(vs) {
+  var ref = versionReference();
+  var c = ETAT.comparer && (ETAT.comparer.a === 'courant' || versionParId(ETAT.comparer.a)) ? ETAT.comparer : { a: (ref || vs[vs.length - 1]).id, b: 'courant' };
+  if (c.b !== 'courant' && !versionParId(c.b)) c.b = 'courant';
+  ETAT.comparer = c;
+  var choix = [{ v: 'courant', l: 'Version de travail' }].concat(vs.slice().reverse().map(function (v) { return { v: v.id, l: (v.reference ? '★ ' : '') + v.nom }; }));
+  var A = chiffresLignes(c.a), B = chiffresLignes(c.b);
+  function nomV(id) { return id === 'courant' ? 'Travail' : (versionParId(id) || {}).nom; }
+  var h = '<div class="carte"><div class="entete-carte"><h2>Comparer deux versions</h2><div class="filtres" style="margin:0">' +
+    '<select onchange="ETAT.comparer.a=this.value;afficher()">' + options(choix, c.a) + '</select><span class="aide">→</span>' +
+    '<select onchange="ETAT.comparer.b=this.value;afficher()">' + options(choix, c.b) + '</select></div></div>' +
+    '<div class="tableau-defile"><table class="budget">' + cols(['lib', 'n', 'bn', 'n']) + '<thead><tr><th></th><th class="n">' + esc(nomV(c.a)) + '</th><th class="n">' + esc(nomV(c.b)) + '</th><th class="n">Écart</th></tr></thead><tbody>';
+  var res = { a: 0, b: 0 }, nb = 0;
+  [['Recettes', 'rec', 1], ['Dépenses', 'dep', -1]].forEach(function (sec) {
+    var lignes = Object.keys(A[sec[1]]).concat(Object.keys(B[sec[1]])).filter(function (l, i, t) { return t.indexOf(l) === i; })
+      .filter(function (l) { return (A[sec[1]][l] || {}).b || (B[sec[1]][l] || {}).b; });
+    var ta = 0, tb = 0;
+    h += '<tr class="section"><td colspan="4">' + sec[0] + '</td></tr>';
+    lignes.forEach(function (l) {
+      var a = (A[sec[1]][l] || {}).b || 0, b = (B[sec[1]][l] || {}).b || 0; ta += a; tb += b;
+      var d = Math.abs(b - a) >= 0.5; if (d) nb++;
+      h += '<tr class="' + (d ? 'modifie' : '') + '"><td>' + esc(l) + '</td><td class="n">' + fmt(a) + '</td><td class="n">' + fmt(b) + '</td><td class="n">' + (d ? ecart(sec[2] * (b - a)) : '') + '</td></tr>';
+    });
+    h += '<tr class="total"><td>Total ' + sec[0].toLowerCase() + '</td><td class="n">' + fmt(ta) + '</td><td class="n">' + fmt(tb) + '</td><td class="n">' + ecart(sec[2] * (tb - ta)) + '</td></tr>';
+    res.a += sec[2] * ta; res.b += sec[2] * tb;
+  });
+  h += '<tr class="grand-total"><td>Résultat</td><td class="n">' + fmt(res.a) + '</td><td class="n">' + fmt(res.b) + '</td><td class="n">' + ecart(res.b - res.a) + '</td></tr></tbody></table></div>' +
+    '<p class="aide">' + nb + ' ligne(s) modifiée(s), surlignées. Écart en vert quand il améliore le résultat.</p></div>';
+  return h;
+}
+function figerVersion() {
+  var ref = versionReference();
+  modale('<h2>Figer la version de travail</h2><p class="aide">Une photo du budget ' + esc(ETAT.saison) + ' est enregistrée telle quelle. Tu pourras continuer à le modifier.</p>' +
+    '<div class="formulaire" style="grid-template-columns:1fr"><label>Nom<input type="text" id="vNom" placeholder="ex. Budget voté en conseil de groupe du 15/11"></label>' +
+    '<label>Commentaire<input type="text" id="vCom" placeholder="facultatif"></label>' +
+    '<label style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" id="vRef"' + (ref ? '' : ' checked') + '> C\u2019est le budget de référence (voté)' + (ref ? ' — remplace « ' + esc(ref.nom) + ' »' : '') + '</label></div>' +
+    '<div class="actions"><button class="btn discret" onclick="fermerModale()">Annuler</button><button class="btn" id="vOk">Figer</button></div>');
+  $('vNom').focus();
+  $('vOk').onclick = function () {
+    var nom = $('vNom').value.trim(); if (!nom) return toast('Donne un nom à la version.', true);
+    $('vOk').disabled = true;
+    FILE = FILE.then(function () { return appel('figerBudget', ETAT.saison, nom, $('vCom').value, $('vRef').checked); }).then(function (r) {
+      D.versions = r.versions; D.budgetFige = r.budgetFige; fermerModale(); afficher(); toast('Version « ' + nom + ' » figée');
+    }).catch(function (e) { $('vOk').disabled = false; erreur(e); });
+  };
+}
+function referenceVersion(id, actif) {
+  FILE = FILE.then(function () { return appel('definirReference', id, actif); }).then(function (v) { D.versions = v; afficher(); toast(actif ? 'Version de référence définie' : 'Référence retirée'); }).catch(erreur);
+}
+function supprimerVersion(id) {
+  var v = versionParId(id); if (!v || !confirm('Supprimer la version « ' + v.nom + ' » ?')) return;
+  FILE = FILE.then(function () { return appel('supprimerVersion', id); }).then(function () {
+    D.versions = D.versions.filter(function (x) { return x.id !== id; }); D.budgetFige = D.budgetFige.filter(function (x) { return x.version !== id; });
+    afficher(); toast('Version supprimée');
+  }).catch(erreur);
+}
+function restaurerVersion(id) {
+  var v = versionParId(id);
+  if (!v || !confirm('Remplacer la version de travail ' + v.saison + ' par « ' + v.nom + ' » ?\n\nLes modifications non figées seront perdues (fige d\u2019abord la version de travail si tu veux la garder).')) return;
+  FILE = FILE.then(function () { return appel('restaurerVersion', id); }).then(function (postes) {
+    D.budget = D.budget.filter(function (p) { return p.saison !== v.saison; }).concat(postes); afficher(); toast('Version « ' + v.nom + ' » restaurée');
+  }).catch(erreur);
+}
+
+/* --- page Budget - Recettes --- */
+function vueRecettes() {
+  return bandeauVersion() + vueRecettesCorps();
+}
+function vueRecettesCorps() {
+  var s = ETAT.saison, n1 = precedente(s), n2 = n1 ? precedente(n1) : null, eff = Engine.compilerEffectifs(D.effectifs);
+  var syn = Engine.synthese(donneesSynthese(), s), T = { n2: 0, n1: 0, b: 0, r: 0 }, CH = chiffresLignes().rec;
+  var corps = lignesRecettes().map(function (l) {
+    var x = CH[l] || { n2: 0, n1: 0, b: 0, r: 0 };
+    ['n2', 'n1', 'b', 'r'].forEach(function (k) { T[k] += x[k]; });
+    var postes = postesDe(l, 'Recette'), p = x.b ? Math.round(100 * x.r / x.b) : null;
+    return '<tr><td>' + esc(l) + (postes.length > 1 ? ' <span class="aide">(' + postes.length + ' postes)</span>' : '') + '</td>' +
+      (n2 ? tdReel(x.n2, l, n2, null, 'masque-mobile') : '') + (n1 ? tdReel(x.n1, l, n1) : '') +
+      '<td class="col-n" style="width:120px"><input class="n saisie" type="number" step="any" data-f="re|' + esc(l) + '" value="' + val(x.b) + '" onchange="majRecette(' + jsArg(l) + ',this.value)"></td>' +
+      tdReel(x.r, l, s, null, 'col-n') + '<td class="n">' + ecart(x.r - x.b) + '</td><td class="n masque-mobile">' + (p === null ? '' : p + ' %') + '</td></tr>';
+  }).join('');
+  var depB = -syn.sections.slice(1).reduce(function (a, x) { return a + x.total.budget; }, 0);
+  var h = '<div class="tuiles">' +
+    tuile('Recettes budgétées', euros(T.b), n1 ? 'réel ' + n1 + ' : ' + euros(T.n1) : '') +
+    tuile('Encaissé à date', euros(T.r), T.b ? Math.round(100 * T.r / T.b) + ' % du budget' : '', jauge(T.r, T.b, true)) +
+    tuile('Par jeune', eff.total(s) ? euros(T.b / eff.total(s)) : '–', eff.total(s) + ' jeunes') +
+    tuile('Résultat budgété', fmt(syn.net.budget), 'recettes − dépenses ' + euros(depB), '', "aller('budget')") + '</div>';
+  h += '<div class="carte"><div class="entete-carte"><h2>Recettes du groupe</h2>' + (n1 ? '<button class="btn discret" onclick="preremplirRecettes()">Préremplir depuis ' + n1 + '</button>' : '') + '</div>' +
+    '<div class="tableau-defile"><table class="edit budget">' + cols(['lib'].concat(n2 ? ['n'] : [], n1 ? ['n'] : [], ['bn', 'n', 'n', 'n'])) + '<thead><tr><th></th>' + (n2 ? '<th class="n masque-mobile">Réel ' + n2 + '</th>' : '') + (n1 ? '<th class="n">Réel ' + n1 + '</th>' : '') +
+    '<th class="n col-n">Budget ' + s + '</th><th class="n col-n">Réel ' + s + '</th><th class="n">Écart</th><th class="n masque-mobile">Encaissé</th></tr></thead><tbody>' + corps +
+    '<tr class="total"><td>Total</td>' + (n2 ? '<td class="n masque-mobile">' + fmt(T.n2) + '</td>' : '') + (n1 ? '<td class="n">' + fmt(T.n1) + '</td>' : '') +
+    '<td class="n col-n">' + fmt(T.b) + '</td><td class="n col-n">' + fmt(T.r) + '</td><td class="n">' + ecart(T.r - T.b) + '</td><td></td></tr></tbody></table></div></div>';
+  return h;
+}
+function majRecette(ligne, valeur) {
+  enregistrerMontant(ligne, 'Recette', null, { poste: ligne, unite: 'Groupe', methode: 'montant' }, { montant: nombre(valeur), prix: '', quantite: '' });
+}
+function preremplirRecettes() {
+  var n1 = precedente(ETAT.saison), CH = chiffresLignes().rec;
+  var vides = lignesRecettes().filter(function (l) { return !budgetLigne(l, 'Recette') && CH[l] && CH[l].n1 > 0; });
+  if (!vides.length) return toast('Rien à préremplir.');
+  if (!confirm(vides.length + ' recette(s) vide(s) vont reprendre le réel ' + n1 + '. Continuer ?')) return;
+  vides.forEach(function (l) { majRecette(l, Math.round(postesDe(l, 'Recette', n1).length ? budgetLigne(l, 'Recette', n1) : CH[l].n1)); });
+}
+
+/* -------------------------------------------------------------- réalisé */
+/** Lien vers le justificatif d'une pièce comptable, s'il est dans le dossier Drive. */
+function celPiece(piece) {
+  if (!piece) return '';
+  var f = D.pieces && D.pieces[piece];
+  if (!f) return '<span class="aide" title="Justificatif absent du dossier Drive">' + esc(piece) + '</span>' +
+    (/^\d{7,8}_\d+$/.test(piece) ? ' <a href="#" class="depot" title="Déposer le justificatif" onclick="ouvrirDepotPiece(' + jsArg(piece) + ');return false">' +
+      svg('<path d="M12 16V4M7 9l5-5 5 5M4 20h16"/>', 'width:14px;height:14px') + '</a>' : '');
+  var url = f.url || 'https://drive.google.com/drive/search?q=' + encodeURIComponent(piece);
+  return '<a class="piece" href="' + esc(url) + '" target="_blank" rel="noopener" title="Ouvrir ' + esc(f.nom) + '">' +
+    svg('<path d="M21 11l-8.5 8.5a5 5 0 0 1-7-7L14 4a3.5 3.5 0 0 1 5 5l-8.5 8.5a2 2 0 0 1-3-3L15 7"/>', 'width:14px;height:14px') + esc(piece) + '</a>';
+}
+function vueRealise() {
+  var f = ETAT.filtre, s = ETAT.saison, t = Engine.cle(f.texte);
+  var liste = (C[s] || []).filter(function (v) {
+    if (f.ligne === '__aclasser' && v.ligne) return false;
+    if (f.ligne === '__corr' && v.source !== 'correction') return false;
+    if (f.ligne && f.ligne.indexOf('__') !== 0 && v.ligne !== f.ligne) return false;
+    if (f.unite && v.unite !== f.unite) return false;
+    if (f.cat && (f.cat.type === 'mouvement' ? composante(v.nature) : categorie(v.nature, f.cat.type)) !== f.cat.c) return false;
+    if (t && Engine.cle([v.intitule, v.activite, v.nature, v.branche, v.piece].join(' ')).indexOf(t) < 0) return false;
+    return true;
+  }).sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; });
+  var dep = 0, rec = 0;
+  liste.forEach(function (v) { if (v.ligne !== Engine.INTERNE) { dep += v.depense; rec += v.recette; } });
+  var choixLignes = [{ v: '__aclasser', l: '⚠ À classer' }, { v: '__corr', l: 'Corrigées à la main' }]
+    .concat(nomsLignes().map(function (l) { return { v: l, l: l }; })).concat([{ v: Engine.INTERNE, l: Engine.INTERNE }]);
+  var h = '<div class="carte"><div class="filtres">' +
+    '<select onchange="ETAT.filtre.ligne=this.value;ETAT.filtre.cat=null;afficher()">' + options(choixLignes, f.ligne, 'Toutes les lignes') + '</select>' +
+    (f.cat ? '<span class="pill pl">' + esc(f.cat.c) + ' <a href="#" onclick="ETAT.filtre.cat=null;afficher();return false" title="Retirer ce filtre">✕</a></span>' : '') +
+    '<select onchange="ETAT.filtre.unite=this.value;afficher()">' + options(nomsUnites(), f.unite, 'Toutes les unités') + '</select>' +
+    '<input type="text" placeholder="Rechercher (intitulé, nature, pièce…)" value="' + esc(f.texte) + '" oninput="ETAT.filtre.texte=this.value;clearTimeout(window._rt);window._rt=setTimeout(function(){afficher();var i=document.querySelector(\'.filtres input\');i.focus();i.setSelectionRange(i.value.length,i.value.length)},300)">' +
+    ((f.ligne || f.unite || f.texte || f.cat) ? '<button class="btn discret" onclick="ETAT.filtre={ligne:\'\',unite:\'\',texte:\'\',cat:null,limite:200};afficher()">Effacer</button>' : '') +
+    '<span class="aide" style="margin-left:auto">' + liste.length + ' ventilations · dépenses <b>' + euros(dep) + '</b> · recettes <b>' + euros(rec) + '</b></span></div>';
+  if (!liste.length) return h + '<div class="vide">Aucune écriture.</div></div>';
+  h += '<div class="tableau-defile"><table><thead><tr><th>Date</th><th>Intitulé</th><th class="masque-mobile">Comptaweb</th><th>Unité</th><th>Ligne de budget</th>' +
+    '<th class="n">Dépense</th><th class="n">Recette</th><th class="masque-mobile">Pièce</th></tr></thead><tbody>';
+  var lignesSel = nomsLignes().concat([Engine.INTERNE]);
+  liste.slice(0, f.limite).forEach(function (v) {
+    var i = (C[s] || []).indexOf(v);
+    h += '<tr class="' + (!v.ligne ? 'att' : '') + '"><td style="white-space:nowrap">' + dateFr(v.date) + '</td><td>' + esc(v.intitule) + '</td>' +
+      '<td class="masque-mobile aide">' + esc(v.activite) + '<br>' + esc(v.nature) + '</td><td>' + esc(v.unite) + '</td>' +
+      '<td style="min-width:200px"><select onchange="reclasserVentilation(' + i + ',this.value)">' +
+      (v.source === 'correction' ? '<option value="__regle">↺ Revenir à la règle</option>' : '') +
+      options(lignesSel, v.ligne, '— à classer —') + '</select>' + (v.source === 'correction' ? ' <span class="puce att">corrigée</span>' : '') + '</td>' +
+      '<td class="n">' + fmt2(v.depense) + '</td><td class="n">' + fmt2(v.recette) + '</td><td class="masque-mobile">' + celPiece(v.piece) + '</td></tr>';
+  });
+  h += '</tbody></table></div>';
+  if (liste.length > f.limite) h += '<div class="actions"><button class="btn discret" onclick="ETAT.filtre.limite+=300;afficher()">Afficher plus (' + (liste.length - f.limite) + ' restantes)</button></div>';
+  return h + '</div>';
+}
+
+function reclasserVentilation(i, ligne) {
+  var v = C[ETAT.saison][i];
+  if (ligne === '__regle') return enregistrerCorrection(v, '');
+  if (!ligne) return;
+  modale('<h2>Classer en « ' + esc(ligne) + ' »</h2><p>' + esc(v.intitule) + '<br><span class="aide">Comptaweb : activité <b>' + esc(v.activite) +
+    '</b>, nature <b>' + esc(v.nature) + '</b></span></p>' +
+    '<div class="actions" style="justify-content:flex-start;flex-direction:column;align-items:stretch">' +
+    '<button class="btn" id="mRegle">Toutes les écritures « ' + esc(v.activite) + ' + ' + esc(v.nature) + ' » (nouvelle règle)</button>' +
+    '<button class="btn secondaire" id="mActivite">Toute l’activité « ' + esc(v.activite) + ' », quelle que soit la nature</button>' +
+    '<button class="btn secondaire" id="mUne">Seulement cette écriture</button>' +
+    '<button class="btn discret" onclick="fermerModale();afficher()">Annuler</button></div>');
+  $('mRegle').onclick = function () { enregistrerRegle({ activite: v.activite, nature: v.nature, ligne: ligne }); };
+  $('mActivite').onclick = function () { enregistrerRegle({ activite: v.activite, nature: '*', ligne: ligne }); };
+  $('mUne').onclick = function () { enregistrerCorrection(v, ligne); };
+}
+function enregistrerRegle(r) {
+  fermerModale();
+  appel('ajouterRegle', r).then(function () {
+    D.regles = D.regles.filter(function (x) { return !(Engine.cle(x.activite) === Engine.cle(r.activite) && Engine.cle(x.nature) === Engine.cle(r.nature)); });
+    D.regles.push(r); reclasser(); afficher(); toast('Règle ajoutée et appliquée à toutes les saisons');
+  }).catch(erreur);
+}
+function enregistrerCorrection(v, ligne) {
+  fermerModale();
+  appel('corriger', v.cle, ETAT.saison, ligne, v.intitule).then(function () {
+    if (ligne) D.corrections[v.cle] = ligne; else delete D.corrections[v.cle];
+    reclasser(); afficher(); toast(ligne ? 'Écriture classée' : 'Écriture rendue à la règle');
+  }).catch(erreur);
+}
+
+/* ------------------------------------------------------------ engagements */
+function vueEngagements() {
+  var s = ETAT.saison;
+  var liste = D.engagements.filter(function (e) { return e.saison === s; }).sort(function (a, b) { return String(a.date) < String(b.date) ? -1 : 1; });
+  var ouverts = liste.filter(function (e) { return Engine.cle(e.statut) !== 'regle' && Engine.cle(e.statut) !== 'annule'; });
+  var corr = Engine.correspondancesEngagements(D.engagements, C[s] || [], s), h = '';
+  if (corr.length) {
+    h += '<div class="carte"><div class="entete-carte"><div><h2>Écritures arrivées pour des engagements</h2><p class="sous">Même ligne, même montant (à 1 € ou 2 % près) : ' +
+      'ces engagements semblent réglés. Marque-les « Réglé » pour qu\u2019ils sortent du projeté.</p></div>' +
+      (corr.length > 1 ? '<button class="btn" onclick="reglerCorrespondances()">Tout marquer réglé (' + corr.length + ')</button>' : '') + '</div>' +
+      '<div class="tableau-defile"><table class="budget"><thead><tr><th>Engagement</th><th class="n">Montant</th><th>Écriture Comptaweb</th><th class="n">Montant</th><th></th></tr></thead><tbody>' +
+      corr.map(function (c) {
+        var e = c.engagement, v = c.ventilation, mv = Engine.cle(e.sens) === 'recette' ? v.recette : v.depense;
+        return '<tr><td><b>' + esc(e.libelle || e.ligne) + '</b><br><span class="aide">' + esc(e.ligne) + (e.date ? ' · prévu le ' + dateFr(e.date) : '') + '</span></td><td class="n">' + NF2.format(Engine.num(e.montant)) + '</td>' +
+          '<td>' + esc(v.intitule) + '<br><span class="aide">' + dateFr(v.date) + (v.piece ? ' · ' + esc(v.piece) : '') + '</span></td><td class="n">' + NF2.format(mv) + '</td>' +
+          '<td><button class="btn secondaire petit" onclick="statutEngagement(\'' + e.id + '\',\'Réglé\')">Réglé</button></td></tr>';
+      }).join('') + '</tbody></table></div></div>';
+  }
+  h += '<div class="carte"><h2>Ajouter un engagement</h2><p class="sous">Une dépense ou une recette prévue mais pas encore passée dans Comptaweb (acompte, réservation, facture attendue…). ' +
+    'Marque-la « réglée » quand l’écriture apparaît : elle sort alors du projeté.</p>' + formulaireEngagement({ saison: s, sens: 'Dépense', statut: 'Ouvert' }, 'nouvel') + '</div>';
+  h += '<div class="carte"><div class="entete-carte"><h2>Engagements ' + esc(s) + '</h2><span class="aide">' + ouverts.length + ' ouvert(s) · ' +
+    euros(ouverts.reduce(function (a, e) { return a + (Engine.cle(e.sens) === 'recette' ? 0 : Engine.num(e.montant)); }, 0)) + ' de dépenses à venir</span></div>';
+  if (!liste.length) h += '<div class="vide">Aucun engagement saisi.</div>';
+  else {
+    h += '<div class="tableau-defile"><table><thead><tr><th>Date</th><th>Libellé</th><th>Ligne</th><th>Unité</th><th>Sens</th><th class="n">Montant</th><th>Statut</th><th></th></tr></thead><tbody>';
+    liste.forEach(function (e) {
+      var st = Engine.cle(e.statut);
+      h += '<tr><td>' + dateFr(e.date) + '</td><td>' + esc(e.libelle) + (e.commentaire ? '<br><span class="aide">' + esc(e.commentaire) + '</span>' : '') + '</td><td>' + esc(e.ligne) + '</td><td>' + esc(e.unite) +
+        '</td><td>' + esc(e.sens) + '</td><td class="n">' + NF2.format(Engine.num(e.montant)) + '</td><td><span class="puce ' + (st === 'regle' ? 'ok' : st === 'annule' ? '' : 'att') + '">' + esc(e.statut || 'Ouvert') + '</span></td>' +
+        '<td style="white-space:nowrap">' + (st === 'ouvert' || !st ? '<button class="btn discret" onclick="statutEngagement(\'' + e.id + '\',\'Réglé\')">Réglé</button> ' : '') +
+        '<button class="btn discret" onclick="editerEngagement(\'' + e.id + '\')">Modifier</button> <button class="btn danger" onclick="supprimerEngagement(\'' + e.id + '\')">✕</button></td></tr>';
+    });
+    h += '</tbody></table></div>';
+  }
+  h += '</div>';
+  // Reste du budget non engagé
+  var syn = Engine.synthese(donneesSynthese(), s), restes = [];
+  syn.sections.slice(1).forEach(function (sec) {
+    sec.lignes.forEach(function (l) { if (l.budget < 0 && l.varProjete > 0) restes.push(l); });
+  });
+  if (restes.length) {
+    h += '<div class="carte"><h2>Budget pas encore engagé</h2><p class="sous">Lignes de dépenses dont le projeté reste sous le budget : soit la dépense viendra (ajoute un engagement), soit c’est une économie.</p>' +
+      '<table><thead><tr><th>Ligne</th><th class="n">Budget</th><th class="n">Projeté</th><th class="n">Reste</th><th></th></tr></thead><tbody>';
+    restes.forEach(function (l) {
+      h += '<tr><td>' + esc(l.ligne) + '</td><td class="n">' + fmt(-l.budget) + '</td><td class="n">' + fmt(-l.projete) + '</td><td class="n"><b>' + fmt(l.varProjete) + '</b></td>' +
+        '<td><button class="btn discret" onclick="editerEngagement(null,' + esc(JSON.stringify({ ligne: l.ligne, montant: Math.round(l.varProjete), libelle: l.ligne })) + ')">Engager</button></td></tr>';
+    });
+    h += '</tbody></table></div>';
+  }
+  return h;
+}
+function formulaireEngagement(e, pref) {
+  return '<div class="formulaire">' +
+    '<label>Date prévue<input type="date" id="' + pref + 'Date" value="' + esc(e.date || '') + '"></label>' +
+    '<label>Libellé<input type="text" id="' + pref + 'Lib" value="' + esc(e.libelle || '') + '" placeholder="ex. Solde car WEG"></label>' +
+    '<label>Ligne<select id="' + pref + 'Ligne">' + options(nomsLignes(), e.ligne, '—') + '</select></label>' +
+    '<label>Unité<select id="' + pref + 'Unite">' + options(nomsUnites(), e.unite || 'Groupe') + '</select></label>' +
+    '<label>Sens<select id="' + pref + 'Sens">' + options(['Dépense', 'Recette'], e.sens || 'Dépense') + '</select></label>' +
+    '<label>Montant (€)<input type="number" step="any" id="' + pref + 'Montant" value="' + esc(e.montant || '') + '"></label>' +
+    (pref === 'nouvel' ? '' : '<label>Statut<select id="' + pref + 'Statut">' + options(['Ouvert', 'Réglé', 'Annulé'], e.statut || 'Ouvert') + '</select></label>') +
+    '<label>Commentaire<input type="text" id="' + pref + 'Com" value="' + esc(e.commentaire || '') + '"></label>' +
+    (pref === 'nouvel' ? '<button class="btn" onclick="sauverEngagement(\'nouvel\')">Ajouter</button>' : '') + '</div>';
+}
+function lireEngagement(pref, base) {
+  var e = {};
+  for (var k in base) e[k] = base[k];
+  e.date = $(pref + 'Date').value; e.libelle = $(pref + 'Lib').value; e.ligne = $(pref + 'Ligne').value;
+  e.unite = $(pref + 'Unite').value; e.sens = $(pref + 'Sens').value; e.montant = $(pref + 'Montant').value;
+  e.commentaire = $(pref + 'Com').value; if ($(pref + 'Statut')) e.statut = $(pref + 'Statut').value;
+  e.saison = e.saison || ETAT.saison; e.statut = e.statut || 'Ouvert';
+  return e;
+}
+function sauverEngagement(pref, base) {
+  var e = lireEngagement(pref, base || {});
+  if (!e.ligne || !Engine.num(e.montant)) return toast('Indique au moins la ligne et le montant.', true);
+  appel('enregistrer', 'Engagements', e).then(function (o) {
+    D.engagements = D.engagements.filter(function (x) { return x.id !== o.id; }).concat([o]);
+    fermerModale(); afficher(); toast('Engagement enregistré');
+  }).catch(erreur);
+}
+function editerEngagement(id, pre) {
+  var e = id ? D.engagements.filter(function (x) { return x.id === id; })[0] : { saison: ETAT.saison, sens: 'Dépense', statut: 'Ouvert', unite: 'Groupe' };
+  if (pre) for (var k in pre) e[k] = pre[k];
+  window._eng = e;
+  modale('<h2>' + (id ? 'Modifier l’engagement' : 'Nouvel engagement') + '</h2>' + formulaireEngagement(e, 'm') +
+    '<div class="actions"><button class="btn discret" onclick="fermerModale()">Annuler</button><button class="btn" onclick="sauverEngagement(\'m\',window._eng)">Enregistrer</button></div>');
+}
+function reglerCorrespondances() {
+  var corr = Engine.correspondancesEngagements(D.engagements, C[ETAT.saison] || [], ETAT.saison);
+  if (!confirm(corr.length + ' engagement(s) vont passer en « Réglé ». Continuer ?')) return;
+  corr.forEach(function (c) {
+    var e = c.engagement; e.statut = 'Réglé';
+    FILE = FILE.then(function () { return appel('enregistrer', 'Engagements', e); });
+  });
+  afficher();
+  FILE = FILE.then(function () { toast(corr.length + ' engagement(s) réglé(s)'); }).catch(erreur);
+}
+function statutEngagement(id, statut) {
+  var e = D.engagements.filter(function (x) { return x.id === id; })[0];
+  e.statut = statut;
+  appel('enregistrer', 'Engagements', e).then(function () { afficher(); toast('Engagement ' + statut.toLowerCase()); }).catch(erreur);
+}
+function supprimerEngagement(id) {
+  if (!confirm('Supprimer cet engagement ?')) return;
+  appel('supprimer', 'Engagements', id).then(function () {
+    D.engagements = D.engagements.filter(function (e) { return e.id !== id; }); afficher();
+  }).catch(erreur);
+}
+
+/* --------------------------------------------------------- camps & flux */
+function vueFlux() {
+  var o = ETAT.fluxOnglet || 'unites';
+  return '<div class="onglets">' + [['unites', 'Flux par unité'], ['fonds', 'Fonds des équipes Compagnons']].map(function (x) {
+    return '<button class="' + (o === x[0] ? 'actif' : '') + '" onclick="ETAT.fluxOnglet=\'' + x[0] + '\';afficher()">' + x[1] + '</button>';
+  }).join('') + '</div>' + (o === 'fonds' ? vueFonds() : fluxParUniteVue());
+}
+
+/* --- Fonds des équipes Compagnons : solde cumulé sur toutes les saisons --- */
+function basculer(k) { ETAT.ouverts[k] = !ETAT.ouverts[k]; var y = window.scrollY; afficher(); window.scrollTo(0, y); }
+function estEquipeCompagnons(branche) { return /^compagnons\b/.test(Engine.cle(branche)); }
+function nomEquipe(branche) { var n = String(branche).replace(/^\s*compagnons\s*-\s*/i, ''); return Engine.cle(n) === 'compagnons' ? 'Compagnons (sans équipe)' : n; }
+function lignesExclues() { return (D.fondsExclusions || []).filter(function (x) { return x.type === 'ligne'; }).map(function (x) { return x.valeur; }); }
+function ecrituresExclues() { var m = {}; (D.fondsExclusions || []).forEach(function (x) { if (x.type === 'ecriture') m[x.valeur] = 1; }); return m; }
+function statutEquipe(branche) { var e = (D.equipes || []).filter(function (x) { return x.branche === branche; })[0]; return e ? e.statut : ''; }
+/** Équipes (branches « Compagnons - … ») avec leurs écritures de toutes les saisons, hors mouvements internes. */
+function fondsEquipes() {
+  var exL = lignesExclues(), exE = ecrituresExclues(), eq = {};
+  codes().forEach(function (code) {
+    (C[code] || []).forEach(function (v) {
+      if (!estEquipeCompagnons(v.branche) || v.ligne === Engine.INTERNE) return;
+      var e = eq[v.branche] = eq[v.branche] || { branche: v.branche, nom: nomEquipe(v.branche), saisons: {}, r: 0, d: 0, ex: 0, ventils: [] };
+      var exclu = !!exE[v.cle] || exL.indexOf(v.ligne) >= 0;
+      e.ventils.push({ v: v, saison: code, exclu: exclu, parLigne: exL.indexOf(v.ligne) >= 0 });
+      if (exclu) { e.ex += v.depense - v.recette; return; }
+      var x = e.saisons[code] = e.saisons[code] || { r: 0, d: 0 };
+      x.r += v.recette; x.d += v.depense; e.r += v.recette; e.d += v.depense;
+    });
+  });
+  return Object.keys(eq).map(function (k) { return eq[k]; }).sort(function (a, b) {
+    var da = a.ventils.reduce(function (m, x) { return x.v.date > m ? x.v.date : m; }, ''), db = b.ventils.reduce(function (m, x) { return x.v.date > m ? x.v.date : m; }, '');
+    return da < db ? 1 : -1;
+  });
+}
+function vueFonds() {
+  var toutes = fondsEquipes(), cs = codes();
+  var actives = toutes.filter(function (e) { return Engine.cle(statutEquipe(e.branche)) !== 'termine'; });
+  var finies = toutes.filter(function (e) { return Engine.cle(statutEquipe(e.branche)) === 'termine'; });
+  var exL = lignesExclues();
+  var h = '<div class="tuiles">' + tuile('Fonds disponibles', euros(actives.reduce(function (a, e) { return a + e.r - e.d; }, 0)), actives.length + ' équipe(s) en cours') +
+    tuile('Gagné (extra-jobs…)', euros(actives.reduce(function (a, e) { return a + e.r; }, 0)), 'depuis le début') +
+    tuile('Dépensé', euros(actives.reduce(function (a, e) { return a + e.d; }, 0)), 'camps et autres dépenses') + '</div>';
+  h += '<div class="carte"><div class="entete-carte"><div><h2>Fonds des équipes Compagnons</h2><p class="sous">Solde de chaque équipe (branche Comptaweb « Compagnons - … ») sur toutes les saisons : ' +
+    'ce que l’équipe a gagné moins ce qu’elle a dépensé. Clique une équipe pour voir ses écritures et en exclure certaines.</p></div></div>' +
+    tableauFonds(actives, cs) + '</div>';
+  if (finies.length) h += '<div class="carte"><details' + (ETAT.ouverts.finies ? ' open' : '') + ' ontoggle="ETAT.ouverts.finies=this.open"><summary><h2 style="display:inline">Projets terminés</h2> <span class="aide">(' + finies.length + ')</span></summary>' +
+    tableauFonds(finies, cs, true) + '</details></div>';
+  // Lignes exclues du calcul
+  var choix = nomsLignes().filter(function (l) { return exL.indexOf(l) < 0; });
+  h += '<div class="carte"><h2>Lignes exclues des fonds</h2><p class="sous">Les écritures de ces lignes ne comptent pas dans le fonds des équipes (ex. une formation payée par le groupe). ' +
+    'Pour une seule écriture, décoche-la dans le détail de l’équipe.</p><div class="filtres">' +
+    (exL.length ? exL.map(function (l) { return '<span class="pill pl">' + esc(l) + ' <a href="#" title="Ne plus exclure" onclick="exclureLigneFonds(' + jsArg(l) + ',false);return false">✕</a></span>'; }).join('') : '<span class="aide">Aucune : tout compte.</span>') +
+    '<select onchange="if(this.value)exclureLigneFonds(this.value,true)">' + options(choix, '', '+ Exclure une ligne…') + '</select></div></div>';
+  return h;
+}
+function tableauFonds(equipes, cs, finies) {
+  if (!equipes.length) return '<div class="vide">Aucune équipe' + (finies ? '' : ' en cours') + '.</div>';
+  var nc = 5 + cs.length;
+  var h = '<div class="tableau-defile"><table class="budget">' + cols(['lib'].concat(cs.map(function () { return 'n'; }), ['n', 'n', 'bn', 'act'])) +
+    '<thead><tr><th>Équipe</th>' + cs.map(function (c) { return '<th class="n">' + c + '</th>'; }).join('') +
+    '<th class="n">Gagné</th><th class="n">Dépensé</th><th class="n">Solde</th><th></th></tr></thead><tbody>';
+  var T = { r: 0, d: 0, s: {} };
+  equipes.forEach(function (e) {
+    var k = 'fonds|' + e.branche, ouvert = !!ETAT.ouverts[k];
+    T.r += e.r; T.d += e.d;
+    h += '<tr class="cliquable' + (ouvert ? ' parent' : '') + '" onclick="basculer(' + jsArg(k) + ')"><td><span class="fleche' + (ouvert ? ' tourne' : '') + '">▸</span> <b>' + esc(e.nom) + '</b>' +
+      (e.ex ? ' <span class="aide">(' + NF0.format(e.ex) + ' € exclus)</span>' : '') + '</td>' +
+      cs.map(function (c) { var x = e.saisons[c]; T.s[c] = (T.s[c] || 0) + (x ? x.r - x.d : 0); return '<td class="n">' + (x ? ecart(x.r - x.d) : '') + '</td>'; }).join('') +
+      '<td class="n">' + fmt(e.r) + '</td><td class="n">' + fmt(e.d) + '</td><td class="n"><b>' + ecart(e.r - e.d) + '</b></td>' +
+      '<td style="white-space:nowrap" onclick="event.stopPropagation()"><button class="btn discret petit" onclick="terminerEquipe(' + jsArg(e.branche) + ',' + (finies ? 'false' : 'true') + ')">' +
+      (finies ? 'Réactiver' : 'Projet terminé') + '</button></td></tr>';
+    if (ouvert) {
+      h += '<tr class="detail"><td colspan="' + nc + '"><div class="tableau-defile"><table class="detail-fonds"><thead><tr><th>Compté</th><th>Saison</th><th>Date</th><th>Intitulé</th><th>Ligne</th>' +
+        '<th class="n">Recette</th><th class="n">Dépense</th><th class="n">Solde cumulé</th></tr></thead><tbody>';
+      var cumul = 0;
+      e.ventils.slice().sort(function (a, b) { return a.v.date < b.v.date ? -1 : a.v.date > b.v.date ? 1 : 0; }).forEach(function (x) {
+        if (!x.exclu) cumul += x.v.recette - x.v.depense;
+        h += '<tr class="' + (x.exclu ? 'exclu' : '') + '"><td style="text-align:center"><input type="checkbox"' + (x.exclu ? '' : ' checked') + (x.parLigne ? ' disabled title="Ligne exclue (voir plus bas)"' : '') +
+          ' onchange="exclureEcritureFonds(' + jsArg(x.v.cle) + ',' + jsArg(x.v.intitule) + ',!this.checked)"></td><td>' + x.saison + '</td><td>' + dateFr(x.v.date) + '</td><td>' + esc(x.v.intitule) + '</td>' +
+          '<td class="aide">' + esc(x.v.ligne || 'à classer') + '</td><td class="n">' + fmt2(x.v.recette) + '</td><td class="n">' + fmt2(x.v.depense) + '</td><td class="n">' + (x.exclu ? '' : NF2.format(cumul)) + '</td></tr>';
+      });
+      h += '</tbody></table></div></td></tr>';
+    }
+  });
+  if (equipes.length > 1) h += '<tr class="total"><td>Total</td>' + cs.map(function (c) { return '<td class="n">' + ecart(T.s[c] || 0) + '</td>'; }).join('') +
+    '<td class="n">' + fmt(T.r) + '</td><td class="n">' + fmt(T.d) + '</td><td class="n">' + ecart(T.r - T.d) + '</td><td></td></tr>';
+  return h + '</tbody></table></div>';
+}
+function enregistrerFonds(nom, liste) {
+  D[nom === 'Equipes' ? 'equipes' : 'fondsExclusions'] = liste; rafraichir();
+  FILE = FILE.then(function () { return appel('enregistrerTable', nom, liste); }).then(function () { toast('Enregistré'); }).catch(function (e) { erreur(e); charger(true); });
+}
+function terminerEquipe(branche, termine) {
+  if (termine && !confirm('Marquer « ' + nomEquipe(branche) + ' » comme projet terminé ? Elle passera dans « Projets terminés ».')) return;
+  var l = (D.equipes || []).filter(function (x) { return x.branche !== branche; });
+  l.push({ branche: branche, statut: termine ? 'Terminé' : 'En cours', commentaire: '' });
+  enregistrerFonds('Equipes', l);
+}
+function exclureLigneFonds(ligne, exclure) {
+  var l = (D.fondsExclusions || []).filter(function (x) { return !(x.type === 'ligne' && x.valeur === ligne); });
+  if (exclure) l.push({ type: 'ligne', valeur: ligne, libelle: '' });
+  enregistrerFonds('FondsExclusions', l);
+}
+function exclureEcritureFonds(cle, intitule, exclure) {
+  var l = (D.fondsExclusions || []).filter(function (x) { return !(x.type === 'ecriture' && x.valeur === cle); });
+  if (exclure) l.push({ type: 'ecriture', valeur: cle, libelle: intitule });
+  enregistrerFonds('FondsExclusions', l);
+}
+
+function fluxParUniteVue() {
+  var s = ETAT.saison, n1 = precedente(s);
+  var hors = D.lignes.filter(function (l) { return l.horsBudget; }).map(function (l) { return l.ligne; });
+  function tableau(saison) {
+    var t = Engine.fluxParUnite(C[saison] || [], D.lignes);
+    var unites = nomsUnites().filter(function (u) { return t[u]; }).concat(Object.keys(t).filter(function (u) { return nomsUnites().indexOf(u) < 0; }));
+    if (!unites.length) return '<div class="vide">Aucun flux hors budget.</div>';
+    var h = '<div class="tableau-defile"><table><thead><tr><th>Unité</th>' + hors.map(function (l) {
+      return '<th class="n col-n">' + esc(l) + '<br>recettes</th><th class="n">dépenses</th>';
+    }).join('') + '<th class="n col-n">Solde</th></tr></thead><tbody>';
+    var tot = {};
+    unites.forEach(function (u) {
+      var solde = 0;
+      h += '<tr><td>' + esc(u) + '</td>' + hors.map(function (l) {
+        var x = t[u][l] || { r: 0, d: 0 };
+        solde += x.r - x.d; tot[l] = tot[l] || { r: 0, d: 0 }; tot[l].r += x.r; tot[l].d += x.d;
+        return '<td class="n col-n">' + fmt(x.r) + '</td><td class="n">' + fmt(-x.d) + '</td>';
+      }).join('') + '<td class="n col-n"><b>' + ecart(solde) + '</b></td></tr>';
+    });
+    var st = 0;
+    h += '<tr class="total"><td>Total</td>' + hors.map(function (l) { var x = tot[l] || { r: 0, d: 0 }; st += x.r - x.d; return '<td class="n col-n">' + fmt(x.r) + '</td><td class="n">' + fmt(-x.d) + '</td>'; }).join('') +
+      '<td class="n col-n">' + ecart(st) + '</td></tr></tbody></table></div>';
+    return h;
+  }
+  var h = '<div class="carte"><h2>Flux hors budget par unité — ' + esc(s) + '</h2><p class="sous">Recettes et dépenses des camps, extra-jobs, cotisations et régularisations. ' +
+    'Un solde positif est de l’argent que l’unité a encore en caisse.</p>' + tableau(s) + '</div>';
+  if (n1) h += '<div class="carte"><h2>Rappel ' + esc(n1) + '</h2>' + tableau(n1) + '</div>';
+  return h;
+}
+
+/* ------------------------------------------------------------- contrôles */
+/** Totaux de la requête Comptaweb « GS - Check Export Trésoriers » pour une saison : {depense, recette, libelle} ou null. */
+function totauxRequete(saison) {
+  var st = D.stats || [], iTete = -1, cD = -1, cR = -1;
+  for (var i = 0; i < st.length && iTete < 0; i++) {
+    st[i].forEach(function (c, k) {
+      var t = Engine.cle(c);
+      if (cD < 0 && /^d[e]pense/.test(t)) cD = k;
+      if (cR < 0 && /^recette/.test(t)) cR = k;
+    });
+    if (cD >= 0 && cR >= 0) iTete = i; else { cD = -1; cR = -1; }
+  }
+  if (iTete < 0) return null;
+  var annees = String(saison).match(/^(\d{4})-(\d{2})$/), a1 = annees ? annees[1] : '', a2 = annees ? '20' + annees[2] : '';
+  var lignes = st.slice(iTete + 1).filter(function (r) { return r.some(function (c) { return c !== '' && c !== null; }); });
+  var r = lignes.filter(function (l) { var t = l.join(' '); return t.indexOf(a1) >= 0 && t.indexOf(a2) >= 0; })[0] || (lignes.length === 1 ? lignes[0] : null);
+  if (!r) return null;
+  return { depense: Math.abs(Engine.num(r[cD])), recette: Math.abs(Engine.num(r[cR])), libelle: r.filter(function (c, k) { return k !== cD && k !== cR && c !== ''; }).join(' ') };
+}
+/** Rapprochement : totaux de la requête Comptaweb = budget du groupe + hors budget + à classer (hors mouvements internes). */
+function rapprochementComptaweb(saison) {
+  var hors = {}, b = { d: 0, r: 0 }, h = { d: 0, r: 0 }, a = { d: 0, r: 0 }, i = { d: 0, r: 0 };
+  D.lignes.forEach(function (l) { if (l.horsBudget) hors[l.ligne] = 1; });
+  (C[saison] || []).forEach(function (v) {
+    var t = !v.ligne ? a : v.ligne === Engine.INTERNE ? i : hors[v.ligne] ? h : b;
+    t.d += v.depense; t.r += v.recette;
+  });
+  var tot = { d: b.d + h.d + a.d, r: b.r + h.r + a.r }, q = totauxRequete(saison);
+  var syn = Engine.synthese(donneesSynthese(), saison);
+  return { budget: b, hors: h, aClasser: a, interne: i, total: tot, requete: q, netSynthese: syn.net.reel, soldeHors: syn.soldeHorsBudget.reel,
+    ok: q ? Math.abs(q.depense - tot.d) < 0.5 && Math.abs(q.recette - tot.r) < 0.5 : null };
+}
+function carteRapprochement(s) {
+  var R = rapprochementComptaweb(s);
+  function rang(nom, x, cls, note) {
+    return '<tr class="' + (cls || '') + '"><td>' + nom + (note ? ' <span class="aide">' + note + '</span>' : '') + '</td><td class="n">' + fmt2(x.r) + '</td><td class="n">' + fmt2(x.d) + '</td><td class="n">' + fmt2(x.r - x.d) + '</td></tr>';
+  }
+  var okSyn = Math.abs((R.budget.r - R.budget.d) - R.netSynthese) < 0.5;
+  var h = '<div class="carte"><div class="entete-carte"><div><h2>Rapprochement avec Comptaweb</h2><p class="sous">La requête « GS - Check Export Trésoriers » ' +
+    'doit retrouver les totaux de l\u2019export, hors mouvements internes (dépôts et retraits d\u2019espèces).</p></div>' +
+    (R.ok === null ? '<span class="puce att">Requête non trouvée</span>' : '<span class="puce ' + (R.ok ? 'ok' : 'ko') + '">' + (R.ok ? '✓ Concordant' : '✗ Écart') + '</span>') + '</div>' +
+    '<div class="tableau-defile"><table class="budget">' + cols(['lib', 'n', 'n', 'n']) + '<thead><tr><th></th><th class="n">Recettes</th><th class="n">Dépenses</th><th class="n">Solde</th></tr></thead><tbody>' +
+    rang('Budget du groupe', R.budget, '', okSyn ? '✓ = résultat de la Synthèse' : '<span class="negatif">≠ résultat de la Synthèse (' + fmt2(R.netSynthese) + ')</span>') +
+    rang('Flux hors budget', R.hors, '', 'camps, cotisations, extra-jobs, ajustements') +
+    (R.aClasser.d || R.aClasser.r ? rang('<a href="#" onclick="aller(\'realise\',{ligne:\'__aclasser\'});return false">À classer</a>', R.aClasser) : '') +
+    rang('Total de l\u2019app', R.total, 'total');
+  if (R.requete) {
+    var q = { r: R.requete.recette, d: R.requete.depense }, e = { r: R.total.r - q.r, d: R.total.d - q.d };
+    h += rang('Requête Comptaweb', q, '', esc(R.requete.libelle)) +
+      '<tr class="grand-total"><td>Écart</td><td class="n">' + (Math.abs(e.r) < 0.5 ? '<span class="positif">✓ 0</span>' : '<span class="negatif">' + fmt2(e.r) + '</span>') + '</td>' +
+      '<td class="n">' + (Math.abs(e.d) < 0.5 ? '<span class="positif">✓ 0</span>' : '<span class="negatif">' + fmt2(e.d) + '</span>') + '</td><td class="n">' + fmt2(e.r - e.d) + '</td></tr>';
+  }
+  h += '</tbody></table></div><p class="aide">Mouvements internes exclus : ' + fmt2(R.interne.r) + ' en recettes, ' + fmt2(R.interne.d) + ' en dépenses.' +
+    (R.requete ? '' : ' La requête n\u2019a pas encore été récupérée par le robot pour ' + esc(s) + ' (ou elle porte sur une autre saison).') +
+    (R.ok === false ? ' Un écart vient en général d\u2019un export plus ancien que la requête : relance le robot depuis Paramètres.' : '') + '</p></div>';
+  return h;
+}
+
+function vueControles() {
+  var s = ETAT.saison, ecr = D.ecritures[s] || [];
+  var j = Engine.controleJustificatifs(ecr, D.fichiers);
+  var nr = Engine.nonRapprochees(ecr, new Date(D.maintenant), 15);
+  var aClasser = (C[s] || []).filter(function (v) { return !v.ligne; }).length;
+  var rq = rapprochementComptaweb(s);
+  var h = '<div class="tuiles">' +
+    tuile('Rapprochement Comptaweb', rq.ok === null ? '–' : rq.ok ? '<span class="positif">✓ OK</span>' : '<span class="negatif">✗ Écart</span>', rq.ok === null ? 'requête non récupérée' : 'requête vs export') +
+    tuile('À classer', aClasser, 'ventilations sans ligne', '', "aller('realise',{ligne:'__aclasser'})") +
+    tuile('Justificatifs à traiter', j.manquants.length, 'dépenses ' + esc(s)) +
+    tuile('Non rapprochées', nr.length, 'depuis plus de 15 jours') +
+    tuile('Fichiers sans écriture', j.orphelins.length, 'dans le dossier Drive') + '</div>';
+  h += carteRapprochement(s);
+  h += '<div class="carte"><h2>Justificatifs manquants</h2><p class="sous">Dépenses payées par carte, virement ou caisse, hors prélèvements du National. Le robot liste chaque jour les fichiers du dossier Drive ; ' +
+    'un fichier est reconnu par son préfixe <code>AAAAMMJJ_n</code>.</p>';
+  if (!j.manquants.length) h += '<div class="vide">Tout est justifié.</div>';
+  else {
+    h += '<div class="tableau-defile"><table><thead><tr><th>Date</th><th>Intitulé</th><th>Mode</th><th>Pièce</th><th class="n">Montant</th><th>Problème</th><th></th></tr></thead><tbody>';
+    MANQUANTS = j.manquants.sort(function (a, b) { return a.ecriture.date < b.ecriture.date ? 1 : -1; });
+    MANQUANTS.forEach(function (m, i) {
+      var e = m.ecriture;
+      h += '<tr><td>' + dateFr(e.date) + '</td><td>' + esc(e.intitule) + '</td><td>' + esc(e.mode) + '</td><td>' + esc(e.piece) + '</td><td class="n">' + NF2.format(e.depense) +
+        '</td><td><span class="puce ' + (e.piece ? 'att' : 'ko') + '">' + esc(m.probleme) + '</span></td>' +
+        '<td style="white-space:nowrap">' + (e.piece ? '<button class="btn secondaire petit" title="Déposer la photo ou le PDF du justificatif" onclick="ouvrirDepot(MANQUANTS[' + i + '].ecriture)">Déposer</button> ' +
+        '<button class="btn discret petit" title="Générer une attestation sur l\u2019honneur" onclick="ouvrirAttestation(' + i + ')">Attestation</button>' : '') + '</td></tr>';
+    });
+    h += '</tbody></table></div>';
+  }
+  if (j.orphelins.length) h += '<details style="margin-top:10px"><summary class="aide">' + j.orphelins.length + ' fichier(s) du Drive sans écriture correspondante</summary><ul class="aide">' +
+    j.orphelins.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ul></details>';
+  h += '</div>';
+  h += '<div class="carte"><h2>Écritures non rapprochées</h2>';
+  if (!nr.length) h += '<div class="vide">Rien en attente de rapprochement.</div>';
+  else {
+    h += '<div class="tableau-defile"><table><thead><tr><th>Date</th><th>Intitulé</th><th>Mode</th><th class="n">Dépense</th><th class="n">Recette</th></tr></thead><tbody>' +
+      nr.map(function (e) { return '<tr><td>' + dateFr(e.date) + '</td><td>' + esc(e.intitule) + '</td><td>' + esc(e.mode) + '</td><td class="n">' + fmt2(e.depense) + '</td><td class="n">' + fmt2(e.recette) + '</td></tr>'; }).join('') +
+      '</tbody></table></div>';
+  }
+  h += '</div>';
+  if (D.stats && D.stats.length) {
+    h += '<div class="carte"><h2>Requête Comptaweb « GS - Check Export Trésoriers »</h2><p class="sous">Telle que récupérée par le robot.</p><div class="tableau-defile"><table><thead><tr>' +
+      D.stats[0].map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '</tr></thead><tbody>' +
+      D.stats.slice(1).map(function (r) { return '<tr>' + r.map(function (c) { return '<td' + (typeof c === 'number' ? ' class="n"' : '') + '>' + esc(typeof c === 'number' ? NF2.format(c) : c) + '</td>'; }).join('') + '</tr>'; }).join('') +
+      '</tbody></table></div></div>';
+  }
+  return h;
+}
+
+/* ------------------------------------------------ dépôt de justificatifs */
+/** Écriture Comptaweb d'une pièce (saison affichée). */
+function ecriturePiece(piece) { return (D.ecritures[ETAT.saison] || []).filter(function (e) { return e.piece === piece; })[0] || { piece: piece, intitule: '', date: '', depense: 0, mode: '' }; }
+function ouvrirDepotPiece(piece) { ouvrirDepot(ecriturePiece(piece)); }
+function ouvrirDepot(e) {
+  if (!attestationPrete()) { toast('Indique d\u2019abord le dossier Drive des justificatifs.', true); ETAT.param = 'attestations'; return aller('parametres'); }
+  window._depot = e;
+  modale('<h2>Déposer le justificatif</h2>' +
+    '<table class="budget" style="margin:8px 0 14px"><tbody>' +
+    [['Date', dateFr(e.date)], ['Intitulé', esc(e.intitule)], ['Montant', e.depense ? NF2.format(e.depense) + ' €' : ''], ['N° de pièce', esc(e.piece)]]
+      .map(function (r) { return '<tr><td class="aide" style="width:120px">' + r[0] + '</td><td>' + r[1] + '</td></tr>'; }).join('') + '</tbody></table>' +
+    '<div class="formulaire" style="grid-template-columns:1fr">' +
+    '<label>Photo(s) ou PDF<input type="file" id="dpFichiers" accept="image/*,application/pdf" multiple></label>' +
+    '<label>Description (après le n° de pièce)<input type="text" id="dpDesc" value="' + esc(e.intitule || '') + '"></label></div>' +
+    '<p class="aide" id="dpNom"></p>' +
+    '<p class="aide">Les photos sont réduites (2000 px) avant l\u2019envoi. Plusieurs fichiers = plusieurs pages, numérotées (1), (2)…</p>' +
+    '<div class="actions"><button class="btn discret" onclick="fermerModale()">Annuler</button><button class="btn" id="dpOk" onclick="envoyerDepot()">Déposer</button></div>');
+  var maj = function () {
+    var n = ($('dpFichiers').files || []).length;
+    $('dpNom').innerHTML = 'Nom : <code>' + esc(e.piece) + ' - ' + esc($('dpDesc').value.trim() || 'Justificatif') + (n > 1 ? ' (1)' : '') + '.…</code>';
+  };
+  $('dpFichiers').onchange = maj; $('dpDesc').oninput = maj; maj();
+}
+/** Lit un fichier en base64 ; les images sont réduites à 2000 px de côté (JPEG). */
+function lireFichierDepot(f) {
+  return new Promise(function (ok, ko) {
+    var r = new FileReader();
+    r.onerror = function () { ko(new Error('Lecture impossible : ' + f.name)); };
+    r.onload = function () {
+      var url = String(r.result);
+      if (!/^image\//.test(f.type) || /gif|svg/.test(f.type)) return ok({ nom: f.name, type: f.type || 'application/pdf', base64: url.split(',')[1] });
+      var img = new Image();
+      img.onload = function () {
+        var k = Math.min(1, 2000 / Math.max(img.width, img.height)), c = document.createElement('canvas');
+        c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+        c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+        ok({ nom: f.name.replace(/\.[^.]+$/, '') + '.jpg', type: 'image/jpeg', base64: c.toDataURL('image/jpeg', 0.85).split(',')[1] });
+      };
+      img.onerror = function () { ok({ nom: f.name, type: f.type, base64: url.split(',')[1] }); };   // format non lisible par le navigateur (HEIC…) : envoyé tel quel
+      img.src = url;
+    };
+    r.readAsDataURL(f);
+  });
+}
+function envoyerDepot() {
+  var e = window._depot, fs = Array.prototype.slice.call($('dpFichiers').files || []);
+  if (!fs.length) return toast('Choisis au moins un fichier.', true);
+  var trop = fs.filter(function (f) { return !/^image\//.test(f.type) && f.size > 15 * 1024 * 1024; })[0];
+  if (trop) return toast(trop.name + ' dépasse 15 Mo.', true);
+  $('dpOk').disabled = true; $('dpOk').textContent = 'Envoi…';
+  Promise.all(fs.map(lireFichierDepot)).then(function (liste) {
+    return appel('deposerJustificatif', e.piece, $('dpDesc').value, liste);
+  }).then(function (out) {
+    out.forEach(function (o, i) {
+      D.fichiers.push(o.nom); D.liensFichiers = D.liensFichiers || {}; D.liensFichiers[o.nom] = o.url;
+      if (i === 0) D.pieces[e.piece] = { nom: o.nom, url: o.url };
+    });
+    fermerModale(); afficher();
+    toast(out.length > 1 ? out.length + ' fichiers déposés' : 'Justificatif déposé : ' + out[0].nom);
+  }).catch(function (err) { $('dpOk').disabled = false; $('dpOk').textContent = 'Déposer'; erreur(err); });
+}
+
+/* --------------------------------------------- attestations sur l'honneur */
+var MANQUANTS = [];
+function attestationPrete() { var a = D.attestation || {}; return !!a.dossier; }
+function ouvrirAttestation(i) {
+  var e = MANQUANTS[i].ecriture, a = D.attestation || {};
+  if (!attestationPrete()) {
+    toast('Indique d\u2019abord le dossier Drive des justificatifs.', true);
+    ETAT.param = 'attestations'; return aller('parametres');
+  }
+  window._attest = e;
+  modale('<h2>Attestation sur l\u2019honneur</h2><p class="aide">Le PDF sera rangé dans « ' + esc(a.dossierNom || 'le dossier des justificatifs') + ' » sous le nom <code>' + esc(e.piece) + ' - Attestation sur l\u2019honneur - …</code>, ' +
+    'ce qui le fera reconnaître comme justificatif.</p>' +
+    '<table class="budget" style="margin:8px 0 14px"><tbody>' +
+    [['Date', dateFr(e.date)], ['Intitulé', esc(e.intitule)], ['Montant', NF2.format(e.depense) + ' €'], ['Mode de paiement', esc(e.mode)], ['N° de pièce', esc(e.piece)]]
+      .map(function (r) { return '<tr><td class="aide" style="width:140px">' + r[0] + '</td><td>' + r[1] + '</td></tr>'; }).join('') + '</tbody></table>' +
+    '<div class="formulaire" style="grid-template-columns:1fr">' +
+    '<label>Personne qui a payé (prénom et nom — elle « signe » l\u2019attestation)<input type="text" id="atPayeur" placeholder="ex. Lucie Martin" list="atPayeurs" autocomplete="off"></label>' +
+    '<datalist id="atPayeurs">' + (D.attestations || []).map(function (x) { return x.payeur; }).filter(function (n, i, t) { return n && t.indexOf(n) === i; }).sort()
+      .map(function (n) { return '<option value="' + esc(n) + '">'; }).join('') + '</datalist>' +
+    '<label>Motif<select id="atMotif">' + options(a.motifs || ['Ticket ou facture perdu', 'Autre']) + '</select></label>' +
+    '<label>Précisions sur la dépense<textarea id="atCom" rows="3" placeholder="ex. forfait covoiturage jusqu\u2019au lieu du week-end ; ticket égaré"></textarea></label></div>' +
+    '<p class="aide">Signé électroniquement par la personne ayant réglé la dépense et par ' + esc(a.tresorier || 'le trésorier') + ', avec le tampon du groupe' + (a.tampon ? '' : ' <span class="negatif">(aucun tampon enregistré)</span>') + '.</p>' +
+    '<div class="actions"><button class="btn discret" onclick="fermerModale()">Annuler</button><button class="btn" id="atOk" onclick="genererAttestation()">Générer le PDF</button></div>');
+  $('atPayeur').focus();
+}
+function genererAttestation() {
+  var e = window._attest, payeur = $('atPayeur').value.trim();
+  if (!payeur) return toast('Indique qui a réglé la dépense.', true);
+  var deja = (D.attestations || []).filter(function (a) { return a.piece === e.piece; });
+  if (deja.length && !confirm('Une attestation existe déjà pour la pièce ' + e.piece + '. En créer une autre quand même ?\n\n(Pour la remplacer, supprime d\u2019abord l\u2019ancienne dans Paramètres › Attestations › Registre.)')) return;
+  $('atOk').disabled = true; $('atOk').textContent = 'Génération…';
+  appel('genererAttestation', { piece: e.piece, date: e.date, intitule: e.intitule, montant: e.depense, mode: e.mode, motif: $('atMotif').value, commentaire: $('atCom').value, payeur: payeur })
+    .then(function (r) {
+      D.fichiers.push(r.nom); D.liensFichiers = D.liensFichiers || {}; D.liensFichiers[r.nom] = r.url;
+      D.pieces[e.piece] = { nom: r.nom, url: r.url };
+      (D.attestations = D.attestations || []).push(r.attestation);
+      fermerModale(); afficher();
+      toast('Attestation enregistrée dans le Drive');
+      modale('<h2>Attestation créée</h2><p>' + esc(r.nom) + '</p><div class="actions"><button class="btn discret" onclick="fermerModale()">Fermer</button>' +
+        '<a class="btn" href="' + esc(r.url) + '" target="_blank" rel="noopener" onclick="fermerModale()">Ouvrir le PDF</a></div>');
+    }).catch(function (err) { $('atOk').disabled = false; $('atOk').textContent = 'Générer le PDF'; erreur(err); });
+}
+function vueParamAttestations() {
+  var a = D.attestation || {}, reg = (D.attestations || []).slice().reverse();
+  var h = '<div class="carte"><h2>Attestations sur l\u2019honneur</h2><p class="sous">Pour une dépense qui a un n° de pièce mais dont le justificatif a disparu : ' +
+    'Contrôles › Justificatifs manquants › « Attestation ». L\u2019app remplit le modèle, le convertit en PDF et le range dans le dossier des justificatifs.</p>' +
+    '<div class="formulaire" style="grid-template-columns:1fr auto;max-width:760px">' +
+    '<label>Dossier Drive des justificatifs (lien ou identifiant, le même que celui du robot)<input type="text" id="paDossier" value="' + esc(a.dossierUrl || '') + '" placeholder="https://drive.google.com/drive/folders/…"></label>' +
+    '<button class="btn secondaire" onclick="paramAttestation(\'dossier\')">Enregistrer</button>' +
+    '<label>Nom du trésorier (visa)<input type="text" id="paTresorier" value="' + esc(a.tresorier || '') + '" placeholder="ex. Camille Martin"></label>' +
+    '<button class="btn secondaire" onclick="paramAttestation(\'tresorier\')">Enregistrer</button></div>' +
+    '<p class="aide">' + (a.dossier ? '✓ Dossier : <a href="' + esc(a.dossierUrl) + '" target="_blank">' + esc(a.dossierNom || a.dossier) + '</a>' : '<span class="negatif">Dossier non renseigné : la génération est impossible.</span>') + '</p>' +
+    '<h3 style="margin-top:18px">Modèle</h3><p class="aide">Un Google Doc normal : modifie le texte et la mise en page comme tu veux. Garde les champs entre accolades ' +
+    '(<code>{{PAYEUR}}</code>, <code>{{DATE_DEPENSE}}</code>, <code>{{INTITULE}}</code>, <code>{{MONTANT}}</code>, <code>{{MODE}}</code>, <code>{{PIECE}}</code>, <code>{{MOTIF}}</code>, ' +
+    '<code>{{COMMENTAIRE}}</code>, <code>{{DATE}}</code>, <code>{{TRESORIER}}</code>, <code>{{HORODATAGE}}</code>, <code>{{TAMPON}}</code>).</p><div class="filtres">' +
+    (a.modeleUrl ? '<a class="btn secondaire" href="' + esc(a.modeleUrl) + '" target="_blank">Ouvrir le modèle</a><button class="btn discret" onclick="if(confirm(\'Recréer le modèle par défaut ? Tes modifications seront perdues.\'))paramAttestation(\'modele\')">Recréer le modèle par défaut</button>'
+      : '<button class="btn secondaire" onclick="paramAttestation(\'modele\')">Créer le modèle</button><span class="aide">(sinon il sera créé à la première attestation)</span>') + '</div>' +
+    '<h3 style="margin-top:18px">Tampon du groupe</h3><p class="aide">Image PNG (fond transparent de préférence), placée à l\u2019endroit de <code>{{TAMPON}}</code>, à côté du visa du trésorier.</p>' +
+    '<div class="filtres"><span class="puce ' + (a.tampon ? 'ok' : 'att') + '">' + (a.tampon ? '✓ Tampon enregistré' : 'Aucun tampon') + '</span>' +
+    '<input type="file" id="paTampon" accept="image/png,image/jpeg"><button class="btn secondaire" onclick="paramAttestation(\'tampon\')">Envoyer</button></div></div>';
+  h += '<div class="carte"><h2>Registre</h2>' + (reg.length ? '<div class="tableau-defile"><table><thead><tr><th>Générée le</th><th>Pièce</th><th>Intitulé</th><th class="n">Montant</th><th>Motif</th><th>Réglée par</th><th></th></tr></thead><tbody>' +
+    reg.map(function (x) {
+      return '<tr><td>' + esc(x.genere) + '</td><td>' + esc(x.piece) + '</td><td>' + esc(x.intitule) + (x.commentaire ? '<br><span class="aide">' + esc(x.commentaire) + '</span>' : '') + '</td><td class="n">' + NF2.format(Engine.num(x.montant)) +
+        '</td><td>' + esc(x.motif) + '</td><td>' + esc(x.payeur) + '</td><td style="white-space:nowrap">' + (x.lien ? '<a class="piece" href="' + esc(x.lien) + '" target="_blank">PDF</a>' : '') +
+        (x.fichier ? ' <button class="btn danger" title="Supprimer cette attestation (PDF à la corbeille)" onclick="supprimerAttestation(' + jsArg(x.fichier) + ')">✕</button>' : '') + '</td></tr>';
+    }).join('') + '</tbody></table></div>' : '<div class="vide">Aucune attestation pour l\u2019instant.</div>') + '</div>';
+  return h;
+}
+function supprimerAttestation(id) {
+  var a = (D.attestations || []).filter(function (x) { return x.fichier === id; })[0];
+  if (!a || !confirm('Supprimer l\u2019attestation de la pièce ' + a.piece + ' (réglée par « ' + a.payeur + ' ») ?\nLe PDF part à la corbeille du Drive.')) return;
+  appel('supprimerAttestation', id).then(function (reg) {
+    D.attestations = reg;
+    var nom = Object.keys(D.liensFichiers || {}).filter(function (n) { return D.liensFichiers[n] === a.lien; })[0];
+    if (nom) { D.fichiers = D.fichiers.filter(function (f) { return f !== nom; }); delete D.liensFichiers[nom]; }
+    if (D.pieces[a.piece] && D.pieces[a.piece].url === a.lien) {
+      delete D.pieces[a.piece];
+      (D.fichiers || []).forEach(function (n) { if (Engine.idFichier(n) === a.piece && !D.pieces[a.piece]) D.pieces[a.piece] = { nom: n, url: (D.liensFichiers || {})[n] || '' }; });
+    }
+    afficher(); toast('Attestation supprimée');
+  }).catch(erreur);
+}
+function paramAttestation(quoi) {
+  var p;
+  if (quoi === 'dossier') p = appel('enregistrerDossierJustificatifs', $('paDossier').value);
+  else if (quoi === 'tresorier') p = appel('enregistrerTresorier', $('paTresorier').value);
+  else if (quoi === 'modele') p = appel('creerModeleAttestation');
+  else {
+    var f = $('paTampon').files[0];
+    if (!f) return toast('Choisis l\u2019image du tampon.', true);
+    p = new Promise(function (ok) { var r = new FileReader(); r.onload = function () { ok(r.result); }; r.readAsDataURL(f); })
+      .then(function (url) { return appel('enregistrerTampon', String(url).split(',')[1], f.type, f.name); });
+  }
+  toast('Enregistrement…');
+  p.then(function (cfg) { D.attestation = cfg; afficher(); toast('Enregistré'); }).catch(erreur);
+}
+
+/* ------------------------------------------------------------ routine du mois */
+var MOIS_FR = ['janvier', 'février', 'mars', 'avril', 'mai', 'juin', 'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'];
+function joursDepuis(iso) { var d = new Date(String(iso)); return isNaN(d) ? 999 : Math.floor((new Date(D.maintenant) - d) / 86400000); }
+/** Étapes du mois : vérifiées automatiquement quand c'est possible, sinon à cocher. */
+function routineEtapes() {
+  var s = courante(), mois = String(D.maintenant).slice(0, 7), m0 = Number(mois.slice(5, 7)), E = [];
+  var v = C[s] || [], ecr = D.ecritures[s] || [];
+  var dernier = D.journal.length ? D.journal[D.journal.length - 1].date : '';
+  E.push({ id: 'robot', lib: 'Actualiser Comptaweb', auto: true, ok: !!dernier && joursDepuis(dernier) <= 3,
+    detail: dernier ? 'dernière actualisation le ' + dernierRobot() : 'jamais actualisé', action: D.github.configure ? 'lancerRobot()' : "ETAT.param='imports';aller('parametres')", bouton: 'Actualiser' });
+  var ac = v.filter(function (x) { return !x.ligne; }).length;
+  E.push({ id: 'classer', lib: 'Classer les nouvelles écritures', auto: true, ok: !ac, detail: ac ? ac + ' écriture(s) à classer' : 'tout est classé', action: "aller('realise',{ligne:'__aclasser'})" });
+  var j = Engine.controleJustificatifs(ecr, D.fichiers).manquants.length;
+  E.push({ id: 'justif', lib: 'Récupérer les justificatifs manquants (ou faire une attestation)', auto: true, ok: !j, detail: j ? j + ' dépense(s) sans justificatif' : 'tout est justifié', action: "aller('controles')" });
+  var nr = Engine.nonRapprochees(ecr, new Date(D.maintenant), 15).length;
+  E.push({ id: 'rappro', lib: 'Rapprocher les écritures dans Comptaweb', auto: true, ok: !nr, detail: nr ? nr + ' écriture(s) non rapprochée(s) depuis plus de 15 jours' : 'tout est rapproché', action: "aller('controles')" });
+  var rq = rapprochementComptaweb(s);
+  E.push({ id: 'concordance', lib: 'Vérifier la concordance avec la requête Comptaweb', auto: true, ok: rq.ok === true,
+    detail: rq.ok === null ? 'requête pas encore récupérée' : rq.ok ? 'requête et export concordants' : 'écart entre la requête et l’export', action: "aller('controles')" });
+  var corr = Engine.correspondancesEngagements(D.engagements, v, s).length;
+  E.push({ id: 'engagements', lib: 'Solder les engagements réglés', auto: true, ok: !corr, detail: corr ? corr + ' engagement(s) dont l’écriture est arrivée' : 'rien à solder', action: "aller('engagements')" });
+  E.push({ id: 'tickets', lib: 'Collecter les tickets des cartes (corporate, procurement) et des caisses d’unité', auto: false, action: "aller('controles')" });
+  E.push({ id: 'budget', lib: 'Faire le point budget : Synthèse comparée au budget voté', auto: false, action: "aller('synthese')" });
+  // Rentrée : saison, effectifs, budget voté
+  if (m0 === 8 || m0 === 9) {
+    var an = Number(mois.slice(0, 4)), code = an + '-' + String(an + 1).slice(2);
+    var sc = D.saisons.filter(function (x) { return x.code === code; })[0];
+    E.push({ id: 'saison', lib: 'Ouvrir la saison ' + code + ' (Paramètres › Imports › Saisons, avec l’exercice Comptaweb)', auto: true, ok: !!(sc && sc.courante),
+      detail: sc ? (sc.courante ? 'saison ouverte et courante' : 'saison créée mais pas courante') : 'saison pas encore créée', action: "ETAT.param='imports';aller('parametres')" });
+  }
+  if (m0 >= 9 && m0 <= 11) {
+    var eff = Engine.compilerEffectifs(D.effectifs).total(s);
+    E.push({ id: 'effectifs', lib: 'Saisir les effectifs de la saison', auto: true, ok: eff > 0, detail: eff ? eff + ' jeunes saisis' : 'aucun effectif saisi', action: "ETAT.budgetOnglet='sorties';aller('budget')" });
+  }
+  if (m0 >= 10 && m0 <= 12) {
+    var ref = versionReference(s);
+    E.push({ id: 'vote', lib: 'Faire voter le budget et le figer comme référence', auto: true, ok: !!ref, detail: ref ? '« ' + ref.nom + ' »' : 'pas encore de budget de référence', action: "ETAT.budgetOnglet='versions';aller('budget')" });
+  }
+  var fait = {};
+  (D.routine || []).forEach(function (r) { if (String(r.mois).slice(0, 7) === mois) fait[r.etape] = r; });
+  E.forEach(function (e) { e.coche = fait[e.id] || null; e.fait = e.auto ? (e.ok || !!e.coche) : !!e.coche; });
+  return { mois: mois, etapes: E };
+}
+function vueRoutine() {
+  var R = routineEtapes(), n = R.etapes.filter(function (e) { return e.fait; }).length, tot = R.etapes.length;
+  var m = Number(R.mois.slice(5, 7)) - 1;
+  var h = '<div class="carte"><div class="entete-carte"><div><h2>Routine de ' + MOIS_FR[m] + ' ' + R.mois.slice(0, 4) + '</h2><p class="sous">Les étapes se cochent toutes seules quand l’app peut les vérifier ; ' +
+    'coche les autres à la main. La liste repart à zéro chaque mois.</p></div><span class="pill ' + (n === tot ? 'ok' : 'wa') + '">' + n + ' / ' + tot + '</span></div>' +
+    '<div class="routine">';
+  R.etapes.forEach(function (e) {
+    var verrouille = e.auto && e.ok;
+    var info = e.auto ? (e.ok ? '✓ vérifié : ' + esc(e.detail) : esc(e.detail) + (e.coche ? ' · coché à la main' : ''))
+      : (e.coche ? 'fait le ' + esc(String(e.coche.faitLe).slice(8, 10) + '/' + String(e.coche.faitLe).slice(5, 7)) : '');
+    h += '<div class="etape' + (e.fait ? ' faite' : '') + '"><label><input type="checkbox"' + (e.fait ? ' checked' : '') + (verrouille ? ' disabled title="Vérifié automatiquement"' : '') +
+      ' onchange="cocherEtape(' + jsArg(R.mois) + ',' + jsArg(e.id) + ',this.checked)"><span><b>' + esc(e.lib) + '</b>' + (info ? '<br><span class="aide">' + info + '</span>' : '') + '</span></label>' +
+      '<button class="btn discret petit" onclick="' + e.action + '">' + (e.bouton || 'Ouvrir') + '</button></div>';
+  });
+  h += '</div></div>';
+  return h;
+}
+function cocherEtape(mois, etape, fait) {
+  var rows = (D.routine || []).filter(function (r) { return !(String(r.mois) === mois && r.etape === etape); });
+  if (fait) rows.push({ mois: mois, etape: etape, faitLe: new Date().toISOString().slice(0, 16).replace('T', ' '), par: '' });
+  D.routine = rows; rafraichir();
+  FILE = FILE.then(function () { return appel('cocherRoutine', mois, etape, fait); }).then(function (r) { D.routine = r; }).catch(erreur);
+}
+
+/* ------------------------------------------------------------ mode d'emploi */
+function vueModeEmploi() {
+  function sec(titre, corps) { return '<div class="carte aide-page"><h2>' + titre + '</h2>' + corps + '</div>'; }
+  var titre = (D.groupe || {}).titre || 'l’application';
+  return sec('À quoi sert ' + esc(titre), '<p>L’application remplace le classeur « Budget & Suivi » du trésorier : construire le budget du groupe, suivre le réalisé à partir de Comptaweb, ' +
+      'tenir les contrôles de trésorerie et suivre les fonds des équipes Compagnons. Les données sont dans le <a href="' + esc(D.classeurUrl) + '" target="_blank">classeur Google</a> du compte qui l’a installée ; ' +
+      'l’application ne fait que le lire et l’écrire.</p>') +
+    sec('Chaque mois', '<ol><li>Ouvrir <b>Routine du mois</b> : la plupart des étapes se vérifient seules.</li>' +
+      '<li><b>Actualiser</b> (en haut à droite) si les données ont plus de quelques jours. Le robot tourne aussi tout seul chaque matin.</li>' +
+      '<li><b>Réalisé › À classer</b> : choisir la ligne de budget ; « nouvelle règle » classe aussi toutes les écritures semblables, passées et futures.</li>' +
+      '<li><b>Contrôles</b> : justificatifs manquants (relancer les chefs, ou faire une <b>attestation sur l’honneur</b>), écritures non rapprochées, concordance avec la requête Comptaweb.</li>' +
+      '<li><b>À venir</b> : solder les engagements dont l’écriture est arrivée.</li></ol>' +
+      '<p>Un e-mail récapitulatif peut arriver chaque lundi (Paramètres › Imports › E-mail hebdomadaire).</p>') +
+    sec('À la rentrée (août – décembre)', '<ol><li><b>Paramètres › Imports › Saisons</b> : ajouter la nouvelle saison (ex. 2027-28), onglet « Ecritures 2027-28 », ' +
+      'exercice Comptaweb exactement comme dans le sélecteur de Comptaweb, cocher « Courante ». Le robot bascule dessus dès le lendemain.</li>' +
+      '<li><b>Budget - Dépenses</b> : « Préremplir depuis N-1 » dans chaque onglet, puis ajuster ; saisir les <b>effectifs</b> (onglet Sorties) — ils servent au calcul par jeune et à la Participation au Mouvement.</li>' +
+      '<li><b>Budget - Recettes</b> : idem.</li>' +
+      '<li>Après le vote en conseil de groupe : <b>Budget - Dépenses › Versions › Figer</b> en cochant « budget de référence ». Les révisions se font ensuite dans la version de travail.</li>' +
+      '<li>Fonds Compagnons (Camps & flux) : marquer « Projet terminé » les équipes dont le projet est clos.</li></ol>') +
+    sec('Le robot Comptaweb', '<p>Un programme sur GitHub (dépôt <code>' + esc(D.github.depot) + '</code>) se connecte à Comptaweb chaque matin vers 7 h, télécharge l’export des recettes et dépenses ' +
+      'de la saison courante, la requête « GS - Check Export Trésoriers » et la liste des fichiers du dossier Drive des justificatifs, puis écrit tout dans le classeur.</p>' +
+      '<ul><li>Identifiants Comptaweb, adresse du classeur et compte de service : dans les <i>Secrets</i> du dépôt GitHub (Settings › Secrets and variables › Actions).</li>' +
+      '<li>Le bouton « Actualiser » utilise un <b>jeton GitHub</b> (Paramètres › Imports) valable un an au plus : l’app prévient un mois avant l’expiration.</li>' +
+      '<li>Si le robot échoue : Paramètres › Imports › « Voir les dernières exécutions » donne le lien vers le détail. Cause fréquente : mot de passe Comptaweb changé (mettre à jour le secret).</li></ul>') +
+    sec('Classement et règles', '<p>Chaque ventilation Comptaweb reçoit une ligne de budget selon <b>Paramètres › Règles de classement</b> : activité + nature, puis nature seule (activité *), puis activité seule (nature *). ' +
+      'Une correction faite sur une seule écriture prime sur les règles. Les « Dépôts, retrait espèces » sont des mouvements internes, exclus des totaux.</p>' +
+      '<p>Lignes de budget : <b>Paramètres › Lignes budgétaires</b> (section, recette, hors budget, façon de saisir le budget).</p>') +
+    sec('Justificatifs et attestations', '<p>Un justificatif est reconnu quand le nom du fichier dans le dossier Drive commence par le n° de pièce Comptaweb (<code>AAAAMMJJ_n - …</code>). ' +
+      'Pour l’ajouter sans le renommer à la main : Contrôles › Justificatifs manquants › <b>Déposer</b> (ou la flèche à côté du n° de pièce dans le Réalisé) — photo ou PDF, même depuis le téléphone. ' +
+      'S’il a disparu : Contrôles › Justificatifs manquants › <b>Attestation</b>. Le modèle (Google Docs), le dossier, le tampon et le nom du trésorier se règlent dans Paramètres › Attestations ; ' +
+      'chaque attestation est notée dans l’onglet « Attestations » du classeur.</p>') +
+    sec('Transmettre à un nouveau trésorier', '<ul><li>Lui donner l’accès au compte Google de la trésorerie qui possède le classeur, le script et le dossier des justificatifs (idéalement un compte dédié au groupe, pas un compte personnel).</li>' +
+      '<li>Lui transférer ou partager le dépôt GitHub ; il crée son propre jeton GitHub et le colle dans Paramètres › Imports.</li>' +
+      '<li>Changer le nom du trésorier dans Paramètres › Attestations et le destinataire de l’e-mail hebdomadaire.</li>' +
+      '<li>Mettre à jour les identifiants Comptaweb dans les secrets GitHub si le compte change.</li></ul>') +
+        sec('Mettre à jour l\u2019application', '<p>Les nouvelles versions sont publiées sur <a href="https://github.com/gfunkstark/budget-groupe-sgdf" target="_blank">github.com/gfunkstark/budget-groupe-sgdf</a> ' +
+      '(Paramètres › Groupe indique si la tienne est à jour). Une mise à jour = remplacer <b>Code.gs</b> et <b>Index</b> dans Apps Script (Extensions › Apps Script depuis le classeur) ' +
+      'par les fichiers du dossier <code>installer</code>, exécuter une fois <code>autoriser</code> si de nouvelles autorisations sont nécessaires, puis Déployer › Gérer les déploiements › crayon › « Nouvelle version ». ' +
+      'L\u2019adresse de l\u2019app et les données ne changent pas.</p>');
+}
+
+/* ------------------------------------------------------------ paramètres */
+var EDITEURS = {
+  Saisons: [['code', 'Saison', 'text'], ['onglet', 'Onglet des écritures', 'text'], ['debut', 'Début', 'date'], ['exercice', 'Exercice Comptaweb', 'text'], ['courante', 'Courante', 'bool']],
+  Lignes: [['ligne', 'Ligne', 'text'], ['recette', 'En recettes', 'bool'], ['section', 'Section des dépenses', 'text'], ['horsBudget', 'Hors budget', 'bool'], ['budget', 'Saisie du budget (dépenses)', 'saisie'], ['ordre', 'Ordre', 'num']],
+  Regles: [['activite', 'Activité Comptaweb (* = toutes)', 'text'], ['nature', 'Nature (* = toutes)', 'text'], ['ligne', 'Ligne de budget', 'ligne']],
+  Unites: [['branche', 'Branche Comptaweb', 'text'], ['unite', 'Unité suivie', 'text'], ['ordre', 'Ordre', 'num']]
+};
+var CLES_TABLES = { Saisons: 'saisons', Lignes: 'lignes', Regles: 'regles', Unites: 'unites' };
+
+var SOUS_PARAM = [['groupe', 'Groupe'], ['imports', 'Imports'], ['Lignes', 'Lignes budgétaires'], ['Regles', 'Règles de classement'], ['Unites', 'Unités'], ['attestations', 'Attestations'], ['aide', 'Mode d\u2019emploi']];
+
+function vueParametres() {
+  var h = '<div class="onglets">' + SOUS_PARAM.map(function (o) {
+    var n = o[0] === 'imports' || o[0] === 'aide' || o[0] === 'groupe' ? '' : ' <span class="compte">' + (o[0] === 'attestations' ? (D.attestations || []).length : D[CLES_TABLES[o[0]]].length) + '</span>';
+    return '<button class="' + (ETAT.param === o[0] ? 'actif' : '') + '" onclick="allerParam(\'' + o[0] + '\')">' + esc(o[1]) + n + '</button>';
+  }).join('') + '</div>';
+  if (ETAT.param === 'imports') return h + vueImports();
+  if (ETAT.param === 'groupe') return h + vueGroupe();
+  if (ETAT.param === 'attestations') return h + vueParamAttestations();
+  if (ETAT.param === 'aide') return h + vueModeEmploi();
+  return h + editeur(ETAT.param);
+}
+
+function allerParam(p) {
+  if (ETAT.modifie && !confirm('Des modifications ne sont pas enregistrées. Les abandonner ?')) return;
+  ETAT.modifie = false; ETAT.param = p; afficher();
+}
+
+function carteEmailHebdo() {
+  var n = D.notifications || {};
+  return '<div class="carte"><div class="entete-carte"><div><h2>E-mail hebdomadaire</h2><p class="sous">Chaque lundi vers 8 h : écritures à classer, justificatifs manquants, ' +
+    'écritures non rapprochées, engagements à solder et expiration du jeton GitHub.</p></div><span class="puce ' + (n.actif ? 'ok' : '') + '">' + (n.actif ? '✓ Activé' : 'Désactivé') + '</span></div>' +
+    (n.aAutoriser ? '<div class="alerte">Autorisations à accorder : dans l\u2019éditeur Apps Script, exécute une fois la fonction <code>autoriser</code>.</div>' : '') +
+    '<div class="filtres"><label class="aide">Destinataire <input type="text" id="emDest" value="' + esc(n.destinataire || '') + '" placeholder="' + esc(n.parDefaut || 'adresse e-mail') + '" style="min-width:260px"></label>' +
+    (n.actif ? '<button class="btn secondaire" onclick="emailHebdo(true)">Enregistrer</button><button class="btn discret" onclick="emailHebdo(false)">Désactiver</button>'
+      : '<button class="btn" onclick="emailHebdo(true)">Activer</button>') +
+    '<button class="btn discret" onclick="emailTest()">Envoyer un test</button></div></div>';
+}
+function emailHebdo(actif) {
+  appel('configurerEmailHebdo', actif, $('emDest').value).then(function (c) { D.notifications = c; afficher(); toast(actif ? 'E-mail hebdomadaire activé' : 'E-mail hebdomadaire désactivé'); }).catch(erreur);
+}
+function emailTest() {
+  toast('Envoi…');
+  var dest = $('emDest').value;
+  appel('configurerEmailHebdo', !!(D.notifications || {}).actif, dest).then(function () { return appel('envoyerResumeTest'); })
+    .then(function (a) { toast('E-mail de test envoyé à ' + a); }).catch(erreur);
+}
+function vueGroupe() {
+  var g = D.groupe || {};
+  return '<div class="carte"><h2>Identité du groupe</h2><p class="sous">Affichée dans le menu, l\u2019e-mail du lundi et les attestations sur l\u2019honneur. ' +
+    'Le titre de l\u2019application devient « Budget » suivi du nom court.</p>' +
+    '<div class="formulaire" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr));max-width:900px">' +
+    '<label>Nom du groupe<input type="text" id="grNom" value="' + esc(g.nom || '') + '" placeholder="ex. Groupe Saint-Exupéry"></label>' +
+    '<label>Nom court (titre de l\u2019app)<input type="text" id="grCourt" value="' + esc(g.court || '') + '" placeholder="ex. St-Ex"></label>' +
+    '<label>Adresse (en-tête des attestations)<input type="text" id="grAdresse" value="' + esc(g.adresse || '') + '" placeholder="ex. 12, rue … — 75000 Paris"></label>' +
+    '<label>Ville (« Fait à … »)<input type="text" id="grVille" value="' + esc(g.ville || '') + '" placeholder="ex. Paris"></label></div>' +
+    '<div class="actions" style="justify-content:flex-start"><button class="btn" onclick="sauverGroupe()">Enregistrer</button></div></div>' +
+    '<div class="carte"><h2>Logo</h2><p class="sous">Affiché en haut du menu. Une image carrée (PNG à fond transparent de préférence) ; elle est réduite automatiquement.</p>' +
+    '<div class="filtres">' + (g.logo || LOGO.indexOf('data:') === 0 ? '<img src="' + esc(g.logo || LOGO) + '" alt="" style="width:56px;height:56px;object-fit:contain">' : '<span class="puce">Aucun logo</span>') +
+    '<input type="file" id="grLogo" accept="image/png,image/jpeg,image/webp"><button class="btn secondaire" onclick="sauverLogo()">Envoyer</button>' +
+    (g.logo ? '<button class="btn discret" onclick="sauverLogo(true)">Retirer</button>' : '') + '</div></div>' + carteVersion();
+}
+/* Version installée / dernière version publiée sur GitHub */
+function carteVersion() {
+  var m = ETAT.maj;
+  if (!m) { ETAT.maj = { attente: true }; appel('verifierMiseAJour').then(function (r) { ETAT.maj = r; if (ETAT.vue === 'parametres') afficher(); }).catch(function () { ETAT.maj = {}; }); m = ETAT.maj; }
+  var lien = 'https://github.com/' + esc(m.depot || 'gfunkstark/budget-groupe-sgdf');
+  var etat = m.attente ? '<span class="puce">vérification…</span>' : !m.derniere ? '<span class="puce">dernière version inconnue</span>' :
+    m.aJour ? '<span class="puce ok">\u2713 à jour</span>' : '<span class="puce att">version ' + esc(m.derniere) + ' disponible</span>';
+  return '<div class="carte"><h2>Version de l\u2019application</h2><p class="sous">Version installée : <b>' + esc(D.version || '') + '</b> ' + etat + '</p>' +
+    (m.derniere && !m.aJour ? '<p class="aide">Pour mettre à jour : ouvre <a href="' + lien + '" target="_blank">le dépôt GitHub</a>, copie les fichiers du dossier <code>installer</code> ' +
+      'à la place de Code.gs et Index dans l\u2019éditeur Apps Script, puis Déployer › Gérer les déploiements › Modifier › Nouvelle version. Tes données ne changent pas.</p>' :
+      '<p class="aide">Les nouvelles versions sont publiées sur <a href="' + lien + '" target="_blank">' + lien.replace('https://', '') + '</a>.</p>') + '</div>';
+}
+function sauverGroupe() {
+  appel('enregistrerGroupe', { nom: $('grNom').value, court: $('grCourt').value, adresse: $('grAdresse').value, ville: $('grVille').value })
+    .then(function (g) { D.groupe = g; charger(true); toast('Groupe enregistré'); }).catch(erreur);
+}
+function sauverLogo(retirer) {
+  var envoi = function (url) { return appel('enregistrerLogo', url).then(function (g) { D.groupe = g; afficher(); toast(retirer ? 'Logo retiré' : 'Logo enregistré'); }); };
+  if (retirer) return envoi('').catch(erreur);
+  var f = $('grLogo').files[0]; if (!f) return toast('Choisis une image.', true);
+  var r = new FileReader();
+  r.onload = function () {
+    var img = new Image();
+    img.onload = function () {
+      var t = 160, k = Math.min(1, t / Math.max(img.width, img.height)), c = document.createElement('canvas');
+      c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      envoi(c.toDataURL('image/png')).catch(erreur);
+    };
+    img.src = r.result;
+  };
+  r.readAsDataURL(f);
+}
+function carteUrlApp() {
+  return '<div class="carte"><h2>Adresse de l\u2019application</h2><p class="sous">Utilisée par le menu « ' + esc((D.groupe || {}).titre || 'Budget') + ' › Ouvrir l\u2019application » du classeur et par le bouton de l\u2019e-mail du lundi. ' +
+    'Colle l\u2019adresse de ton déploiement (Déployer › Gérer les déploiements › Application Web › URL).</p><div class="filtres">' +
+    '<input type="text" id="appUrl" value="' + esc(D.appUrl || '') + '" placeholder="https://script.google.com/macros/s/…/exec" style="min-width:min(560px,100%)">' +
+    '<button class="btn secondaire" onclick="sauverUrlApp()">Enregistrer</button></div></div>';
+}
+function sauverDepot() {
+  appel('enregistrerDepotRobot', $('depotRobot').value).then(function (d) { D.github.depot = d; afficher(); toast('Dépôt enregistré'); }).catch(erreur);
+}
+function sauverUrlApp() {
+  appel('enregistrerUrlApp', $('appUrl').value).then(function (u) { D.appUrl = u; afficher(); toast('Adresse enregistrée'); }).catch(erreur);
+}
+function vueImports() {
+  var h = '<div class="carte"><h2>Robot Comptaweb</h2><p class="sous">Le robot (GitHub Actions, dépôt <code>' + esc(D.github.depot) + '</code>) récupère chaque matin l’export Comptaweb de la saison courante, ' +
+    'la requête « GS - Check Export Trésoriers » et la liste des justificatifs du Drive.</p>';
+  h += '<div class="filtres"><label class="aide">Dépôt GitHub du robot <input type="text" id="depotRobot" value="' + esc(D.github.depot || '') + '" placeholder="propriétaire/nom-du-dépôt" style="min-width:240px"></label>' +
+    '<button class="btn discret" onclick="sauverDepot()">Enregistrer</button></div>';
+  h += '<div class="filtres">' + boutonRobot() +
+    '<button class="btn discret" onclick="voirRobot()"' + (D.github.configure ? '' : ' disabled') + '>Voir les dernières exécutions</button>' +
+    '<span class="aide">' + (D.journal.length ? 'Dernière mise à jour du classeur : ' + esc(dernierRobot()) : 'Le robot n’a encore rien écrit dans ce classeur.') + '</span></div><div id="etatRobot"></div>' +
+    '<details' + (D.github.configure ? '' : ' open') + '><summary class="aide">' + (D.github.configure ? 'Jeton GitHub configuré' + (D.github.expiration ? ', expire le <b>' + dateFr(D.github.expiration) + '</b>' : '') + ' — le remplacer' : 'Configurer le jeton GitHub (nécessaire pour le bouton)') + '</summary>' +
+    '<p class="aide">Sur GitHub : Settings › Developer settings › Fine-grained tokens › Generate. Dépôt : uniquement <code>' + esc(D.github.depot) +
+    '</code>. Permission : <b>Actions</b> en lecture et écriture. Colle le jeton ci-dessous ; il est stocké dans les propriétés du script, pas dans le classeur.</p>' +
+    '<div class="filtres"><input type="password" id="jeton" placeholder="github_pat_…" style="min-width:320px"><button class="btn secondaire" onclick="sauverJeton()">Enregistrer</button>' +
+    (D.github.configure ? '<button class="btn danger" onclick="sauverJeton(true)">Retirer</button>' : '') + '</div></details></div>';
+
+  h += '<div class="carte"><h2>Importer un export Comptaweb</h2><p class="sous">Pour une saison passée ou en secours si le robot ne tourne pas : Comptaweb › Recettes / dépenses › Export CSV. ' +
+    'Le contenu de l’onglet de la saison est remplacé.</p><div class="filtres">' +
+    '<label class="aide">Saison <input type="text" id="impSaison" value="' + esc(ETAT.saison) + '" style="width:90px"></label>' +
+    '<input type="file" id="impFichier" accept=".csv,text/csv"><button class="btn secondaire" onclick="importer()">Importer</button></div></div>';
+
+  h += editeur('Saisons');
+  h += carteEmailHebdo();
+  h += carteUrlApp();
+  return h;
+}
+
+var AIDES = {
+  Saisons: 'Une seule saison courante : c’est elle que le robot met à jour. Pour changer de saison en septembre : ajoute la ligne, coche « Courante », ' +
+    'et indique l’exercice tel qu’il apparaît dans le sélecteur de Comptaweb.',
+  Lignes: '« En recettes » : la ligne apparaît dans les recettes du groupe. « Section » : où vont ses dépenses (Activités, Fonctionnement…). « Hors budget » : flux de passage (camps, cotisations…). « Saisie du budget » : comment se construit le budget de dépenses de la ligne (automatique = deviné d\u2019après le nom).',
+  Regles: 'Ordre d’application : activité + nature exactes, puis nature seule (activité *), puis activité seule (nature *). Les règles s’appliquent à toutes les saisons.',
+  Unites: 'Branche/Pôle Comptaweb → unité suivie. Toutes les branches « Compagnons - … » vont dans l’unité de la branche « Compagnons ».'
+};
+
+var TITRES_TABLES = { Saisons: 'Saisons', Lignes: 'Lignes budgétaires', Regles: 'Règles de classement', Unites: 'Unités' };
+
+function editeur(nom) {
+  var cols = EDITEURS[nom], lignes = D[CLES_TABLES[nom]].slice();
+  if (nom === 'Lignes' || nom === 'Unites') lignes.sort(function (a, b) { return (Number(a.ordre) || 0) - (Number(b.ordre) || 0); });
+  if (nom === 'Regles') lignes.sort(function (a, b) {
+    return String(a.ligne).localeCompare(String(b.ligne), 'fr') || String(a.activite).localeCompare(String(b.activite), 'fr') || String(a.nature).localeCompare(String(b.nature), 'fr');
+  });
+  var h = '<div class="carte"><div class="entete-carte"><h2>' + TITRES_TABLES[nom] + '</h2>' +
+    (nom === 'Regles' ? '<input type="text" placeholder="Filtrer (activité, nature, ligne…)" oninput="filtrerEditeur(\'' + nom + '\', this.value)" style="min-width:240px">' : '') +
+    '</div><p class="sous">' + AIDES[nom] + '</p><div class="tableau-defile"><table class="edit" id="ed' + nom + '" oninput="ETAT.modifie=true" onchange="ETAT.modifie=true"><thead><tr>' +
+    cols.map(function (c) { return '<th>' + esc(c[1]) + '</th>'; }).join('') + '<th></th></tr></thead><tbody>';
+  lignes.forEach(function (r) { h += rangeeEditeur(nom, r); });
+  h += '</tbody></table></div><div class="actions"><button class="btn discret" onclick="ajouterRangee(\'' + nom + '\')">+ Ajouter</button>' +
+    '<button class="btn" onclick="sauverTable(\'' + nom + '\')">Enregistrer</button></div></div>';
+  return h;
+}
+function filtrerEditeur(nom, texte) {
+  var t = Engine.cle(texte);
+  document.querySelectorAll('#ed' + nom + ' tbody tr').forEach(function (tr) {
+    var contenu = Array.prototype.map.call(tr.querySelectorAll('[data-k]'), function (i) { return i.value; }).join(' ');
+    tr.style.display = !t || Engine.cle(contenu).indexOf(t) >= 0 ? '' : 'none';
+  });
+}
+function rangeeEditeur(nom, r) {
+  return '<tr>' + EDITEURS[nom].map(function (c) {
+    var v = r[c[0]];
+    if (c[2] === 'bool') return '<td style="text-align:center"><input type="checkbox" data-k="' + c[0] + '"' + (v ? ' checked' : '') + '></td>';
+    if (c[2] === 'saisie') return '<td style="min-width:190px"><select data-k="' + c[0] + '">' + options(SAISIES, v || '') + '</select></td>';
+    if (c[2] === 'ligne') return '<td><select data-k="' + c[0] + '">' + options(nomsLignes().concat([Engine.INTERNE]), v, '—') + '</select></td>';
+    return '<td><input type="' + (c[2] === 'num' ? 'number' : c[2] === 'date' ? 'date' : 'text') + '" data-k="' + c[0] + '" value="' + esc(v) + '"></td>';
+  }).join('') + '<td><button class="btn danger" title="Supprimer la ligne" onclick="this.closest(\'tr\').remove();ETAT.modifie=true">✕</button></td></tr>';
+}
+function ajouterRangee(nom) {
+  var tb = document.querySelector('#ed' + nom + ' tbody');
+  tb.insertAdjacentHTML('beforeend', rangeeEditeur(nom, {}));
+  ETAT.modifie = true;
+  var champ = tb.lastElementChild.querySelector('input, select');
+  if (champ) { champ.scrollIntoView({ block: 'center' }); champ.focus(); }
+}
+function lireEditeur(nom) {
+  return Array.prototype.map.call(document.querySelectorAll('#ed' + nom + ' tbody tr'), function (tr) {
+    var o = {};
+    tr.querySelectorAll('[data-k]').forEach(function (i) { o[i.dataset.k] = i.type === 'checkbox' ? i.checked : i.value; });
+    return o;
+  });
+}
+function sauverTable(nom) {
+  var rows = lireEditeur(nom);
+  appel('enregistrerTable', nom, rows).then(function () { ETAT.modifie = false; toast('Enregistré'); return charger(true); }).catch(erreur);
+}
+
+function joursAvantExpiration() {
+  var e = D.github && D.github.expiration;
+  return e ? Math.round((new Date(e + 'T12:00:00') - new Date(D.maintenant)) / 86400000) : null;
+}
+function sauverJeton(retirer) {
+  var j = retirer ? '' : $('jeton').value;
+  if (!retirer && !j) return toast('Colle d’abord le jeton.', true);
+  appel('enregistrerJetonGithub', j).then(function (r) {
+    if (typeof r === 'boolean') r = { configure: r, expiration: '' };
+    D.github.configure = r.configure; D.github.expiration = r.expiration; charger(true);
+    toast(r.configure ? 'Jeton vérifié et enregistré' + (r.expiration ? ' (expire le ' + dateFr(r.expiration) + ')' : '') : 'Jeton retiré');
+  }).catch(erreur);
+}
+/** Message d'état du robot, affiché sur la Synthèse et dans Paramètres (même si on change de page). */
+function etatRobotHtml() { return ETAT.robotMsg || ''; }
+function majEtatRobot(html, enCours) {
+  ETAT.robotMsg = html; ETAT.robotEnCours = !!enCours;
+  document.querySelectorAll('.etat-robot').forEach(function (e) { e.innerHTML = html; });
+  document.querySelectorAll('.btn-robot').forEach(function (b) { b.disabled = !!enCours; });
+}
+function boutonRobot(classe) {
+  var court = /discret/.test(classe || '');
+  if (!D.github.configure) return '<button class="btn ' + (classe || '') + '" title="Configure d’abord le jeton GitHub" onclick="ETAT.param=\'imports\';aller(\'parametres\')">' + (court ? 'Actualiser' : 'Actualiser depuis Comptaweb') + '</button>';
+  return '<button class="btn btn-robot ' + (classe || '') + '"' + (ETAT.robotEnCours ? ' disabled' : '') + ' onclick="lancerRobot()">' +
+    svg('<path d="M20 11a8 8 0 0 0-14.9-3M4 5v4h4M4 13a8 8 0 0 0 14.9 3M20 19v-4h-4"/>', 'width:15px;height:15px;vertical-align:-3px;margin-right:6px') + (court ? 'Actualiser' : 'Actualiser depuis Comptaweb') + '</button>';
+}
+function lancerRobot() {
+  majEtatRobot('<div class="alerte info">Robot lancé. Il met en général 2 à 3 minutes ; les données se rechargeront toutes seules.</div>', true);
+  var depart = Date.now();
+  appel('actualiserComptaweb').then(function () {
+    var suivre = function () {
+      appel('etatRobot').then(function (runs) {
+        var r = runs.filter(function (x) { return new Date(x.debut).getTime() > depart - 60000; })[0];
+        if (r && r.statut === 'completed') {
+          if (r.resultat === 'success') { majEtatRobot('', false); toast('Comptaweb actualisé'); charger(true); }
+          else majEtatRobot('<div class="alerte ko">Le robot a échoué (' + esc(r.resultat) + '). <a href="' + esc(r.url) + '" target="_blank">Voir le détail sur GitHub</a></div>', false);
+          return;
+        }
+        if (Date.now() - depart > 12 * 60000) { majEtatRobot('<div class="alerte">Le robot tourne encore. Recharge la page dans quelques minutes.</div>', false); return; }
+        setTimeout(suivre, 20000);
+      }).catch(function (e) { majEtatRobot('', false); erreur(e); });
+    };
+    setTimeout(suivre, 25000);
+  }).catch(function (e) { majEtatRobot('', false); erreur(e); });
+}
+function voirRobot() {
+  appel('etatRobot').then(function (runs) {
+    $('etatRobot').innerHTML = '<table><thead><tr><th>Lancement</th><th>Déclencheur</th><th>Résultat</th><th></th></tr></thead><tbody>' + runs.map(function (r) {
+      var res = r.statut !== 'completed' ? 'en cours' : r.resultat === 'success' ? 'réussi' : r.resultat;
+      return '<tr><td>' + new Date(r.debut).toLocaleString('fr-FR') + '</td><td>' + ({ schedule: 'planifié', workflow_dispatch: 'manuel' }[r.declencheur] || esc(r.declencheur)) +
+        '</td><td><span class="puce ' + (res === 'réussi' ? 'ok' : res === 'en cours' ? 'att' : 'ko') + '">' + esc(res) + '</span></td><td><a href="' + esc(r.url) + '" target="_blank">détail</a></td></tr>';
+    }).join('') + '</tbody></table>';
+  }).catch(erreur);
+}
+function importer() {
+  var f = $('impFichier').files[0], s = $('impSaison').value.trim();
+  if (!f || !s) return toast('Choisis la saison et le fichier.', true);
+  var lire = function (enc) {
+    return new Promise(function (ok) { var r = new FileReader(); r.onload = function () { ok(r.result); }; r.readAsText(f, enc); });
+  };
+  lire('UTF-8').then(function (t) { return t.indexOf('�') >= 0 ? lire('ISO-8859-1') : t; }).then(function (t) {
+    toast('Import en cours…');
+    return appel('importerCsv', s, t);
+  }).then(function (r) { toast(r.ecritures + ' écritures importées dans « ' + r.onglet + ' »'); ETAT.saison = s; return charger(true); }).catch(erreur);
+}
+
+/* --------------------------------------------------------------- démarrage */
+document.addEventListener('click', function (e) {
+  var a = e.target.closest('#nav button[data-vue]');
+  if (a) { e.preventDefault(); aller(a.dataset.vue); }
+});
+$('saison').addEventListener('change', function () { ETAT.saison = this.value; afficher(); });
+$('btnRecharger').addEventListener('click', function () { charger(); });
+$('modale').addEventListener('click', function (e) { if (e.target.id === 'modale') { fermerModale(); afficher(); } });
+charger();
+
+</script>
+</body>
+</html>

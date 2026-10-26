@@ -1,0 +1,59 @@
+name: Budget Pipeline (Comptaweb → Budget du groupe)
+on:
+  schedule:
+    - cron: '0 5 * * *'   # tous les jours vers 6-7 h (heure de Paris)
+  workflow_dispatch:
+concurrency:
+  group: budget
+  cancel-in-progress: false
+jobs:
+  run-budget:
+    if: github.repository != 'gfunkstark/budget-groupe-sgdf'   # jamais dans le dépôt public
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: robot
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Chrome
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y google-chrome-stable
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Write service account JSON
+        run: echo '${{ secrets.SGDF_SERVICE_ACCOUNT_FILE_JSON }}' > service_account.json
+      - name: Run pipeline
+        env:
+          SGDF_USERNAME: ${{ secrets.SGDF_USERNAME }}
+          SGDF_PASSWORD: ${{ secrets.SGDF_PASSWORD }}
+          SGDF_SERVICE_ACCOUNT_FILE: service_account.json
+          SPREADSHEET_URL: ${{ secrets.SPREADSHEET_URL }}
+          EXPECTED_PERIOD: ${{ secrets.EXPECTED_PERIOD }}
+          DRIVE_FOLDER_ID: ${{ secrets.DRIVE_FOLDER_ID }}
+          SHEET_COMPTA: ${{ secrets.SHEET_COMPTA }}
+          SHEET_STATS: ${{ secrets.SHEET_STATS }}
+          SHEET_FILES: ${{ secrets.SHEET_FILES }}
+          PAUSE_SECONDS: ${{ secrets.PAUSE_SECONDS }}
+          COMPTAWEB_REQUETE: ${{ secrets.COMPTAWEB_REQUETE }}
+        run: python Budget.py
+
+      - name: Upload debug artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-artifacts
+          path: |
+            robot/error.png
+            robot/error_csv_page.png
+            robot/error_csv_page.html
+            robot/error_stats.png
+            robot/error_stats.html
+            robot/error_period.png
+            robot/error_period.html
+          if-no-files-found: ignore

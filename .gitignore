@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+service_account.json
+robot/downloads/
+robot/logs/
+robot/error*.png
+robot/error*.html
+.env
+dist/
+dist-generique/

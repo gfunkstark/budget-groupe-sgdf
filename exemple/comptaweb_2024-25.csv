@@ -1,0 +1,273 @@
+Date;Compte bancaire 1;Rapprochée 1;Compte bancaire 2;Rapprochée 2;Saison écriture bancaire;Intitulé;Dépense;Devise dépense;Recette;Devise recette;N° de pièce;Mode de transaction;Catégorie tiers;Structure tiers;Type;Nature;Activité;Branche/Pôle;Dépense ventilation;Devise dépense ventilation;Recette ventilation;Devise recette ventilation
+08/08/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Abonnement stockage en ligne;2,99;EUR;;;20250808_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+08/08/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Abonnement stockage en ligne;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Frais communication et Internet;Fonctionnement;Groupe;2,99;EUR;;
+05/08/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Frais bancaires mensuels;16,56;EUR;;;;Prélèvement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+05/08/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Frais bancaires mensuels;;;;;;Prélèvement;Autre : pas structure SGDF;;Ventilation;Frais Bancaires;Frais bancaires;Groupe;16,56;EUR;;
+22/07/2025;GROUPE EXEMPLE;Oui;;;;Louveteaux-Jeannettes - Camps - Alimentation;2894,01;EUR;;;20250722_2;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+22/07/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Louveteaux-Jeannettes - Camps - Alimentation;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Alimentation, Intendance;Camps en France;Louveteaux-Jeannettes;2894,01;EUR;;
+22/07/2025;GROUPE EXEMPLE;Oui;;;;Louveteaux-Jeannettes - Camps - Hébergement;2053,65;EUR;;;20250722_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+22/07/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Louveteaux-Jeannettes - Camps - Hébergement;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Hébergement, séminaire;Camps en France;Louveteaux-Jeannettes;2053,65;EUR;;
+22/07/2025;GROUPE EXEMPLE;Oui;;;;Louveteaux-Jeannettes - Camps - Transport collectif;1699,04;EUR;;;20250722_3;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+22/07/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Louveteaux-Jeannettes - Camps - Transport collectif;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Transport collectif : en Autocar;Camps en France;Louveteaux-Jeannettes;1699,04;EUR;;
+22/07/2025;GROUPE EXEMPLE;Oui;;;;Pionniers-Caravelles - Camps - Alimentation;2329,41;EUR;;;20250722_8;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+22/07/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Pionniers-Caravelles - Camps - Alimentation;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Alimentation, Intendance;Camps en France;Pionniers-Caravelles;2329,41;EUR;;
+22/07/2025;GROUPE EXEMPLE;Oui;;;;Pionniers-Caravelles - Camps - Hébergement;1572,09;EUR;;;20250722_7;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+22/07/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Pionniers-Caravelles - Camps - Hébergement;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Hébergement, séminaire;Camps en France;Pionniers-Caravelles;1572,09;EUR;;
+22/07/2025;GROUPE EXEMPLE;Oui;;;;Pionniers-Caravelles - Camps - Transport collectif;1245,02;EUR;;;20250722_9;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+22/07/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Pionniers-Caravelles - Camps - Transport collectif;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Transport collectif : en Autocar;Camps en France;Pionniers-Caravelles;1245,02;EUR;;
+22/07/2025;GROUPE EXEMPLE;Oui;;;;Scouts-Guides - Camps - Alimentation;3263,65;EUR;;;20250722_5;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+22/07/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Scouts-Guides - Camps - Alimentation;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Alimentation, Intendance;Camps en France;Scouts-Guides;3263,65;EUR;;
+22/07/2025;GROUPE EXEMPLE;Oui;;;;Scouts-Guides - Camps - Hébergement;2402,05;EUR;;;20250722_4;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+22/07/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Scouts-Guides - Camps - Hébergement;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Hébergement, séminaire;Camps en France;Scouts-Guides;2402,05;EUR;;
+22/07/2025;GROUPE EXEMPLE;Oui;;;;Scouts-Guides - Camps - Transport collectif;1933,34;EUR;;;20250722_6;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+22/07/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Scouts-Guides - Camps - Transport collectif;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Transport collectif : en Autocar;Camps en France;Scouts-Guides;1933,34;EUR;;
+08/07/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Abonnement stockage en ligne;2,99;EUR;;;20250708_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+08/07/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Abonnement stockage en ligne;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Frais communication et Internet;Fonctionnement;Groupe;2,99;EUR;;
+06/07/2025;GROUPE EXEMPLE;Oui;;;;Louveteaux-Jeannettes - Camps - Familles;;;6955,20;EUR;;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+06/07/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Louveteaux-Jeannettes - Camps - Familles;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Camps en France;Louveteaux-Jeannettes;;;6955,20;EUR
+06/07/2025;GROUPE EXEMPLE;Oui;;;;Pionniers-Caravelles - Camps - Familles;;;5023,20;EUR;;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+06/07/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Pionniers-Caravelles - Camps - Familles;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Camps en France;Pionniers-Caravelles;;;5023,20;EUR
+06/07/2025;GROUPE EXEMPLE;Oui;;;;Scouts-Guides - Camps - Familles;;;7728,00;EUR;;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+06/07/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Scouts-Guides - Camps - Familles;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Camps en France;Scouts-Guides;;;7728,00;EUR
+05/07/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Frais bancaires mensuels;16,56;EUR;;;;Prélèvement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+05/07/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Frais bancaires mensuels;;;;;;Prélèvement;Autre : pas structure SGDF;;Ventilation;Frais Bancaires;Frais bancaires;Groupe;16,56;EUR;;
+08/06/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Abonnement stockage en ligne;2,99;EUR;;;20250608_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+08/06/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Abonnement stockage en ligne;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Frais communication et Internet;Fonctionnement;Groupe;2,99;EUR;;
+05/06/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Frais bancaires mensuels;16,56;EUR;;;;Prélèvement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+05/06/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Frais bancaires mensuels;;;;;;Prélèvement;Autre : pas structure SGDF;;Ventilation;Frais Bancaires;Frais bancaires;Groupe;16,56;EUR;;
+27/05/2025;GROUPE EXEMPLE;Oui;;;;Pionniers-Caravelles - Activité - Courses;149,44;EUR;;;20250527_1;Carte procurement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+27/05/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Pionniers-Caravelles - Activité - Courses;;;;;;Carte procurement;Autre : pas structure SGDF;;Ventilation;Achat Petit Matériel;Sorties & Activités;Pionniers-Caravelles;149,44;EUR;;
+20/05/2025;GROUPE EXEMPLE;Oui;;;;Louveteaux-Jeannettes - Sortie - Courses;114,96;EUR;;;20250520_1;Carte procurement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/05/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Louveteaux-Jeannettes - Sortie - Courses;;;;;;Carte procurement;Autre : pas structure SGDF;;Ventilation;Alimentation, Intendance;Sorties & Activités;Louveteaux-Jeannettes;114,96;EUR;;
+17/05/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Matériel - Malles;333,59;EUR;;;20250517_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+17/05/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Matériel - Malles;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Achat Matériel Pédagogique;Fonctionnement;Groupe;333,59;EUR;;
+16/05/2025;GROUPE EXEMPLE;Oui;;;;Compagnons - Sortie - Matériel;42,79;EUR;;;20250516_1;Carte procurement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+16/05/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Compagnons - Sortie - Matériel;;;;;;Carte procurement;Autre : pas structure SGDF;;Ventilation;Activités, sorties, visites;Week-end d'Unité;Compagnons;42,79;EUR;;
+16/05/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Matériel - Tentes;310,65;EUR;;;20250516_2;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+16/05/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Matériel - Tentes;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Achat Matériel Pédagogique;Fonctionnement;Groupe;310,65;EUR;;
+11/05/2025;GROUPE EXEMPLE;Oui;;;;Compagnons - Sortie - Entrées;31,72;EUR;;;20250511_1;Carte procurement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+11/05/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Compagnons - Sortie - Entrées;;;;;;Carte procurement;Autre : pas structure SGDF;;Ventilation;Alimentation, Intendance;Week-end d'Unité;Compagnons;31,72;EUR;;
+09/05/2025;GROUPE EXEMPLE;Oui;;;;Louveteaux-Jeannettes - Activité - Entrées;101,26;EUR;;;20250509_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+09/05/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Louveteaux-Jeannettes - Activité - Entrées;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Achat Petit Matériel;Week-end d'Unité;Louveteaux-Jeannettes;101,26;EUR;;
+08/05/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Abonnement stockage en ligne;2,99;EUR;;;20250508_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+08/05/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Abonnement stockage en ligne;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Frais communication et Internet;Fonctionnement;Groupe;2,99;EUR;;
+05/05/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Frais bancaires mensuels;16,56;EUR;;;;Prélèvement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+05/05/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Frais bancaires mensuels;;;;;;Prélèvement;Autre : pas structure SGDF;;Ventilation;Frais Bancaires;Frais bancaires;Groupe;16,56;EUR;;
+05/05/2025;GROUPE EXEMPLE;Oui;;;;Louveteaux-Jeannettes - WE unité - Transport;289,96;EUR;;;20250505_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+05/05/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Louveteaux-Jeannettes - WE unité - Transport;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Activités, sorties, visites;Sorties & Activités;Louveteaux-Jeannettes;289,96;EUR;;
+08/04/2025;GROUPE EXEMPLE;Oui;;;;Compagnons - WE unité - Transport;59,79;EUR;;;20250408_1;Carte procurement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+08/04/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Compagnons - WE unité - Transport;;;;;;Carte procurement;Autre : pas structure SGDF;;Ventilation;Transport collectif en commun (RER, métro, Tram, bus, etc. );Sorties & Activités;Compagnons;59,79;EUR;;
+08/04/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Abonnement stockage en ligne;2,99;EUR;;;20250408_2;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+08/04/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Abonnement stockage en ligne;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Frais communication et Internet;Fonctionnement;Groupe;2,99;EUR;;
+05/04/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Frais bancaires mensuels;16,56;EUR;;;;Prélèvement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+05/04/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Frais bancaires mensuels;;;;;;Prélèvement;Autre : pas structure SGDF;;Ventilation;Frais Bancaires;Frais bancaires;Groupe;16,56;EUR;;
+04/04/2025;GROUPE EXEMPLE;Oui;;;;Louveteaux-Jeannettes - Sortie - Courses;177,83;EUR;;;20250404_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+04/04/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Louveteaux-Jeannettes - Sortie - Courses;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Achat Petit Matériel;Week-end d'Unité;Louveteaux-Jeannettes;177,83;EUR;;
+03/04/2025;GROUPE EXEMPLE;Oui;;;;Farfadets - Sortie - Entrées;70,63;EUR;;;20250403_1;Carte procurement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+03/04/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Farfadets - Sortie - Entrées;;;;;;Carte procurement;Autre : pas structure SGDF;;Ventilation;Achat Petit Matériel;Sorties & Activités;Farfadets;70,63;EUR;;
+27/03/2025;GROUPE EXEMPLE;Oui;;;;Compagnons - Sortie - Courses;77,04;EUR;;;20250327_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+27/03/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Compagnons - Sortie - Courses;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Achat Petit Matériel;Sorties & Activités;Compagnons;77,04;EUR;;
+23/03/2025;GROUPE EXEMPLE;Oui;;;;Scouts-Guides - Sortie - Courses;179,25;EUR;;;20250323_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+23/03/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Scouts-Guides - Sortie - Courses;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Alimentation, Intendance;Week-end d'Unité;Scouts-Guides;179,25;EUR;;
+22/03/2025;GROUPE EXEMPLE;Oui;;;;Scouts-Guides - Activité - Transport;272,23;EUR;;;20250322_1;Carte procurement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+22/03/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Scouts-Guides - Activité - Transport;;;;;;Carte procurement;Autre : pas structure SGDF;;Ventilation;Alimentation, Intendance;Sorties & Activités;Scouts-Guides;272,23;EUR;;
+20/03/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Groupe - Achat Petit Matériel;308,02;EUR;;;20250320_6;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/03/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Week-end de Groupe - Achat Petit Matériel;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Achat Petit Matériel;Week-end de Groupe;Groupe;308,02;EUR;;
+20/03/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Groupe - Alimentation;1187,32;EUR;;;20250320_5;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/03/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Week-end de Groupe - Alimentation;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Alimentation, Intendance;Week-end de Groupe;Groupe;1187,32;EUR;;
+20/03/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Groupe - Carburant;93,32;EUR;;;20250320_4;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/03/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Week-end de Groupe - Carburant;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Carburant;Week-end de Groupe;Groupe;93,32;EUR;;
+20/03/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Groupe - Hébergement;658,36;EUR;;;20250320_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/03/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Week-end de Groupe - Hébergement;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Hébergement, séminaire;Week-end de Groupe;Groupe;658,36;EUR;;
+20/03/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Groupe - Location Véhicule/Bateau;269,64;EUR;;;20250320_3;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/03/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Week-end de Groupe - Location Véhicule/Bateau;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Location Véhicule/Bateau;Week-end de Groupe;Groupe;269,64;EUR;;
+20/03/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Groupe - Transport collectif;1993,45;EUR;;;20250320_2;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/03/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Week-end de Groupe - Transport collectif;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Transport collectif : en Autocar;Week-end de Groupe;Groupe;1993,45;EUR;;
+16/03/2025;GROUPE EXEMPLE;Oui;;;;Les Baroudeurs - Extrajob - Vente de gâteaux;;;334,99;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+16/03/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Les Baroudeurs - Extrajob - Vente de gâteaux;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Extra-Jobs;Extrajobs divers;Compagnons - Les Baroudeurs;;;334,99;EUR
+15/03/2025;GROUPE EXEMPLE;Oui;;;;Cap au Sud - Extrajob - Baby-sitting;;;564,35;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+15/03/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Cap au Sud - Extrajob - Baby-sitting;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Extra-Jobs;Extrajobs divers;Compagnons - Cap au Sud;;;564,35;EUR
+12/03/2025;GROUPE EXEMPLE;Oui;;;;Pionniers-Caravelles - WE unité - Courses;83,95;EUR;;;20250312_1;Carte procurement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+12/03/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Pionniers-Caravelles - WE unité - Courses;;;;;;Carte procurement;Autre : pas structure SGDF;;Ventilation;Activités, sorties, visites;Sorties & Activités;Pionniers-Caravelles;83,95;EUR;;
+10/03/2025;GROUPE EXEMPLE;Oui;;;;Pionniers-Caravelles - Activité - Transport;92,31;EUR;;;20250310_1;Carte procurement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+10/03/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Pionniers-Caravelles - Activité - Transport;;;;;;Carte procurement;Autre : pas structure SGDF;;Ventilation;Transport collectif en commun (RER, métro, Tram, bus, etc. );Week-end d'Unité;Pionniers-Caravelles;92,31;EUR;;
+08/03/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Abonnement stockage en ligne;2,99;EUR;;;20250308_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+08/03/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Abonnement stockage en ligne;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Frais communication et Internet;Fonctionnement;Groupe;2,99;EUR;;
+05/03/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Frais bancaires mensuels;16,56;EUR;;;;Prélèvement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+05/03/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Frais bancaires mensuels;;;;;;Prélèvement;Autre : pas structure SGDF;;Ventilation;Frais Bancaires;Frais bancaires;Groupe;16,56;EUR;;
+05/03/2025;GROUPE EXEMPLE;Oui;;;;Pionniers-Caravelles - Sortie - Matériel;215,19;EUR;;;20250305_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+05/03/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Pionniers-Caravelles - Sortie - Matériel;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Achat Petit Matériel;Sorties & Activités;Pionniers-Caravelles;215,19;EUR;;
+01/03/2025;GROUPE EXEMPLE;Oui;;;;Farfadets - Sortie - Transport;96,98;EUR;;;20250301_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+01/03/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Farfadets - Sortie - Transport;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Transport collectif en commun (RER, métro, Tram, bus, etc. );Sorties & Activités;Farfadets;96,98;EUR;;
+22/02/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Matériel - Pharmacie;220,79;EUR;;;20250222_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+22/02/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Matériel - Pharmacie;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Achat Matériel Pédagogique;Fonctionnement;Groupe;220,79;EUR;;
+21/02/2025;GROUPE EXEMPLE;Oui;;;;Compagnons - Sortie - Transport;71,29;EUR;;;20250221_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+21/02/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Compagnons - Sortie - Transport;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Activités, sorties, visites;Week-end d'Unité;Compagnons;71,29;EUR;;
+18/02/2025;GROUPE EXEMPLE;Oui;;;;Cap au Sud - Extrajob - Emballage cadeaux;;;204,87;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+18/02/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Cap au Sud - Extrajob - Emballage cadeaux;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Extra-Jobs;Extrajobs divers;Compagnons - Cap au Sud;;;204,87;EUR
+12/02/2025;GROUPE EXEMPLE;Oui;;;;Scouts-Guides - Sortie - Courses;227,65;EUR;;;20250212_1;Carte procurement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+12/02/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Scouts-Guides - Sortie - Courses;;;;;;Carte procurement;Autre : pas structure SGDF;;Ventilation;Achat Petit Matériel;Sorties & Activités;Scouts-Guides;227,65;EUR;;
+10/02/2025;GROUPE EXEMPLE;Oui;;;;Regroupement de prélèvements nationaux du 10/02/2025;5636,16;EUR;;;;Virement;Echelon National;National;Ecriture;;;;;;;
+10/02/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Regroupement de prélèvements nationaux du 10/02/2025;;;;;;Virement;Echelon National;;Ventilation;Cotisations SGDF;Inscriptions;National;5564,16;EUR;;
+10/02/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Regroupement de prélèvements nationaux du 10/02/2025;;;;;;Virement;Echelon National;;Ventilation;Assurances;Fonctionnement;Groupe;72,00;EUR;;
+09/02/2025;GROUPE EXEMPLE;Oui;;;;Cap au Sud - Extrajob - Vente de gâteaux;;;362,92;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+09/02/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Cap au Sud - Extrajob - Vente de gâteaux;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Extra-Jobs;Extrajobs divers;Compagnons - Cap au Sud;;;362,92;EUR
+08/02/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Abonnement stockage en ligne;2,99;EUR;;;20250208_2;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+08/02/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Abonnement stockage en ligne;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Frais communication et Internet;Fonctionnement;Groupe;2,99;EUR;;
+08/02/2025;GROUPE EXEMPLE;Oui;;;;Louveteaux-Jeannettes - Sortie - Transport;261,87;EUR;;;20250208_1;Carte procurement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+08/02/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Louveteaux-Jeannettes - Sortie - Transport;;;;;;Carte procurement;Autre : pas structure SGDF;;Ventilation;Transport collectif en commun (RER, métro, Tram, bus, etc. );Sorties & Activités;Louveteaux-Jeannettes;261,87;EUR;;
+05/02/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Frais bancaires mensuels;16,56;EUR;;;;Prélèvement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+05/02/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Frais bancaires mensuels;;;;;;Prélèvement;Autre : pas structure SGDF;;Ventilation;Frais Bancaires;Frais bancaires;Groupe;16,56;EUR;;
+24/01/2025;GROUPE EXEMPLE;Oui;;;;Louveteaux-Jeannettes - WE unité - Matériel;239,37;EUR;;;20250124_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+24/01/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Louveteaux-Jeannettes - WE unité - Matériel;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Activités, sorties, visites;Week-end d'Unité;Louveteaux-Jeannettes;239,37;EUR;;
+20/01/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Maitrise - Achat Petit Matériel;64,28;EUR;;;20250120_6;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/01/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Week-end de Maitrise - Achat Petit Matériel;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Achat Petit Matériel;Week-end de Maitrise;Groupe;64,28;EUR;;
+20/01/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Maitrise - Alimentation;245,33;EUR;;;20250120_5;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/01/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Week-end de Maitrise - Alimentation;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Alimentation, Intendance;Week-end de Maitrise;Groupe;245,33;EUR;;
+20/01/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Maitrise - Carburant;19,28;EUR;;;20250120_4;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/01/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Week-end de Maitrise - Carburant;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Carburant;Week-end de Maitrise;Groupe;19,28;EUR;;
+20/01/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Maitrise - Hébergement;143,10;EUR;;;20250120_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/01/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Week-end de Maitrise - Hébergement;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Hébergement, séminaire;Week-end de Maitrise;Groupe;143,10;EUR;;
+20/01/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Maitrise - Location Véhicule/Bateau;61,17;EUR;;;20250120_3;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/01/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Week-end de Maitrise - Location Véhicule/Bateau;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Location Véhicule/Bateau;Week-end de Maitrise;Groupe;61,17;EUR;;
+20/01/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Maitrise - Transport collectif;499,16;EUR;;;20250120_2;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/01/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Week-end de Maitrise - Transport collectif;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Transport collectif : en Autocar;Week-end de Maitrise;Groupe;499,16;EUR;;
+11/01/2025;GROUPE EXEMPLE;Oui;;;;Compagnons - WE unité - Transport;49,94;EUR;;;20250111_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+11/01/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Compagnons - WE unité - Transport;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Activités, sorties, visites;Sorties & Activités;Compagnons;49,94;EUR;;
+08/01/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Abonnement stockage en ligne;2,99;EUR;;;20250108_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+08/01/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Abonnement stockage en ligne;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Frais communication et Internet;Fonctionnement;Groupe;2,99;EUR;;
+06/01/2025;GROUPE EXEMPLE;Oui;;;;Louveteaux-Jeannettes - Activité - Courses;177,71;EUR;;;20250106_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+06/01/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Louveteaux-Jeannettes - Activité - Courses;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Alimentation, Intendance;Sorties & Activités;Louveteaux-Jeannettes;177,71;EUR;;
+05/01/2025;GROUPE EXEMPLE;Oui;;;;Groupe - Frais bancaires mensuels;16,56;EUR;;;;Prélèvement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+05/01/2025;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Frais bancaires mensuels;;;;;;Prélèvement;Autre : pas structure SGDF;;Ventilation;Frais Bancaires;Frais bancaires;Groupe;16,56;EUR;;
+19/12/2024;GROUPE EXEMPLE;Oui;;;;Compagnons - Calendriers - Dépôt ventes;;;1129,97;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+19/12/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Compagnons - Calendriers - Dépôt ventes;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Ventes de produits;Calendriers;Compagnons;;;1129,97;EUR
+15/12/2024;GROUPE EXEMPLE;Oui;;;;Pionniers-Caravelles - Calendriers - Dépôt ventes;;;483,52;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+15/12/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Pionniers-Caravelles - Calendriers - Dépôt ventes;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Ventes de produits;Calendriers;Pionniers-Caravelles;;;483,52;EUR
+11/12/2024;GROUPE EXEMPLE;Oui;;;;Scouts-Guides - Calendriers - Dépôt ventes;;;863,61;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+11/12/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Scouts-Guides - Calendriers - Dépôt ventes;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Ventes de produits;Calendriers;Scouts-Guides;;;863,61;EUR
+08/12/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Abonnement stockage en ligne;2,99;EUR;;;20241208_2;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+08/12/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Abonnement stockage en ligne;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Frais communication et Internet;Fonctionnement;Groupe;2,99;EUR;;
+08/12/2024;GROUPE EXEMPLE;Oui;;;;Scouts-Guides - Activité - Courses;216,23;EUR;;;20241208_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+08/12/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Scouts-Guides - Activité - Courses;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Achat Petit Matériel;Sorties & Activités;Scouts-Guides;216,23;EUR;;
+07/12/2024;GROUPE EXEMPLE;Oui;;;;Louveteaux-Jeannettes - Calendriers - Dépôt ventes;;;1096,10;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+07/12/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Louveteaux-Jeannettes - Calendriers - Dépôt ventes;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Ventes de produits;Calendriers;Louveteaux-Jeannettes;;;1096,10;EUR
+05/12/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Frais bancaires mensuels;16,56;EUR;;;;Prélèvement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+05/12/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Frais bancaires mensuels;;;;;;Prélèvement;Autre : pas structure SGDF;;Ventilation;Frais Bancaires;Frais bancaires;Groupe;16,56;EUR;;
+05/12/2024;GROUPE EXEMPLE;Oui;;;;Les Baroudeurs - Extrajob - Emballage cadeaux;;;385,90;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+05/12/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Les Baroudeurs - Extrajob - Emballage cadeaux;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Extra-Jobs;Extrajobs divers;Compagnons - Les Baroudeurs;;;385,90;EUR
+03/12/2024;GROUPE EXEMPLE;Oui;;;;Farfadets - Calendriers - Dépôt ventes;;;915,65;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+03/12/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Farfadets - Calendriers - Dépôt ventes;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Ventes de produits;Calendriers;Farfadets;;;915,65;EUR
+21/11/2024;GROUPE EXEMPLE;Oui;;;;Compagnons - Activité - Entrées;57,15;EUR;;;20241121_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+21/11/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Compagnons - Activité - Entrées;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Alimentation, Intendance;Sorties & Activités;Compagnons;57,15;EUR;;
+19/11/2024;GROUPE EXEMPLE;Oui;;;;Farfadets - WE unité - Courses;83,88;EUR;;;20241119_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+19/11/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Farfadets - WE unité - Courses;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Achat Petit Matériel;Week-end d'Unité;Farfadets;83,88;EUR;;
+18/11/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Formations - Stages des chefs;901,60;EUR;;;20241118_1;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+18/11/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Formations - Stages des chefs;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Formation;Formations;Groupe;901,60;EUR;;
+09/11/2024;GROUPE EXEMPLE;Oui;;;;Pionniers-Caravelles - Activité - Entrées;198,03;EUR;;;20241109_1;Carte procurement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+09/11/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Pionniers-Caravelles - Activité - Entrées;;;;;;Carte procurement;Autre : pas structure SGDF;;Ventilation;Activités, sorties, visites;Week-end d'Unité;Pionniers-Caravelles;198,03;EUR;;
+08/11/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Abonnement stockage en ligne;2,99;EUR;;;20241108_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+08/11/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Abonnement stockage en ligne;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Frais communication et Internet;Fonctionnement;Groupe;2,99;EUR;;
+05/11/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Frais bancaires mensuels;16,56;EUR;;;;Prélèvement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+05/11/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Frais bancaires mensuels;;;;;;Prélèvement;Autre : pas structure SGDF;;Ventilation;Frais Bancaires;Frais bancaires;Groupe;16,56;EUR;;
+03/11/2024;GROUPE EXEMPLE;Oui;;;;Louveteaux-Jeannettes - Activité - Transport;140,84;EUR;;;20241103_1;Carte procurement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+03/11/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Louveteaux-Jeannettes - Activité - Transport;;;;;;Carte procurement;Autre : pas structure SGDF;;Ventilation;Alimentation, Intendance;Week-end d'Unité;Louveteaux-Jeannettes;140,84;EUR;;
+29/10/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 14;;;1319,28;EUR;;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+29/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 14;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;929,07;EUR
+29/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 14;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;390,21;EUR
+27/10/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 13;;;1474,68;EUR;;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+27/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 13;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;1038,51;EUR
+27/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 13;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;436,17;EUR
+25/10/2024;GROUPE EXEMPLE;Oui;;;;Compagnons - Sortie - Transport;73,40;EUR;;;20241025_1;Carte procurement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+25/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Compagnons - Sortie - Transport;;;;;;Carte procurement;Autre : pas structure SGDF;;Ventilation;Alimentation, Intendance;Sorties & Activités;Compagnons;73,40;EUR;;
+25/10/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 12;;;2019,29;EUR;;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+25/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 12;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;1344,29;EUR
+25/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 12;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;564,60;EUR
+25/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 12;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Dons avec Reçu Fiscal;Inscriptions;Groupe;;;110,40;EUR
+23/10/2024;GROUPE EXEMPLE;Oui;;;;Cap au Sud - Extrajob - Vente de gâteaux;;;179,66;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+23/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Cap au Sud - Extrajob - Vente de gâteaux;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Extra-Jobs;Extrajobs divers;Compagnons - Cap au Sud;;;179,66;EUR
+23/10/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 11;;;1981,66;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+23/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 11;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;1317,79;EUR
+23/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 11;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;553,47;EUR
+23/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 11;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Dons avec Reçu Fiscal;Inscriptions;Groupe;;;110,40;EUR
+22/10/2024;GROUPE EXEMPLE;Oui;;;;Farfadets - Sortie - Courses;33,16;EUR;;;20241022_1;Carte procurement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+22/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Farfadets - Sortie - Courses;;;;;;Carte procurement;Autre : pas structure SGDF;;Ventilation;Activités, sorties, visites;Week-end d'Unité;Farfadets;33,16;EUR;;
+21/10/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 10;;;1787,48;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+21/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 10;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;1258,79;EUR
+21/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 10;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;528,69;EUR
+20/10/2024;GROUPE EXEMPLE;Oui;;;;Pionniers-Caravelles - WE unité - Courses;166,81;EUR;;;20241020_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Pionniers-Caravelles - WE unité - Courses;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Alimentation, Intendance;Sorties & Activités;Pionniers-Caravelles;166,81;EUR;;
+18/10/2024;GROUPE EXEMPLE;Oui;;;;Les Baroudeurs - Extrajob - Vente de gâteaux;;;382,21;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+18/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Les Baroudeurs - Extrajob - Vente de gâteaux;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Extra-Jobs;Extrajobs divers;Compagnons - Les Baroudeurs;;;382,21;EUR
+17/10/2024;GROUPE EXEMPLE;Oui;;;;Les Baroudeurs - Extrajob - Vente de gâteaux;;;422,35;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+17/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Les Baroudeurs - Extrajob - Vente de gâteaux;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Extra-Jobs;Extrajobs divers;Compagnons - Les Baroudeurs;;;422,35;EUR
+15/10/2024;GROUPE EXEMPLE;Oui;;;;Farfadets - Sortie - Transport;85,91;EUR;;;20241015_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+15/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Farfadets - Sortie - Transport;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Activités, sorties, visites;Sorties & Activités;Farfadets;85,91;EUR;;
+15/10/2024;GROUPE EXEMPLE;Oui;;;;Regroupement de prélèvements nationaux du 15/10/2024;18335,04;EUR;;;;Virement;Echelon National;National;Ecriture;;;;;;;
+15/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Regroupement de prélèvements nationaux du 15/10/2024;;;;;;Virement;Echelon National;;Ventilation;Cotisations SGDF;Inscriptions;National;12983,04;EUR;;
+15/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Regroupement de prélèvements nationaux du 15/10/2024;;;;;;Virement;Echelon National;;Ventilation;Assurances;Fonctionnement;Groupe;168,00;EUR;;
+15/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Regroupement de prélèvements nationaux du 15/10/2024;;;;;;Virement;Echelon National;;Ventilation;Participation au Fct du Territoire;Participation au Mouvement;Groupe;720,00;EUR;;
+15/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Regroupement de prélèvements nationaux du 15/10/2024;;;;;;Virement;Echelon National;;Ventilation;Participation au FSI;Participation au Mouvement;Groupe;720,00;EUR;;
+15/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Regroupement de prélèvements nationaux du 15/10/2024;;;;;;Virement;Echelon National;;Ventilation;Péréquation;Participation au Mouvement;Groupe;288,00;EUR;;
+15/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Regroupement de prélèvements nationaux du 15/10/2024;;;;;;Virement;Echelon National;;Ventilation;Participation au Fct du Mouvement;Participation au Mouvement;Groupe;3456,00;EUR;;
+12/10/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Dépôt espèces;300,00;EUR;300,00;EUR;;Espèces;Autre : pas structure SGDF;;Ecriture;;;;;;;
+12/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Dépôt espèces;;;;;;Espèces;Autre : pas structure SGDF;;Ventilation;Dépôts, retrait espèces;Fonctionnement;Groupe;300,00;EUR;300,00;EUR
+08/10/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Abonnement stockage en ligne;2,99;EUR;;;20241008_2;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+08/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Abonnement stockage en ligne;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Frais communication et Internet;Fonctionnement;Groupe;2,99;EUR;;
+08/10/2024;GROUPE EXEMPLE;Oui;;;;Pionniers-Caravelles - Sortie - Matériel;209,17;EUR;;;20241008_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+08/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Pionniers-Caravelles - Sortie - Matériel;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Activités, sorties, visites;Week-end d'Unité;Pionniers-Caravelles;209,17;EUR;;
+05/10/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Frais bancaires mensuels;16,56;EUR;;;;Prélèvement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+05/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Frais bancaires mensuels;;;;;;Prélèvement;Autre : pas structure SGDF;;Ventilation;Frais Bancaires;Frais bancaires;Groupe;16,56;EUR;;
+03/10/2024;GROUPE EXEMPLE;Oui;;;;Scouts-Guides - WE unité - Transport;169,84;EUR;;;20241003_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+03/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Scouts-Guides - WE unité - Transport;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Alimentation, Intendance;Sorties & Activités;Scouts-Guides;169,84;EUR;;
+02/10/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Conseil de groupe - Collation;64,50;EUR;;;20241002_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+02/10/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Conseil de groupe - Collation;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Alimentation, Intendance;Réunions (conseils et préparations);Groupe;64,50;EUR;;
+20/09/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Rentrée - Achat Petit Matériel;239,51;EUR;;;20240920_6;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Week-end de Rentrée - Achat Petit Matériel;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Achat Petit Matériel;Week-end de Rentrée;Groupe;239,51;EUR;;
+20/09/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Rentrée - Alimentation;922,70;EUR;;;20240920_5;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Week-end de Rentrée - Alimentation;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Alimentation, Intendance;Week-end de Rentrée;Groupe;922,70;EUR;;
+20/09/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Rentrée - Carburant;65,43;EUR;;;20240920_4;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Week-end de Rentrée - Carburant;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Carburant;Week-end de Rentrée;Groupe;65,43;EUR;;
+20/09/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Rentrée - Hébergement;558,36;EUR;;;20240920_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Week-end de Rentrée - Hébergement;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Hébergement, séminaire;Week-end de Rentrée;Groupe;558,36;EUR;;
+20/09/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Rentrée - Location Véhicule/Bateau;220,46;EUR;;;20240920_3;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Week-end de Rentrée - Location Véhicule/Bateau;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Location Véhicule/Bateau;Week-end de Rentrée;Groupe;220,46;EUR;;
+20/09/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Week-end de Rentrée - Transport collectif;1472,10;EUR;;;20240920_2;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+20/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Week-end de Rentrée - Transport collectif;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Transport collectif : en Autocar;Week-end de Rentrée;Groupe;1472,10;EUR;;
+19/09/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 9;;;2151,32;EUR;;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+19/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 9;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;1482,62;EUR
+19/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 9;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;622,70;EUR
+19/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 9;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Dons avec Reçu Fiscal;Inscriptions;Groupe;;;46,00;EUR
+17/09/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 8;;;844,39;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+17/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 8;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;594,64;EUR
+17/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 8;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;249,75;EUR
+15/09/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 7;;;2196,34;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+15/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 7;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;1546,72;EUR
+15/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 7;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;649,62;EUR
+14/09/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Matériel - Tentes;127,68;EUR;;;20240914_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+14/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Matériel - Tentes;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Achat Matériel Pédagogique;Fonctionnement;Groupe;127,68;EUR;;
+13/09/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 6;;;2422,31;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+13/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 6;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;1705,85;EUR
+13/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 6;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;716,46;EUR
+11/09/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 5;;;937,82;EUR;;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+11/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 5;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;660,44;EUR
+11/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 5;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;277,38;EUR
+09/09/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 4;;;989,69;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+09/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 4;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;664,57;EUR
+09/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 4;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;279,12;EUR
+09/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 4;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Dons avec Reçu Fiscal;Inscriptions;Groupe;;;46,00;EUR
+08/09/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Abonnement stockage en ligne;2,99;EUR;;;20240908_1;Carte bancaire;Autre : pas structure SGDF;;Ecriture;;;;;;;
+08/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Abonnement stockage en ligne;;;;;;Carte bancaire;Autre : pas structure SGDF;;Ventilation;Frais communication et Internet;Fonctionnement;Groupe;2,99;EUR;;
+07/09/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 3;;;2259,51;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+07/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 3;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;1513,46;EUR
+07/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 3;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;635,65;EUR
+07/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 3;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Dons avec Reçu Fiscal;Inscriptions;Groupe;;;110,40;EUR
+05/09/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Frais bancaires mensuels;16,56;EUR;;;;Prélèvement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+05/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Frais bancaires mensuels;;;;;;Prélèvement;Autre : pas structure SGDF;;Ventilation;Frais Bancaires;Frais bancaires;Groupe;16,56;EUR;;
+05/09/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 2;;;1646,32;EUR;;Chèque;Autre : pas structure SGDF;;Ecriture;;;;;;;
+05/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 2;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;1159,38;EUR
+05/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 2;;;;;;Chèque;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;486,94;EUR
+03/09/2024;GROUPE EXEMPLE;Oui;;;;Groupe - Inscriptions - Chèques et virements lot 1;;;1662,53;EUR;;Virement;Autre : pas structure SGDF;;Ecriture;;;;;;;
+03/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 1;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Participation Activités (camp, we...);Inscriptions;Groupe;;;1093,05;EUR
+03/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 1;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Cotisations SGDF;Inscriptions;Groupe;;;459,08;EUR
+03/09/2024;GROUPE EXEMPLE;Oui;;;Sept 2024 - Août 2025;Groupe - Inscriptions - Chèques et virements lot 1;;;;;;Virement;Autre : pas structure SGDF;;Ventilation;Dons avec Reçu Fiscal;Inscriptions;Groupe;;;110,40;EUR
