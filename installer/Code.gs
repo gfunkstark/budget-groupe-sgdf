@@ -1,4 +1,4 @@
-/* Budget du groupe — version 1.1.0 (générique)
+/* Budget du groupe — version 1.1.1 (générique)
  * FICHIER GÉNÉRÉ par app/build/build.py — modifier app/src/ puis relancer le build. */
 
 /* =====================================================================
@@ -601,7 +601,7 @@ if (typeof module !== 'undefined') module.exports = Seed;
 // Identité par défaut (nom du groupe, dépôt du robot) : dans Seed, propre à chaque build ;
 // modifiable ensuite dans Paramètres › Groupe et Paramètres › Imports.
 var APP = {
-  version: '1.1.0',
+  version: '1.1.1',
   depotPublic: 'gfunkstark/budget-groupe-sgdf',   // où sont publiées les nouvelles versions
   workflow: 'budget.yml',
   branche: 'main'

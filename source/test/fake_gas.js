@@ -58,7 +58,7 @@
   G.Utilities = { getUuid: function () { n++; return ('0000000' + n.toString(16)).slice(-8) + '-xxxx'; } };
   G.UrlFetchApp = { fetch: function (url, o) {
     G.FAUX.fetchs.push({ url: url, o: o });
-    if (/raw\.githubusercontent/.test(url)) return { getResponseCode: function () { return 200; }, getContentText: function () { return G.FAUX.derniereVersion || '1.1.0'; } };
+    if (/raw\.githubusercontent/.test(url)) return { getResponseCode: function () { return 200; }, getContentText: function () { return G.FAUX.derniereVersion || '1.1.1'; } };
     var runs = { workflow_runs: [{ run_started_at: new Date().toISOString(), status: 'completed', conclusion: 'success', event: 'workflow_dispatch', html_url: 'https://github.com/x' }] };
     return { getResponseCode: function () { return /dispatches/.test(url) ? 204 : 200; }, getContentText: function () { return /dispatches/.test(url) ? '' : JSON.stringify(runs); },
       getAllHeaders: function () { return { 'GitHub-Authentication-Token-Expiration': '2026-11-10 12:00:00 UTC' }; } };

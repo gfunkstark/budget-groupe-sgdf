@@ -30,7 +30,7 @@ appel('enregistrerDossierJustificatifs', 'dossierABCDEFGHIJKLMNOPQRSTUVWXYZ');
 appel('creerModeleAttestation');
 var txt = vm.runInContext('Object.keys(FAUX.drive.textes).map(function(k){return FAUX.drive.textes[k]}).join("\\n")', ctx);
 eq('modèle au nom du groupe', true, /Groupe Exemple/.test(txt) && /1, rue de la Paix/.test(txt) && /Fait à Paris/.test(txt) && !/Vaugirard/.test(txt));
-ctx.FAUX.derniereVersion = '1.1.0';
+ctx.FAUX.derniereVersion = '1.1.1';
 eq('à jour', true, appel('verifierMiseAJour').aJour);
 ctx.FAUX.derniereVersion = '9.1.0';
 eq('mise à jour disponible', ['9.1.0', false], [appel('verifierMiseAJour').derniere, appel('verifierMiseAJour').aJour]);

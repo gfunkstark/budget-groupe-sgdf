@@ -170,14 +170,23 @@ def read_app_config():
                 return i
         return None
     i_code, i_tab, i_cur, i_ex = col("saison"), col("onglet"), col("courante"), col("exercice")
+    saisons = []
     for r in rows[1:]:
         r = r + [""] * len(head)
-        if r[i_cur].strip().lower() in ("oui", "true", "vrai", "1"):
-            cfg = {"saison": r[i_code].strip(), "onglet": r[i_tab].strip(),
-                   "exercice": (r[i_ex].strip() if i_ex is not None else "") or EXPECTED_PERIOD}
-            log(f"Application Budget : saison {cfg['saison']} → onglet « {cfg['onglet']} », exercice « {cfg['exercice']} »")
-            return cfg
-    raise ValueError("Onglet Saisons présent mais aucune saison marquée Courante = Oui.")
+        if r[i_code].strip():
+            saisons.append({"saison": r[i_code].strip(), "onglet": r[i_tab].strip(),
+                            "exercice": r[i_ex].strip() if i_ex is not None else "",
+                            "courante": r[i_cur].strip().lower() in ("oui", "true", "vrai", "1")})
+    cour = [x for x in saisons if x["courante"]]
+    if not cour:
+        raise ValueError("Onglet Saisons présent mais aucune saison marquée Courante = Oui.")
+    cfg = dict(cour[0]); cfg["exercice"] = cfg["exercice"] or EXPECTED_PERIOD
+    # Saison précédente : réexportée aussi, car on continue d'y rapprocher des écritures (chèques encaissés en septembre…)
+    avant = sorted([x for x in saisons if x["saison"] < cfg["saison"] and x["exercice"] and x["onglet"]], key=lambda x: x["saison"])
+    cfg["precedente"] = avant[-1] if avant else None
+    log(f"Application Budget : saison {cfg['saison']} → onglet « {cfg['onglet']} », exercice « {cfg['exercice']} »"
+        + (f" ; saison précédente {cfg['precedente']['saison']} réexportée aussi" if cfg["precedente"] else ""))
+    return cfg
 
 
 def worksheet_or_create(sheet, name):
@@ -480,6 +489,21 @@ def main():
                 upload_banque(*download_banque(driver))
             except Exception as e:
                 log(f"Mouvements bancaires ignorés : {e}")
+
+        # Step 2 ter — Saison précédente (facultatif) : rapprochements faits depuis son import
+        if cfg and cfg.get("precedente") and os.getenv("RAFRAICHIR_SAISON_PRECEDENTE", "oui").lower() not in ("non", "false", "0"):
+            prec = cfg["precedente"]
+            try:
+                ensure_period(driver, prec["exercice"])
+                n_prec = upload_csv_to_sheet(download_csv(driver), prec)
+                log(f"Saison {prec['saison']} réexportée : {n_prec} lignes.")
+            except Exception as e:
+                log(f"Saison précédente non réexportée : {e}")
+            finally:
+                try:
+                    ensure_period(driver, cfg["exercice"])   # on laisse Comptaweb sur l'exercice courant
+                except Exception as e:
+                    log(f"Retour à l'exercice courant impossible : {e}")
 
         # Step 3 — Drive file list (facultatif : DRIVE_FOLDER_ID vide = pas de contrôle des justificatifs)
         folder_id = os.getenv("DRIVE_FOLDER_ID")

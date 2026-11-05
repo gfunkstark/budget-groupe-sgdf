@@ -41,6 +41,7 @@ jobs:
           SHEET_FILES: ${{ secrets.SHEET_FILES }}
           PAUSE_SECONDS: ${{ secrets.PAUSE_SECONDS }}
           COMPTAWEB_REQUETE: ${{ secrets.COMPTAWEB_REQUETE }}
+          RAFRAICHIR_SAISON_PRECEDENTE: ${{ secrets.RAFRAICHIR_SAISON_PRECEDENTE }}
         run: python Budget.py
 
       - name: Upload debug artifacts on failure
