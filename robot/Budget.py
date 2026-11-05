@@ -37,6 +37,7 @@ LOGIN_URL = "https://sgdf.production.sirom.net/"
 TARGET_URL = "https://comptaweb.sgdf.fr/recettedepense?m=1"
 EXERCISE_URL = "https://comptaweb.sgdf.fr/exercice?m=1"
 STATS_URL = "https://comptaweb.sgdf.fr/statistiqueslibres?m=1"
+BANQUE_URL = "https://comptaweb.sgdf.fr/mouvementsbancaires"
 
 USERNAME = os.getenv("SGDF_USERNAME")
 PASSWORD = os.getenv("SGDF_PASSWORD")
@@ -149,6 +150,7 @@ def ensure_period(driver, period=None):
 APP_ONGLET_STATS = "Stats Comptaweb"
 APP_ONGLET_FICHIERS = "Fichiers Drive"
 APP_ONGLET_JOURNAL = "Journal robot"
+APP_ONGLET_BANQUE = "Banque Comptaweb"
 
 
 def read_app_config():
@@ -349,6 +351,62 @@ def upload_stats(df, cfg=None):
         ws.update(values=[df.columns.tolist()] + df.values.tolist(), range_name="Q1")
     log("Stats uploaded.")
 
+
+# ======================
+# STEP 2 bis: MOUVEMENTS BANCAIRES NON RAPPROCHÉS
+# ======================
+def attendre_csv(timeout=60):
+    for _ in range(timeout):
+        for f in os.listdir(DOWNLOAD_DIR):
+            if f.endswith(".csv"):
+                return os.path.join(DOWNLOAD_DIR, f)
+        time.sleep(1)
+    raise TimeoutError("Export des mouvements bancaires non téléchargé en 60 s.")
+
+
+def download_banque(driver):
+    """Exporte, pour chaque compte bancaire du groupe, les mouvements non rapprochés."""
+    log("Mouvements bancaires non rapprochés...")
+    driver.get(BANQUE_URL)
+    wait = WebDriverWait(driver, 20)
+    select = Select(wait.until(EC.presence_of_element_located((By.NAME, "comptebancaire"))))
+    comptes = [(o.get_attribute("value"), o.text.strip()) for o in select.options if o.get_attribute("value")]
+    if not comptes:
+        raise ValueError("Aucun compte bancaire dans la liste.")
+    lignes, entete = [], None
+    for valeur, libelle in comptes:
+        for f in os.listdir(DOWNLOAD_DIR):
+            if f.endswith(".csv"):
+                os.remove(os.path.join(DOWNLOAD_DIR, f))
+        select = Select(wait.until(EC.presence_of_element_located((By.NAME, "comptebancaire"))))
+        select.select_by_value(valeur)          # la page se recharge (submit du formulaire)
+        time.sleep(PAUSE_SECONDS)
+        try:
+            bouton = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(
+                (By.XPATH, "//button[contains(normalize-space(.), 'Export CSV')]")))
+        except TimeoutException:
+            if driver.find_elements(By.CSS_SELECTOR, "table tbody tr"):
+                raise                            # des mouvements affichés mais pas de bouton : on ne conclut rien
+            log(f"  {libelle.split(' - ')[-1].strip()} : aucun mouvement non rapproché")
+            driver.get(BANQUE_URL)
+            continue
+        bouton.click()
+        df = pd.read_csv(attendre_csv(), sep=";", encoding="latin1", dtype=str, keep_default_na=False)
+        entete = entete or df.columns.tolist()
+        df = df.reindex(columns=entete, fill_value="")
+        lignes += df.values.tolist()
+        log(f"  {libelle.split(' - ')[-1].strip()} : {len(df)} mouvement(s) non rapproché(s)")
+        driver.get(BANQUE_URL)
+    return entete, lignes
+
+
+def upload_banque(entete, lignes):
+    sheet = get_gspread().open_by_url(SPREADSHEET_URL)
+    ws = worksheet_or_create(sheet, APP_ONGLET_BANQUE)
+    ws.clear()
+    ws.update(values=[entete] + lignes, range_name="A1", value_input_option="RAW")
+    log("Mouvements bancaires envoyés.")
+
 # ======================
 # STEP 3: DRIVE FILE LIST
 # ======================
@@ -415,6 +473,13 @@ def main():
             if not cfg:
                 raise
             log(f"Requête « {REQUETE_STATS} » ignorée : {e}")
+
+        # Step 2 bis — Mouvements bancaires non rapprochés (facultatif)
+        if cfg:
+            try:
+                upload_banque(*download_banque(driver))
+            except Exception as e:
+                log(f"Mouvements bancaires ignorés : {e}")
 
         # Step 3 — Drive file list (facultatif : DRIVE_FOLDER_ID vide = pas de contrôle des justificatifs)
         folder_id = os.getenv("DRIVE_FOLDER_ID")

@@ -253,6 +253,11 @@ function vueSynthese() {
   });
   h += '<tr class="total"><td>Solde</td>' + (n1 ? '<td></td><td></td><td class="n">' + fmt(syn.soldeHorsBudget.n1) + '</td>' : '') +
     '<td class="col-n"></td><td></td><td class="n">' + fmt(syn.soldeHorsBudget.reel) + '</td></tr></tbody></table></div></div>';
+  var rbs = ETAT.saison === courante() ? rapproBanque() : null, depBq = rbs ? rbs.mouvements.filter(function (m) { return m.montant < 0; }) : [];
+  if (depBq.length) {
+    h += '<div class="alerte">' + depBq.length + ' dépense(s) passée(s) en banque mais pas encore saisie(s) dans Comptaweb (' + euros(-depBq.reduce(function (a, m) { return a + m.montant; }, 0)) +
+      ') ne sont pas dans le réel. <a href="#" onclick="aller(\'controles\');return false">Voir le rapprochement bancaire</a></div>';
+  }
   if (syn.aClasser.nombre) {
     h += '<div class="alerte">' + syn.aClasser.nombre + ' ventilation(s) sans ligne de budget (' + euros(syn.aClasser.depenses) + ' de dépenses, ' +
       euros(syn.aClasser.recettes) + ' de recettes) ne sont pas dans la synthèse. <a href="#" onclick="aller(\'realise\',{ligne:\'__aclasser\'});return false">Les classer</a></div>';
@@ -1301,17 +1306,62 @@ function carteRapprochement(s) {
   return h;
 }
 
+/* Rapprochement bancaire : mouvements non rapprochés (robot) face aux écritures non rapprochées, toutes saisons */
+function rapproBanque() {
+  if (!D.banque) return null;
+  var tout = [];
+  (D.saisons || []).forEach(function (x) { tout = tout.concat(D.ecritures[x.code] || []); });
+  return Engine.rapprochementBancaire(D.banque, tout);
+}
+var URL_BANQUE_CW = 'https://comptaweb.sgdf.fr/mouvementsbancaires';
+function carteBanque(rb, nr) {
+  var age = function (d) { return Math.max(0, Math.round((new Date(D.maintenant) - new Date(d + 'T12:00:00')) / 86400000)); };
+  var tot = function (l, f) { return l.reduce(function (a, x) { return a + f(x); }, 0); };
+  var lien = '<a href="' + URL_BANQUE_CW + '" target="_blank">Mouvements bancaires dans Comptaweb</a>';
+  if (!rb) {
+    var h = '<div class="carte"><h2>Écritures non rapprochées</h2><p class="sous">Écritures de plus de 15 jours pas encore rapprochées du relevé dans Comptaweb. ' +
+      'Avec la dernière version du robot, l\u2019app récupère aussi les opérations bancaires non rapprochées.</p>';
+    if (!nr.length) return h + '<div class="vide">Rien en attente de rapprochement.</div></div>';
+    return h + '<div class="tableau-defile"><table><thead><tr><th>Date</th><th>Intitulé</th><th>Mode</th><th class="n">Dépense</th><th class="n">Recette</th></tr></thead><tbody>' +
+      nr.map(function (e) { return '<tr><td>' + dateFr(e.date) + '</td><td>' + esc(e.intitule) + '</td><td>' + esc(e.mode) + '</td><td class="n">' + fmt2(e.depense) + '</td><td class="n">' + fmt2(e.recette) + '</td></tr>'; }).join('') +
+      '</tbody></table></div></div>';
+  }
+  var h = '<div class="carte" id="carteBanque"><h2>Rapprochement bancaire</h2><p class="sous">Opérations du relevé et écritures Comptaweb pas encore rapprochées (' + lien + '). ' +
+    'Le rapprochement lui-même se fait dans Comptaweb.</p>';
+  if (!rb.paires.length && !rb.mouvements.length && !rb.ecritures.length) return h + '<div class="vide">Tout est rapproché.</div></div>';
+  if (rb.paires.length) {
+    h += '<h3>' + rb.paires.length + ' à rapprocher <span class="aide">— même montant, dates proches : il suffit de les cocher dans Comptaweb</span></h3><div class="tableau-defile"><table><thead><tr>' +
+      '<th>Banque</th><th>Opération</th><th class="n">Montant</th><th>Écriture</th><th>Intitulé</th><th>Pièce</th></tr></thead><tbody>' +
+      rb.paires.map(function (p) { return '<tr><td>' + dateFr(p.mouvement.date) + '</td><td>' + esc(p.mouvement.intitule) + '</td><td class="n">' + fmt2(p.mouvement.montant) +
+        '</td><td>' + dateFr(p.ecriture.date) + (p.ecart ? ' <span class="aide">(' + p.ecart + ' j)</span>' : '') + '</td><td>' + esc(p.ecriture.intitule) + '</td><td>' + esc(p.ecriture.piece || '') + '</td></tr>'; }).join('') +
+      '</tbody></table></div>';
+  }
+  h += '<div class="grille-blocs" style="margin-top:12px"><div><h3>Opérations bancaires sans écriture <span class="puce ' + (rb.mouvements.length ? 'att' : 'ok') + '">' + rb.mouvements.length + '</span></h3>' +
+    '<p class="aide">Passées en banque mais pas saisies dans Comptaweb : le réalisé ne les compte pas encore. Saisis-les (avec le n° de pièce), puis rapproche.</p>';
+  h += rb.mouvements.length ? '<div class="tableau-defile"><table><thead><tr><th>Date</th><th>Libellé banque</th><th class="n">Montant</th><th class="n">Âge</th></tr></thead><tbody>' +
+    rb.mouvements.map(function (m) { return '<tr><td>' + dateFr(m.date) + '</td><td>' + esc(m.intitule) + '</td><td class="n">' + fmt2(m.montant) + '</td><td class="n">' + age(m.date) + ' j</td></tr>'; }).join('') +
+    '<tr class="total"><td colspan="2">Total</td><td class="n">' + fmt2(tot(rb.mouvements, function (m) { return m.montant; })) + '</td><td></td></tr></tbody></table></div>' : '<div class="vide">Aucune.</div>';
+  h += '</div><div><h3>Écritures sans opération bancaire <span class="puce ' + (rb.ecritures.length ? 'att' : 'ok') + '">' + rb.ecritures.length + '</span></h3>' +
+    '<p class="aide">Saisies dans Comptaweb mais pas encore vues sur le relevé : chèque pas encore encaissé, date ou montant différent, doublon…</p>';
+  h += rb.ecritures.length ? '<div class="tableau-defile"><table><thead><tr><th>Date</th><th>Intitulé</th><th>Mode</th><th class="n">Montant</th><th class="n">Âge</th></tr></thead><tbody>' +
+    rb.ecritures.slice().sort(function (a, b) { return a.ecriture.date < b.ecriture.date ? -1 : 1; }).map(function (x) {
+      var a = age(x.ecriture.date);
+      return '<tr><td>' + dateFr(x.ecriture.date) + '</td><td>' + esc(x.ecriture.intitule) + '</td><td>' + esc(x.ecriture.mode) + '</td><td class="n">' + fmt2(x.montant) + '</td><td class="n">' + (a > 30 ? '<span class="negatif">' + a + ' j</span>' : a + ' j') + '</td></tr>'; }).join('') +
+    '<tr class="total"><td colspan="3">Total</td><td class="n">' + fmt2(tot(rb.ecritures, function (x) { return x.montant; })) + '</td><td></td></tr></tbody></table></div>' : '<div class="vide">Aucune.</div>';
+  return h + '</div></div></div>';
+}
 function vueControles() {
   var s = ETAT.saison, ecr = D.ecritures[s] || [];
   var j = Engine.controleJustificatifs(ecr, D.fichiers);
   var nr = Engine.nonRapprochees(ecr, new Date(D.maintenant), 15);
   var aClasser = (C[s] || []).filter(function (v) { return !v.ligne; }).length;
-  var rq = rapprochementComptaweb(s);
+  var rq = rapprochementComptaweb(s), rb = rapproBanque();
   var h = '<div class="tuiles">' +
     tuile('Rapprochement Comptaweb', rq.ok === null ? '–' : rq.ok ? '<span class="positif">✓ OK</span>' : '<span class="negatif">✗ Écart</span>', rq.ok === null ? 'requête non récupérée' : 'requête vs export') +
     tuile('À classer', aClasser, 'ventilations sans ligne', '', "aller('realise',{ligne:'__aclasser'})") +
     tuile('Justificatifs à traiter', j.manquants.length, 'dépenses ' + esc(s)) +
-    tuile('Non rapprochées', nr.length, 'depuis plus de 15 jours') +
+    (rb ? tuile('Banque sans écriture', rb.mouvements.length, rb.paires.length ? rb.paires.length + ' autre(s) à rapprocher' : 'opérations à saisir dans Comptaweb', '', "document.getElementById('carteBanque').scrollIntoView({behavior:'smooth'})")
+      : tuile('Non rapprochées', nr.length, 'depuis plus de 15 jours')) +
     tuile('Fichiers sans écriture', j.orphelins.length, 'dans le dossier Drive') + '</div>';
   h += carteRapprochement(s);
   h += '<div class="carte"><h2>Justificatifs manquants</h2><p class="sous">Dépenses payées par carte, virement ou caisse, hors prélèvements du National. Le robot liste chaque jour les fichiers du dossier Drive ; ' +
@@ -1332,14 +1382,7 @@ function vueControles() {
   if (j.orphelins.length) h += '<details style="margin-top:10px"><summary class="aide">' + j.orphelins.length + ' fichier(s) du Drive sans écriture correspondante</summary><ul class="aide">' +
     j.orphelins.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ul></details>';
   h += '</div>';
-  h += '<div class="carte"><h2>Écritures non rapprochées</h2>';
-  if (!nr.length) h += '<div class="vide">Rien en attente de rapprochement.</div>';
-  else {
-    h += '<div class="tableau-defile"><table><thead><tr><th>Date</th><th>Intitulé</th><th>Mode</th><th class="n">Dépense</th><th class="n">Recette</th></tr></thead><tbody>' +
-      nr.map(function (e) { return '<tr><td>' + dateFr(e.date) + '</td><td>' + esc(e.intitule) + '</td><td>' + esc(e.mode) + '</td><td class="n">' + fmt2(e.depense) + '</td><td class="n">' + fmt2(e.recette) + '</td></tr>'; }).join('') +
-      '</tbody></table></div>';
-  }
-  h += '</div>';
+  h += carteBanque(rb, nr);
   if (D.stats && D.stats.length) {
     h += '<div class="carte"><h2>Requête Comptaweb « GS - Check Export Trésoriers »</h2><p class="sous">Telle que récupérée par le robot.</p><div class="tableau-defile"><table><thead><tr>' +
       D.stats[0].map(function (c) { return '<th>' + esc(c) + '</th>'; }).join('') + '</tr></thead><tbody>' +
@@ -1522,8 +1565,12 @@ function routineEtapes() {
   E.push({ id: 'classer', lib: 'Classer les nouvelles écritures', auto: true, ok: !ac, detail: ac ? ac + ' écriture(s) à classer' : 'tout est classé', action: "aller('realise',{ligne:'__aclasser'})" });
   var j = Engine.controleJustificatifs(ecr, D.fichiers).manquants.length;
   E.push({ id: 'justif', lib: 'Récupérer les justificatifs manquants (ou faire une attestation)', auto: true, ok: !j, detail: j ? j + ' dépense(s) sans justificatif' : 'tout est justifié', action: "aller('controles')" });
-  var nr = Engine.nonRapprochees(ecr, new Date(D.maintenant), 15).length;
+  var nr = Engine.nonRapprochees(ecr, new Date(D.maintenant), 15).length, rbp = rapproBanque();
+  if (rbp && rbp.paires.length) nr = Math.max(nr, rbp.paires.length);
   E.push({ id: 'rappro', lib: 'Rapprocher les écritures dans Comptaweb', auto: true, ok: !nr, detail: nr ? nr + ' écriture(s) non rapprochée(s) depuis plus de 15 jours' : 'tout est rapproché', action: "aller('controles')" });
+  var rb = rapproBanque();
+  if (rb) E.push({ id: 'banque', lib: 'Saisir dans Comptaweb les opérations bancaires sans écriture', auto: true, ok: !rb.mouvements.length,
+    detail: rb.mouvements.length ? rb.mouvements.length + ' opération(s) du relevé sans écriture (' + euros(rb.mouvements.reduce(function (a, m) { return a + m.montant; }, 0)) + ')' : 'tout le relevé est saisi', action: "aller('controles')" });
   var rq = rapprochementComptaweb(s);
   E.push({ id: 'concordance', lib: 'Vérifier la concordance avec la requête Comptaweb', auto: true, ok: rq.ok === true,
     detail: rq.ok === null ? 'requête pas encore récupérée' : rq.ok ? 'requête et export concordants' : 'écart entre la requête et l’export', action: "aller('controles')" });

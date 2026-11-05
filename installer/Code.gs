@@ -1,4 +1,4 @@
-/* Budget du groupe — version 1.0.0 (générique)
+/* Budget du groupe — version 1.1.0 (générique)
  * FICHIER GÉNÉRÉ par app/build/build.py — modifier app/src/ puis relancer le build. */
 
 /* =====================================================================
@@ -413,6 +413,53 @@ var Engine = (function () {
     });
   }
 
+  /* ------------------------------------------- rapprochement bancaire */
+  /** Export Comptaweb « mouvements bancaires » → [{date, compte, montant, intitule}] (non rapprochés seulement). */
+  function lireBanque(lignes) {
+    if (!lignes || lignes.length < 2) return [];
+    var c = lignes[0].map(cle), i = function (n) { return c.indexOf(n); };
+    var iD = i('date'), iC = i('compte bancaire'), iM = i('montant'), iI = i('intitule'), iR = c.findIndex ? c.findIndex(function (x) { return /^rapproch/.test(x); }) : -1;
+    if (iD < 0 || iM < 0) throw new Error('Colonnes Date / Montant introuvables dans les mouvements bancaires');
+    return lignes.slice(1).filter(function (r) { return txt(r[iD]) && (iR < 0 || cle(r[iR]) !== 'oui'); }).map(function (r, n) {
+      return { id: 'b' + n, date: dateIso(r[iD]), compte: iC >= 0 ? txt(r[iC]) : '', montant: arrondi(num(r[iM])), intitule: iI >= 0 ? txt(r[iI]) : '' };
+    });
+  }
+
+  /** Écritures non rapprochées sur un compte bancaire, montant vu du compte (+ entrée, − sortie). */
+  function ecrituresBancairesNonRapprochees(ecritures, comptes) {
+    var ok = function (c) { return c && (!comptes || comptes.indexOf(cle(c)) >= 0); }, out = [];
+    (ecritures || []).forEach(function (e) {
+      var m = arrondi(num(e.recette) - num(e.depense));
+      if (ok(e.compte) && cle(e.rappro) === 'non') out.push({ ecriture: e, compte: e.compte, montant: m });
+      if (ok(e.compte2) && cle(e.rappro2) === 'non') out.push({ ecriture: e, compte: e.compte2, montant: -m });
+    });
+    return out;
+  }
+
+  /**
+   * Met en regard les mouvements bancaires et les écritures non rapprochés :
+   * paires probables = même compte, même montant (au centime, signe ignoré), à 30 jours près, la plus proche en date.
+   * → { paires: [{mouvement, ecriture, ecart}], mouvements: [...seuls], ecritures: [...seules] }
+   */
+  function rapprochementBancaire(mouvements, ecritures, joursMax) {
+    var max = (joursMax || 30) * 86400000, prises = {}, paires = [], seuls = [];
+    var jour = function (d) { return new Date(d + 'T12:00:00').getTime(); };
+    var comptes = {}; (mouvements || []).forEach(function (m) { if (m.compte) comptes[cle(m.compte)] = 1; });
+    var nr = ecrituresBancairesNonRapprochees(ecritures, Object.keys(comptes).length ? Object.keys(comptes) : null);
+    (mouvements || []).slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; }).forEach(function (m) {
+      var best = -1, ecart = Infinity;
+      nr.forEach(function (x, k) {
+        if (prises[k] || Math.abs(Math.abs(x.montant) - Math.abs(m.montant)) > 0.005) return;
+        if (m.compte && cle(x.compte) !== cle(m.compte)) return;
+        var d = Math.abs(jour(x.ecriture.date) - jour(m.date));
+        if (d <= max && d < ecart) { best = k; ecart = d; }
+      });
+      if (best >= 0) { prises[best] = 1; paires.push({ mouvement: m, ecriture: nr[best].ecriture, montant: nr[best].montant, ecart: Math.round(ecart / 86400000) }); }
+      else seuls.push(m);
+    });
+    return { paires: paires, mouvements: seuls, ecritures: nr.filter(function (x, k) { return !prises[k]; }) };
+  }
+
   /**
    * Engagements ouverts pour lesquels une écriture correspondante est arrivée :
    * même ligne, même sens, montant à 1 € ou 2 % près, datée au plus 60 jours avant l'engagement.
@@ -434,6 +481,7 @@ var Engine = (function () {
   }
 
   return {
+    lireBanque: lireBanque, ecrituresBancairesNonRapprochees: ecrituresBancairesNonRapprochees, rapprochementBancaire: rapprochementBancaire,
     correspondancesEngagements: correspondancesEngagements,
     txt: txt, cle: cle, num: num, arrondi: arrondi, dateIso: dateIso,
     INTERNE: INTERNE, METHODES: METHODES,
@@ -553,7 +601,7 @@ if (typeof module !== 'undefined') module.exports = Seed;
 // Identité par défaut (nom du groupe, dépôt du robot) : dans Seed, propre à chaque build ;
 // modifiable ensuite dans Paramètres › Groupe et Paramètres › Imports.
 var APP = {
-  version: '1.0.0',
+  version: '1.1.0',
   depotPublic: 'gfunkstark/budget-groupe-sgdf',   // où sont publiées les nouvelles versions
   workflow: 'budget.yml',
   branche: 'main'
@@ -591,6 +639,7 @@ var BOOLEENS = { recette: 1, horsBudget: 1, courante: 1, reference: 1 };
 var ONGLET_STATS = 'Stats Comptaweb';
 var ONGLET_FICHIERS = 'Fichiers Drive';
 var ONGLET_JOURNAL = 'Journal robot';
+var ONGLET_BANQUE = 'Banque Comptaweb';   // mouvements bancaires non rapprochés (robot)
 
 /* ------------------------------------------------------------ web app */
 function doGet() {
@@ -738,6 +787,10 @@ function getDonnees() {
   var journal = lireOngletBrut_(ONGLET_JOURNAL).slice(1).map(function (r) {
     return { date: r[0] instanceof Date ? r[0].toISOString() : String(r[0]), saison: r[1], lignes: r[2], statut: r[3] };
   });
+  var banque = null;   // null = jamais récupéré (pas de robot ou version antérieure)
+  if (onglet_(ONGLET_BANQUE)) {
+    try { banque = Engine.lireBanque(lireOngletBrut_(ONGLET_BANQUE)); } catch (e) { erreurs.push(ONGLET_BANQUE + ' : ' + e.message); }
+  }
   var corrections = {};
   lireTable_('Corrections').forEach(function (c) { corrections[c.cle] = c.ligne; });
   return {
@@ -745,7 +798,7 @@ function getDonnees() {
     effectifs: lireTable_('Effectifs'), budget: lireTable_('Budget'), engagements: lireTable_('Engagements'),
     corrections: corrections, correctionsListe: lireTable_('Corrections'),
     equipes: lireTable_('Equipes'), fondsExclusions: lireTable_('FondsExclusions'),
-    ecritures: ecritures, ventilations: ventilations, fichiers: fichiers, liensFichiers: liensFichiers, stats: stats,
+    ecritures: ecritures, ventilations: ventilations, banque: banque, fichiers: fichiers, liensFichiers: liensFichiers, stats: stats,
     journal: journal.slice(-10), erreurs: erreurs,
     groupe: identite_(), version: APP.version,
     github: { configure: !!PropertiesService.getScriptProperties().getProperty('GITHUB_TOKEN'), depot: depotRobot_(),
@@ -1316,9 +1369,11 @@ function pointsATraiter_() {
   var j = Engine.controleJustificatifs(ecr, d.fichiers);
   var nr = Engine.nonRapprochees(ecr, new Date(), 15);
   var corr = Engine.correspondancesEngagements(d.engagements, v, saison);
+  var tout = []; d.saisons.forEach(function (x) { tout = tout.concat(d.ecritures[x.code] || []); });
+  var banque = d.banque ? Engine.rapprochementBancaire(d.banque, tout) : null;
   var dernier = d.journal.length ? d.journal[d.journal.length - 1] : null;
   var exp = d.github.expiration, joursExp = exp ? Math.round((new Date(exp + 'T12:00:00') - new Date()) / 86400000) : null;
-  return { saison: saison, aClasser: aClasser, manquants: j.manquants, nonRapprochees: nr, engagements: corr, dernier: dernier, expiration: exp, joursExpiration: joursExp };
+  return { saison: saison, aClasser: aClasser, manquants: j.manquants, nonRapprochees: nr, engagements: corr, banque: banque, dernier: dernier, expiration: exp, joursExpiration: joursExp };
 }
 
 function envoyerResumeHebdo(test) {
@@ -1333,13 +1388,16 @@ function envoyerResumeHebdo(test) {
       lignes.slice(0, 15).map(function (l) { return '<li>' + l + '</li>'; }).join('') + (n > 15 ? '<li>… et ' + (n - 15) + ' autre(s)</li>' : '') + '</ul>';
   }
   function e(t) { return String(t || '').replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-  var n = P.aClasser.length + P.manquants.length + P.nonRapprochees.length + P.engagements.length;
+  var mvSeuls = P.banque ? P.banque.mouvements : [];
+  var n = P.aClasser.length + P.manquants.length + P.nonRapprochees.length + P.engagements.length + mvSeuls.length;
   var h = '<div style="font-family:Arial,sans-serif;font-size:14px;color:#1d2433;max-width:640px">' +
     '<h2 style="margin:0 0 4px;color:#1f4e79">' + e(identite_().titre) + ' — point de la semaine</h2>' +
     '<p style="margin:0 0 12px;color:#666">Saison ' + e(P.saison) + (P.dernier ? ' · données Comptaweb du ' + e(String(P.dernier.date).slice(0, 16).replace('T', ' ')) : '') + '</p>' +
     bloc('Écritures à classer', P.aClasser.length, P.aClasser.map(function (x) { return dfr(x.date) + ' — ' + e(x.intitule) + ' (' + e(x.activite) + ' / ' + e(x.nature) + ')'; })) +
     bloc('Justificatifs manquants', P.manquants.length, P.manquants.map(function (m) { return dfr(m.ecriture.date) + ' — ' + e(m.ecriture.intitule) + ' — ' + euros(m.ecriture.depense) + ' (' + e(m.probleme) + ')'; })) +
     bloc('Écritures non rapprochées depuis plus de 15 jours', P.nonRapprochees.length, P.nonRapprochees.map(function (x) { return dfr(x.date) + ' — ' + e(x.intitule) + ' — ' + euros(x.depense || x.recette); })) +
+    (P.banque ? bloc('Opérations bancaires sans écriture dans Comptaweb', mvSeuls.length, mvSeuls.map(function (m) { return dfr(m.date) + ' — ' + e(m.intitule) + ' — ' + euros(m.montant); })) +
+      (P.banque.paires.length ? '<p style="margin:6px 0">🔗 ' + P.banque.paires.length + ' opération(s) bancaire(s) ont leur écriture : à rapprocher dans Comptaweb.</p>' : '') : '') +
     bloc('Engagements dont l’écriture est arrivée', P.engagements.length, P.engagements.map(function (c) { return e(c.engagement.libelle || c.engagement.ligne) + ' — ' + euros(c.engagement.montant); })) +
     (P.joursExpiration !== null && P.joursExpiration <= 30 ? '<p style="margin:14px 0;color:#b42318"><b>⏳ Le jeton GitHub du robot expire le ' + dfr(P.expiration) + '</b> : crée-en un nouveau et colle-le dans Paramètres › Imports.</p>' : '') +
     (url ? '<p style="margin:18px 0"><a href="' + url + '" style="background:#1f4e79;color:#fff;padding:8px 14px;border-radius:6px;text-decoration:none">Ouvrir ' + e(identite_().titre) + '</a></p>' : '') +

@@ -410,6 +410,53 @@ var Engine = (function () {
     });
   }
 
+  /* ------------------------------------------- rapprochement bancaire */
+  /** Export Comptaweb « mouvements bancaires » → [{date, compte, montant, intitule}] (non rapprochés seulement). */
+  function lireBanque(lignes) {
+    if (!lignes || lignes.length < 2) return [];
+    var c = lignes[0].map(cle), i = function (n) { return c.indexOf(n); };
+    var iD = i('date'), iC = i('compte bancaire'), iM = i('montant'), iI = i('intitule'), iR = c.findIndex ? c.findIndex(function (x) { return /^rapproch/.test(x); }) : -1;
+    if (iD < 0 || iM < 0) throw new Error('Colonnes Date / Montant introuvables dans les mouvements bancaires');
+    return lignes.slice(1).filter(function (r) { return txt(r[iD]) && (iR < 0 || cle(r[iR]) !== 'oui'); }).map(function (r, n) {
+      return { id: 'b' + n, date: dateIso(r[iD]), compte: iC >= 0 ? txt(r[iC]) : '', montant: arrondi(num(r[iM])), intitule: iI >= 0 ? txt(r[iI]) : '' };
+    });
+  }
+
+  /** Écritures non rapprochées sur un compte bancaire, montant vu du compte (+ entrée, − sortie). */
+  function ecrituresBancairesNonRapprochees(ecritures, comptes) {
+    var ok = function (c) { return c && (!comptes || comptes.indexOf(cle(c)) >= 0); }, out = [];
+    (ecritures || []).forEach(function (e) {
+      var m = arrondi(num(e.recette) - num(e.depense));
+      if (ok(e.compte) && cle(e.rappro) === 'non') out.push({ ecriture: e, compte: e.compte, montant: m });
+      if (ok(e.compte2) && cle(e.rappro2) === 'non') out.push({ ecriture: e, compte: e.compte2, montant: -m });
+    });
+    return out;
+  }
+
+  /**
+   * Met en regard les mouvements bancaires et les écritures non rapprochés :
+   * paires probables = même compte, même montant (au centime, signe ignoré), à 30 jours près, la plus proche en date.
+   * → { paires: [{mouvement, ecriture, ecart}], mouvements: [...seuls], ecritures: [...seules] }
+   */
+  function rapprochementBancaire(mouvements, ecritures, joursMax) {
+    var max = (joursMax || 30) * 86400000, prises = {}, paires = [], seuls = [];
+    var jour = function (d) { return new Date(d + 'T12:00:00').getTime(); };
+    var comptes = {}; (mouvements || []).forEach(function (m) { if (m.compte) comptes[cle(m.compte)] = 1; });
+    var nr = ecrituresBancairesNonRapprochees(ecritures, Object.keys(comptes).length ? Object.keys(comptes) : null);
+    (mouvements || []).slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; }).forEach(function (m) {
+      var best = -1, ecart = Infinity;
+      nr.forEach(function (x, k) {
+        if (prises[k] || Math.abs(Math.abs(x.montant) - Math.abs(m.montant)) > 0.005) return;
+        if (m.compte && cle(x.compte) !== cle(m.compte)) return;
+        var d = Math.abs(jour(x.ecriture.date) - jour(m.date));
+        if (d <= max && d < ecart) { best = k; ecart = d; }
+      });
+      if (best >= 0) { prises[best] = 1; paires.push({ mouvement: m, ecriture: nr[best].ecriture, montant: nr[best].montant, ecart: Math.round(ecart / 86400000) }); }
+      else seuls.push(m);
+    });
+    return { paires: paires, mouvements: seuls, ecritures: nr.filter(function (x, k) { return !prises[k]; }) };
+  }
+
   /**
    * Engagements ouverts pour lesquels une écriture correspondante est arrivée :
    * même ligne, même sens, montant à 1 € ou 2 % près, datée au plus 60 jours avant l'engagement.
@@ -431,6 +478,7 @@ var Engine = (function () {
   }
 
   return {
+    lireBanque: lireBanque, ecrituresBancairesNonRapprochees: ecrituresBancairesNonRapprochees, rapprochementBancaire: rapprochementBancaire,
     correspondancesEngagements: correspondancesEngagements,
     txt: txt, cle: cle, num: num, arrondi: arrondi, dateIso: dateIso,
     INTERNE: INTERNE, METHODES: METHODES,

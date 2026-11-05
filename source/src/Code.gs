@@ -46,6 +46,7 @@ var BOOLEENS = { recette: 1, horsBudget: 1, courante: 1, reference: 1 };
 var ONGLET_STATS = 'Stats Comptaweb';
 var ONGLET_FICHIERS = 'Fichiers Drive';
 var ONGLET_JOURNAL = 'Journal robot';
+var ONGLET_BANQUE = 'Banque Comptaweb';   // mouvements bancaires non rapprochés (robot)
 
 /* ------------------------------------------------------------ web app */
 function doGet() {
@@ -193,6 +194,10 @@ function getDonnees() {
   var journal = lireOngletBrut_(ONGLET_JOURNAL).slice(1).map(function (r) {
     return { date: r[0] instanceof Date ? r[0].toISOString() : String(r[0]), saison: r[1], lignes: r[2], statut: r[3] };
   });
+  var banque = null;   // null = jamais récupéré (pas de robot ou version antérieure)
+  if (onglet_(ONGLET_BANQUE)) {
+    try { banque = Engine.lireBanque(lireOngletBrut_(ONGLET_BANQUE)); } catch (e) { erreurs.push(ONGLET_BANQUE + ' : ' + e.message); }
+  }
   var corrections = {};
   lireTable_('Corrections').forEach(function (c) { corrections[c.cle] = c.ligne; });
   return {
@@ -200,7 +205,7 @@ function getDonnees() {
     effectifs: lireTable_('Effectifs'), budget: lireTable_('Budget'), engagements: lireTable_('Engagements'),
     corrections: corrections, correctionsListe: lireTable_('Corrections'),
     equipes: lireTable_('Equipes'), fondsExclusions: lireTable_('FondsExclusions'),
-    ecritures: ecritures, ventilations: ventilations, fichiers: fichiers, liensFichiers: liensFichiers, stats: stats,
+    ecritures: ecritures, ventilations: ventilations, banque: banque, fichiers: fichiers, liensFichiers: liensFichiers, stats: stats,
     journal: journal.slice(-10), erreurs: erreurs,
     groupe: identite_(), version: APP.version,
     github: { configure: !!PropertiesService.getScriptProperties().getProperty('GITHUB_TOKEN'), depot: depotRobot_(),
@@ -771,9 +776,11 @@ function pointsATraiter_() {
   var j = Engine.controleJustificatifs(ecr, d.fichiers);
   var nr = Engine.nonRapprochees(ecr, new Date(), 15);
   var corr = Engine.correspondancesEngagements(d.engagements, v, saison);
+  var tout = []; d.saisons.forEach(function (x) { tout = tout.concat(d.ecritures[x.code] || []); });
+  var banque = d.banque ? Engine.rapprochementBancaire(d.banque, tout) : null;
   var dernier = d.journal.length ? d.journal[d.journal.length - 1] : null;
   var exp = d.github.expiration, joursExp = exp ? Math.round((new Date(exp + 'T12:00:00') - new Date()) / 86400000) : null;
-  return { saison: saison, aClasser: aClasser, manquants: j.manquants, nonRapprochees: nr, engagements: corr, dernier: dernier, expiration: exp, joursExpiration: joursExp };
+  return { saison: saison, aClasser: aClasser, manquants: j.manquants, nonRapprochees: nr, engagements: corr, banque: banque, dernier: dernier, expiration: exp, joursExpiration: joursExp };
 }
 
 function envoyerResumeHebdo(test) {
@@ -788,13 +795,16 @@ function envoyerResumeHebdo(test) {
       lignes.slice(0, 15).map(function (l) { return '<li>' + l + '</li>'; }).join('') + (n > 15 ? '<li>… et ' + (n - 15) + ' autre(s)</li>' : '') + '</ul>';
   }
   function e(t) { return String(t || '').replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
-  var n = P.aClasser.length + P.manquants.length + P.nonRapprochees.length + P.engagements.length;
+  var mvSeuls = P.banque ? P.banque.mouvements : [];
+  var n = P.aClasser.length + P.manquants.length + P.nonRapprochees.length + P.engagements.length + mvSeuls.length;
   var h = '<div style="font-family:Arial,sans-serif;font-size:14px;color:#1d2433;max-width:640px">' +
     '<h2 style="margin:0 0 4px;color:#1f4e79">' + e(identite_().titre) + ' — point de la semaine</h2>' +
     '<p style="margin:0 0 12px;color:#666">Saison ' + e(P.saison) + (P.dernier ? ' · données Comptaweb du ' + e(String(P.dernier.date).slice(0, 16).replace('T', ' ')) : '') + '</p>' +
     bloc('Écritures à classer', P.aClasser.length, P.aClasser.map(function (x) { return dfr(x.date) + ' — ' + e(x.intitule) + ' (' + e(x.activite) + ' / ' + e(x.nature) + ')'; })) +
     bloc('Justificatifs manquants', P.manquants.length, P.manquants.map(function (m) { return dfr(m.ecriture.date) + ' — ' + e(m.ecriture.intitule) + ' — ' + euros(m.ecriture.depense) + ' (' + e(m.probleme) + ')'; })) +
     bloc('Écritures non rapprochées depuis plus de 15 jours', P.nonRapprochees.length, P.nonRapprochees.map(function (x) { return dfr(x.date) + ' — ' + e(x.intitule) + ' — ' + euros(x.depense || x.recette); })) +
+    (P.banque ? bloc('Opérations bancaires sans écriture dans Comptaweb', mvSeuls.length, mvSeuls.map(function (m) { return dfr(m.date) + ' — ' + e(m.intitule) + ' — ' + euros(m.montant); })) +
+      (P.banque.paires.length ? '<p style="margin:6px 0">🔗 ' + P.banque.paires.length + ' opération(s) bancaire(s) ont leur écriture : à rapprocher dans Comptaweb.</p>' : '') : '') +
     bloc('Engagements dont l’écriture est arrivée', P.engagements.length, P.engagements.map(function (c) { return e(c.engagement.libelle || c.engagement.ligne) + ' — ' + euros(c.engagement.montant); })) +
     (P.joursExpiration !== null && P.joursExpiration <= 30 ? '<p style="margin:14px 0;color:#b42318"><b>⏳ Le jeton GitHub du robot expire le ' + dfr(P.expiration) + '</b> : crée-en un nouveau et colle-le dans Paramètres › Imports.</p>' : '') +
     (url ? '<p style="margin:18px 0"><a href="' + url + '" style="background:#1f4e79;color:#fff;padding:8px 14px;border-radius:6px;text-decoration:none">Ouvrir ' + e(identite_().titre) + '</a></p>' : '') +

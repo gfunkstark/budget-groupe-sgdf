@@ -1,5 +1,12 @@
 # Nouveautés
 
+## 1.1.0 — novembre 2026
+
+- **Rapprochement bancaire** : le robot récupère chaque matin, pour chaque compte du groupe, les opérations bancaires non rapprochées de Comptaweb (page Mouvements bancaires).
+  Les Contrôles les mettent en regard des écritures non rapprochées : paires à rapprocher (même montant, dates proches), opérations du relevé sans écriture, écritures sans opération.
+- Alerte dans la Synthèse pour les dépenses passées en banque mais pas encore saisies, nouvelle étape dans la routine du mois, rubrique dans l'e-mail du lundi.
+- **Mise à jour** : remplacer `Code.gs`, `Index` **et** `robot/Budget.py` dans le dépôt privé du robot.
+
 ## 1.0.0 — octobre 2026
 
 Première version partagée avec les groupes du territoire.
