@@ -2070,7 +2070,9 @@ function carteBanque(rb, nr) {
   var lien = '<a href="' + URL_BANQUE_CW + '" target="_blank">Mouvements bancaires dans Comptaweb</a>';
   if (!rb) {
     var h = '<div class="carte"><h2>Écritures non rapprochées</h2><p class="sous">Écritures de plus de 15 jours pas encore rapprochées du relevé dans Comptaweb. ' +
-      'Avec la dernière version du robot, l\u2019app récupère aussi les opérations bancaires non rapprochées.</p>';
+      (D.banqueErreur ? '</p><div class="alerte">Le robot n\u2019a pas pu récupérer les opérations bancaires non rapprochées lors de son dernier passage' +
+        (D.banqueErreur.date ? ' (' + dateFr(String(D.banqueErreur.date).slice(0, 10)) + ')' : '') + ' : ' + esc(D.banqueErreur.message) + '. Seules les écritures non rapprochées sont affichées.</div><p>' :
+        'Avec la dernière version du robot, l\u2019app récupère aussi les opérations bancaires non rapprochées.') + '</p>';
     if (!nr.length) return h + '<div class="vide">Rien en attente de rapprochement.</div></div>';
     return h + '<div class="tableau-defile"><table><thead><tr><th>Date</th><th>Intitulé</th><th>Mode</th><th class="n">Dépense</th><th class="n">Recette</th></tr></thead><tbody>' +
       nr.map(function (e) { return '<tr><td>' + dateFr(e.date) + '</td><td>' + esc(e.intitule) + '</td><td>' + esc(e.mode) + '</td><td class="n">' + fmt2(e.depense) + '</td><td class="n">' + fmt2(e.recette) + '</td></tr>'; }).join('') +

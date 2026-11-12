@@ -194,9 +194,11 @@ function getDonnees() {
   var journal = lireOngletBrut_(ONGLET_JOURNAL).slice(1).map(function (r) {
     return { date: r[0] instanceof Date ? r[0].toISOString() : String(r[0]), saison: r[1], lignes: r[2], statut: r[3] };
   });
-  var banque = null;   // null = jamais récupéré (pas de robot ou version antérieure)
+  var banque = null, banqueErreur = null;   // null = jamais récupéré (pas de robot) ou échec au dernier passage
   if (onglet_(ONGLET_BANQUE)) {
-    try { banque = Engine.lireBanque(lireOngletBrut_(ONGLET_BANQUE)); } catch (e) { erreurs.push(ONGLET_BANQUE + ' : ' + e.message); }
+    var brut = lireOngletBrut_(ONGLET_BANQUE);
+    if (brut.length && String(brut[0][0]) === 'Erreur') banqueErreur = { message: String(brut[0][1] || ''), date: String(brut[0][2] || '') };
+    else { try { banque = Engine.lireBanque(brut); } catch (e) { erreurs.push(ONGLET_BANQUE + ' : ' + e.message); } }
   }
   var corrections = {};
   lireTable_('Corrections').forEach(function (c) { corrections[c.cle] = c.ligne; });
@@ -205,7 +207,7 @@ function getDonnees() {
     effectifs: lireTable_('Effectifs'), budget: lireTable_('Budget'), engagements: lireTable_('Engagements'),
     corrections: corrections, correctionsListe: lireTable_('Corrections'),
     equipes: lireTable_('Equipes'), fondsExclusions: lireTable_('FondsExclusions'),
-    ecritures: ecritures, ventilations: ventilations, banque: banque, fichiers: fichiers, liensFichiers: liensFichiers, stats: stats,
+    ecritures: ecritures, ventilations: ventilations, banque: banque, banqueErreur: banqueErreur, fichiers: fichiers, liensFichiers: liensFichiers, stats: stats,
     journal: journal.slice(-10), erreurs: erreurs,
     groupe: identite_(), version: APP.version,
     github: { configure: !!PropertiesService.getScriptProperties().getProperty('GITHUB_TOKEN'), depot: depotRobot_(),

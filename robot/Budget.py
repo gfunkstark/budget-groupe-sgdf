@@ -390,15 +390,13 @@ def download_banque(driver):
         select = Select(wait.until(EC.presence_of_element_located((By.NAME, "comptebancaire"))))
         select.select_by_value(valeur)          # la page se recharge (submit du formulaire)
         time.sleep(PAUSE_SECONDS)
-        try:
-            bouton = WebDriverWait(driver, 10).until(EC.element_to_be_clickable(
-                (By.XPATH, "//button[contains(normalize-space(.), 'Export CSV')]")))
-        except TimeoutException:
-            if driver.find_elements(By.CSS_SELECTOR, "table tbody tr"):
-                raise                            # des mouvements affichés mais pas de bouton : on ne conclut rien
+        if not lignes_affichees(driver):
+            # Liste vide : Comptaweb ne télécharge rien quand on clique sur Export CSV
             log(f"  {libelle.split(' - ')[-1].strip()} : aucun mouvement non rapproché")
             driver.get(BANQUE_URL)
             continue
+        bouton = wait.until(EC.element_to_be_clickable(
+            (By.XPATH, "//button[contains(normalize-space(.), 'Export CSV')]")))
         bouton.click()
         df = pd.read_csv(attendre_csv(), sep=";", encoding="latin1", dtype=str, keep_default_na=False)
         entete = entete or df.columns.tolist()
@@ -406,7 +404,16 @@ def download_banque(driver):
         lignes += df.values.tolist()
         log(f"  {libelle.split(' - ')[-1].strip()} : {len(df)} mouvement(s) non rapproché(s)")
         driver.get(BANQUE_URL)
-    return entete, lignes
+    return entete or ENTETE_BANQUE, lignes
+
+
+ENTETE_BANQUE = ["Date", "Compte bancaire", "Montant", "Intitulé", "Rapprochee"]
+
+
+def lignes_affichees(driver):
+    """Lignes de mouvements affichées (hors ligne « aucune donnée » d'une table vide)."""
+    return [r for r in driver.find_elements(By.CSS_SELECTOR, "table tbody tr")
+            if len(r.find_elements(By.TAG_NAME, "td")) > 1]
 
 
 def upload_banque(entete, lignes):
@@ -415,6 +422,16 @@ def upload_banque(entete, lignes):
     ws.clear()
     ws.update(values=[entete] + lignes, range_name="A1", value_input_option="RAW")
     log("Mouvements bancaires envoyés.")
+
+
+def signaler_echec_banque(message):
+    """Échec : on n'affiche pas d'anciens mouvements comme s'ils étaient à jour."""
+    sheet = get_gspread().open_by_url(SPREADSHEET_URL)
+    ws = worksheet_or_create(sheet, APP_ONGLET_BANQUE)
+    ws.clear()
+    from datetime import datetime, timezone
+    ws.update(values=[["Erreur", str(message)[:300], datetime.now(timezone.utc).isoformat(timespec="seconds")]],
+              range_name="A1", value_input_option="RAW")
 
 # ======================
 # STEP 3: DRIVE FILE LIST
@@ -489,6 +506,11 @@ def main():
                 upload_banque(*download_banque(driver))
             except Exception as e:
                 log(f"Mouvements bancaires ignorés : {e}")
+                try:
+                    driver.save_screenshot(os.path.join(BASE_DIR, "error_banque.png"))
+                    signaler_echec_banque(e)
+                except Exception as e2:
+                    log(f"Signalement de l'échec impossible : {e2}")
 
         # Step 2 ter — Saison précédente (facultatif) : rapprochements faits depuis son import
         if cfg and cfg.get("precedente") and os.getenv("RAFRAICHIR_SAISON_PRECEDENTE", "oui").lower() not in ("non", "false", "0"):

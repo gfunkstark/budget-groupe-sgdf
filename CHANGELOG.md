@@ -1,5 +1,11 @@
 # Nouveautés
 
+## 1.1.2 — novembre 2026
+
+- Robot : quand plus aucune opération bancaire n'est à rapprocher, la liste est bien vidée (avant, l'export vide échouait et l'app gardait les anciennes opérations).
+- Robot : en cas d'échec de cette étape, l'app le signale au lieu d'afficher des données périmées ; une capture de la page est jointe à l'exécution GitHub.
+- Mise à jour : `robot/Budget.py`, `.github/workflows/budget.yml`, `Code.gs` et `Index`.
+
 ## 1.1.1 — novembre 2026
 
 - Robot : la saison précédente est réexportée à chaque passage (exercice renseigné dans Paramètres › Imports › Saisons), pour que les rapprochements faits après son import (chèques encaissés en septembre…) soient pris en compte. Le robot remet ensuite Comptaweb sur l'exercice courant. Désactivable avec le secret `RAFRAICHIR_SAISON_PRECEDENTE` = `non`.
